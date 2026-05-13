@@ -26,6 +26,24 @@
   <div class="box">
     <h2>Admin Panel</h2>
     <p>Here you will manage users and withdraw requests.</p>
-  </div>
+  </div><script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyBnP9QJgg6d874QB-a4meFbprLMEufRzuY",
+    authDomain: "refer-earn-73e38.firebaseapp.com",
+    projectId: "refer-earn-73e38",
+    storageBucket: "refer-earn-73e38.firebasestorage.app",
+    messagingSenderId: "323369987305",
+    appId: "1:323369987305:web:7c8eead19bff6454f4d478",
+    measurementId: "G-Z0WLNVH8YZ"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+
+  console.log("Firebase connected!");
+</script>
 </body>
 </html>
