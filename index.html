@@ -31,7 +31,7 @@
   <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
   import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
+import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
   const firebaseConfig = {
     apiKey: "AIzaSyBnP9QJgg6d874QB-a4meFbprLMEufRzuY",
     authDomain: "refer-earn-73e38.firebaseapp.com",
@@ -44,6 +44,15 @@
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
+    const auth = getAuth(app);
+
+document.getElementById("loginBtn").onclick = async () => {
+  const provider = new GoogleAuthProvider();
+  const result = await signInWithPopup(auth, provider);
+
+  document.getElementById("userInfo").innerText =
+    "Logged in: " + result.user.email;
+};
 
   const userId = "demo-user";
   const userRef = doc(db, "users", userId);
