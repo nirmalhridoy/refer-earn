@@ -26,9 +26,9 @@
   <div class="box">
     <h2>Admin Panel</h2>
     <p>Here you will manage users and withdraw requests.</p>
-  </div><script type="module">
+  <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
+  import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyBnP9QJgg6d874QB-a4meFbprLMEufRzuY",
@@ -41,9 +41,28 @@
   };
 
   const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
+  const db = getFirestore(app);
 
-  console.log("Firebase connected!");
-</script>
+  const userId = "demo-user";
+  const userRef = doc(db, "users", userId);
+
+  async function loadBalance() {
+    const snap = await getDoc(userRef);
+    let balance = 0;
+
+    if (snap.exists()) {
+      balance = snap.data().balance || 0;
+    } else {
+      await setDoc(userRef, { balance: 0 });
+    }
+
+    document.body.innerHTML = document.body.innerHTML.replace(
+      "Balance: 0৳",
+      "Balance: " + balance + "৳"
+    );
+  }
+
+  loadBalance();
+  </script>
 </body>
 </html>
