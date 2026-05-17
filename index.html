@@ -51,12 +51,29 @@ document.getElementById("loginBtn").onclick = async () => {
   const provider = new GoogleAuthProvider();
   const result = await signInWithPopup(auth, provider);
 
+  const user = result.user;
   document.getElementById("userInfo").innerText =
-    "Logged in: " + result.user.email;
-};
+    "Logged in: " + user.email;
 
-  const userId = "demo-user";
-  const userRef = doc(db, "users", userId);
+  const userRef = doc(db, "users", user.uid);
+
+  const snap = await getDoc(userRef);
+  let balance = 0;
+
+  if (snap.exists()) {
+    balance = snap.data().balance || 0;
+  } else {
+    await setDoc(userRef, { balance: 0, email: user.email });
+  }
+
+  document.body.innerHTML = document.body.innerHTML.replace(
+    "Balance: 0৳",
+    "Balance: " + balance + "৳"
+  );
+
+  document.querySelector("input").value =
+    "https://nirmalhridoy.github.io/refer-earn/?ref=" + user.uid;
+};
 
   async function loadBalance() {
     const snap = await getDoc(userRef);
@@ -74,7 +91,6 @@ document.getElementById("loginBtn").onclick = async () => {
     );
   }
 
-  loadBalance();
   </script>
 </body>
 </html>
