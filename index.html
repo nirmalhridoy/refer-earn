@@ -30,40 +30,60 @@
     <p>Here you will manage users and withdraw requests.</p>
   </div>
   <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-  import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-  const firebaseConfig = {
-    apiKey: "AIzaSyBnP9QJgg6d874QB-a4meFbprLMEufRzuY",
-    authDomain: "refer-earn-73e38.firebaseapp.com",
-    projectId: "refer-earn-73e38",
-    storageBucket: "refer-earn-73e38.firebasestorage.app",
-    messagingSenderId: "323369987305",
-    appId: "1:323369987305:web:7c8eead19bff6454f4d478",
-    measurementId: "G-Z0WLNVH8YZ"
-  };
 
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-    const auth = getAuth(app);
+const firebaseConfig = {
+  apiKey: "AIzaSyBnP9QJgg6d874QB-a4meFbprLMEufRzuY",
+  authDomain: "refer-earn-73e38.firebaseapp.com",
+  projectId: "refer-earn-73e38",
+  storageBucket: "refer-earn-73e38.firebasestorage.app",
+  messagingSenderId: "323369987305",
+  appId: "1:323369987305:web:7c8eead19bff6454f4d478",
+  measurementId: "G-Z0WLNVH8YZ"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
 
 document.getElementById("loginBtn").onclick = async () => {
   const provider = new GoogleAuthProvider();
   const result = await signInWithPopup(auth, provider);
-
   const user = result.user;
+
   document.getElementById("userInfo").innerText =
     "Logged in: " + user.email;
 
   const userRef = doc(db, "users", user.uid);
-
   const snap = await getDoc(userRef);
+
   let balance = 0;
 
   if (snap.exists()) {
     balance = snap.data().balance || 0;
   } else {
-    await setDoc(userRef, { balance: 0, email: user.email });
+    await setDoc(userRef, {
+      balance: 0,
+      email: user.email
+    });
+
+    // referral check
+    const params = new URLSearchParams(window.location.search);
+    const ref = params.get("ref");
+
+    if (ref && ref !== user.uid) {
+      const refRef = doc(db, "users", ref);
+      const refSnap = await getDoc(refRef);
+
+      if (refSnap.exists()) {
+        const oldBalance = refSnap.data().balance || 0;
+        await updateDoc(refRef, {
+          balance: oldBalance + 10
+        });
+      }
+    }
   }
 
   document.body.innerHTML = document.body.innerHTML.replace(
@@ -74,23 +94,6 @@ document.getElementById("loginBtn").onclick = async () => {
   document.querySelector("input").value =
     "https://nirmalhridoy.github.io/refer-earn/?ref=" + user.uid;
 };
-
-  async function loadBalance() {
-    const snap = await getDoc(userRef);
-    let balance = 0;
-
-    if (snap.exists()) {
-      balance = snap.data().balance || 0;
-    } else {
-      await setDoc(userRef, { balance: 0 });
-    }
-
-    document.body.innerHTML = document.body.innerHTML.replace(
-      "Balance: 0৳",
-      "Balance: " + balance + "৳"
-    );
-  }
-
-  </script>
+    </script>
 </body>
 </html>
