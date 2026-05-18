@@ -20,7 +20,9 @@
     <p><strong>Balance:</strong> 0৳</p>
     <p><strong>Your Referral Link:</strong></p>
     <input value="https://your-site.vercel.app/?ref=YOUR_ID" readonly>
-    <button>Withdraw</button>
+    <input id="withdrawNumber" placeholder="Enter bKash/Nagad number">
+<input id="withdrawAmount" placeholder="Enter amount">
+    <button id="withdrawBtn">Withdraw</button>
   </div>
 
   <hr>
@@ -31,7 +33,7 @@
   </div>
   <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
@@ -93,6 +95,31 @@ document.getElementById("loginBtn").onclick = async () => {
 
   document.querySelector("input").value =
     "https://nirmalhridoy.github.io/refer-earn/?ref=" + user.uid;
+};
+    document.getElementById("withdrawBtn").onclick = async () => {
+  const number = document.getElementById("withdrawNumber").value;
+  const amount = document.getElementById("withdrawAmount").value;
+
+  if (!number || !amount) {
+    alert("Fill all fields");
+    return;
+  }
+
+  const user = auth.currentUser;
+  if (!user) {
+    alert("Login first");
+    return;
+  }
+
+  await addDoc(collection(db, "withdrawRequests"), {
+    email: user.email,
+    uid: user.uid,
+    number: number,
+    amount: amount,
+    status: "pending"
+  });
+
+  alert("Withdraw request submitted!");
 };
     </script>
 </body>
