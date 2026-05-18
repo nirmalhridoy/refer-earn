@@ -136,12 +136,36 @@ document.getElementById("withdrawAmount").value = "";
         <p><strong>Number:</strong> ${data.number}</p>
         <p><strong>Amount:</strong> ${data.amount}৳</p>
         <p><strong>Status:</strong> ${data.status}</p>
+        <button onclick="approveWithdraw('${doc.id}', '${data.uid}', ${data.amount})">
+  Approve
+</button>
       </div>
     `;
   });
 }
 
 loadWithdrawRequests();
+    window.approveWithdraw = async (requestId, uid, amount) => {
+  const userRef = doc(db, "users", uid);
+  const userSnap = await getDoc(userRef);
+
+  if (!userSnap.exists()) return;
+
+  const oldBalance = userSnap.data().balance || 0;
+  const newBalance = oldBalance - amount;
+
+  await updateDoc(userRef, {
+    balance: newBalance
+  });
+
+  const requestRef = doc(db, "withdrawRequests", requestId);
+  await updateDoc(requestRef, {
+    status: "approved"
+  });
+
+  alert("Withdraw approved!");
+  location.reload();
+};
     </script>
 </body>
 </html>
