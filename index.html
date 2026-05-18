@@ -27,9 +27,9 @@
 
   <hr>
 
-  <div class="box">
-    <h2>Admin Panel</h2>
-    <p>Here you will manage users and withdraw requests.</p>
+  <div class="box" id="adminPanel" style="display:none;">
+  <h2>Admin Panel</h2>
+  <p>Here you will manage users and withdraw requests.</p>
     <div id="withdrawList"></div>
   </div>
   <script type="module">
@@ -179,6 +179,12 @@ loadWithdrawRequests();
 
   document.getElementById("userInfo").innerText =
     "Logged in: " + user.email;
+      if (user.email === "antorahmed0185@gmail.com") {
+  document.getElementById("adminPanel").style.display = "block";
+      }
+      if (user.email === "antorahmed0185@gmail.com") {
+  document.getElementById("adminPanel").style.display = "block";
+      }
 
   const userRef = doc(db, "users", user.uid);
   const snap = await getDoc(userRef);
