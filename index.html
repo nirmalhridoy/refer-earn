@@ -30,10 +30,11 @@
   <div class="box">
     <h2>Admin Panel</h2>
     <p>Here you will manage users and withdraw requests.</p>
+    <div id="withdrawList"></div>
   </div>
   <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getAuth, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
@@ -121,6 +122,27 @@ document.getElementById("loginBtn").onclick = async () => {
 
   alert("Withdraw request submitted!");
 };
+    async function loadWithdrawRequests() {
+  const list = document.getElementById("withdrawList");
+  const snapshot = await getDocs(collection(db, "withdrawRequests"));
+
+  list.innerHTML = "<h3>Withdraw Requests</h3>";
+
+  snapshot.forEach((doc) => {
+    const data = doc.data();
+
+    list.innerHTML += `
+      <div style="border:1px solid #ccc; padding:10px; margin:10px 0;">
+        <p><strong>Email:</strong> ${data.email}</p>
+        <p><strong>Number:</strong> ${data.number}</p>
+        <p><strong>Amount:</strong> ${data.amount}৳</p>
+        <p><strong>Status:</strong> ${data.status}</p>
+      </div>
+    `;
+  });
+}
+
+loadWithdrawRequests();
     </script>
 </body>
 </html>
