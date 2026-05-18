@@ -62,12 +62,13 @@ document.getElementById("loginBtn").onclick = async () => {
   const userRef = doc(db, "users", user.uid);
   const snap = await getDoc(userRef);
 
-  let balance = 0;
+  let balance;
 
-  if (snap.exists()) {
-    balance = snap.data().balance || 0;
-  } else {
-    await setDoc(userRef, {
+if (snap.exists()) {
+  balance = snap.data().balance || 0;
+} else {
+  balance = 0;
+  await setDoc(userRef, {
       balance: 0,
       email: user.email
     });
