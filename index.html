@@ -106,6 +106,10 @@ document.querySelector("strong").parentNode.innerHTML =
     alert("Fill all fields");
     return;
   }
+      if (number.length !== 11) {
+  alert("Enter valid 11-digit number");
+  return;
+      }
 
   const user = auth.currentUser;
       const userRef = doc(db, "users", user.uid);
