@@ -21,6 +21,7 @@
     <p><strong>Balance:</strong> 0৳</p>
     <p><strong>Your Referral Link:</strong></p>
     <input value="https://your-site.vercel.app/?ref=YOUR_ID" readonly>
+    <button id="copyBtn">Copy Referral Link</button>
     <input id="withdrawNumber" placeholder="Enter bKash/Nagad number">
 <input id="withdrawAmount" placeholder="Enter amount">
     <button id="withdrawBtn">Withdraw</button>
@@ -205,6 +206,13 @@ loadWithdrawRequests();
     document.getElementById("logoutBtn").onclick = async () => {
   await signOut(auth);
   location.reload();
+};
+    document.getElementById("copyBtn").onclick = async () => {
+  const link = document.querySelector('input[readonly]').value;
+
+  await navigator.clipboard.writeText(link);
+
+  alert("Referral link copied!");
 };
     </script>
 </body>
