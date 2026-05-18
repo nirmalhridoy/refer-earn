@@ -15,6 +15,7 @@
   <h1>Refer Earn</h1>
   <button id="loginBtn">Login with Google</button>
 <p id="userInfo"></p>
+  <button id="logoutBtn" style="display:none;">Logout</button>
   <div class="box">
     <h2>User Dashboard</h2>
     <p><strong>Balance:</strong> 0৳</p>
@@ -35,7 +36,7 @@
   <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBnP9QJgg6d874QB-a4meFbprLMEufRzuY",
@@ -199,6 +200,10 @@ loadWithdrawRequests();
   document.querySelector('input[readonly]').value =
     "https://nirmalhridoy.github.io/refer-earn/?ref=" + user.uid;
 });
+    document.getElementById("logoutBtn").onclick = async () => {
+  await signOut(auth);
+  location.reload();
+};
     </script>
 </body>
 </html>
