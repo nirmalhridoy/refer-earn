@@ -104,6 +104,14 @@ document.querySelector("strong").parentNode.innerHTML =
   }
 
   const user = auth.currentUser;
+      const userRef = doc(db, "users", user.uid);
+const userSnap = await getDoc(userRef);
+const currentBalance = userSnap.data().balance || 0;
+
+if (Number(amount) > currentBalance) {
+  alert("Insufficient balance");
+  return;
+}
   if (!user) {
     alert("Login first");
     return;
@@ -136,9 +144,9 @@ document.getElementById("withdrawAmount").value = "";
         <p><strong>Number:</strong> ${data.number}</p>
         <p><strong>Amount:</strong> ${data.amount}৳</p>
         <p><strong>Status:</strong> ${data.status}</p>
-        <button onclick="approveWithdraw('${doc.id}', '${data.uid}', ${data.amount})">
-  Approve
-</button>
+        ${data.status === "pending"
+  ? `<button onclick="approveWithdraw('${doc.id}', '${data.uid}', ${data.amount}')">Approve</button>`
+  : ""}
       </div>
     `;
   });
