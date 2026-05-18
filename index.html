@@ -110,6 +110,10 @@ document.querySelector("strong").parentNode.innerHTML =
       const userRef = doc(db, "users", user.uid);
 const userSnap = await getDoc(userRef);
 const currentBalance = userSnap.data().balance || 0;
+      if (Number(amount) < 100) {
+  alert("Minimum withdraw is 100৳");
+  return;
+      }
 
 if (Number(amount) > currentBalance) {
   alert("Insufficient balance");
