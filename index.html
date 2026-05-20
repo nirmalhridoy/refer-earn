@@ -18,7 +18,8 @@
   <button id="logoutBtn" style="display:none;">Logout</button>
   <div class="box">
     <h2>User Dashboard</h2>
-    <p><strong>Balance:</strong> 0৳</p>
+    <p><strong>Balance:</strong> 10৳</p>
+    <p><strong>Total Referrals:</strong> <span id="refCount">0</span></p>
     <p><strong>Your Referral Link:</strong></p>
     <input value="https://your-site.vercel.app/?ref=YOUR_ID" readonly>
     <button id="copyBtn">Copy Referral Link</button>
@@ -73,10 +74,10 @@ if (snap.exists()) {
 } else {
   balance = 0;
   await setDoc(userRef, {
-      balance: 0,
-      email: user.email
-    });
-
+  balance: 0,
+  email: user.email,
+  referrals: 0
+});
     // referral check
     const params = new URLSearchParams(window.location.search);
     const ref = params.get("ref");
@@ -87,10 +88,12 @@ if (snap.exists()) {
 
       if (refSnap.exists()) {
         const oldBalance = refSnap.data().balance || 0;
-        await updateDoc(refRef, {
-          balance: oldBalance + 10
-        });
-      }
+        const oldRefs = refSnap.data().referrals || 0;
+
+await updateDoc(refRef, {
+  balance: oldBalance + 10,
+  referrals: oldRefs + 1
+});     }
     }
   }
 document.querySelector("strong").parentNode.innerHTML =
