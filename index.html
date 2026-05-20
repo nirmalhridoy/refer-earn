@@ -105,7 +105,8 @@ document.querySelector("strong").parentNode.innerHTML =
   snap.data().referrals || 0;
   
   document.querySelector('input[readonly]').value =
-  "https://nirmalhridoy.github.io/refer-earn/?ref=" + user.uid;};
+  "https://nirmalhridoy.github.io/refer-earn/?ref=" + user.uid;
+    loadReferralUsers(user.uid);};
     document.getElementById("withdrawBtn").onclick = async () => {
   const number = document.getElementById("withdrawNumber").value;
   const amount = document.getElementById("withdrawAmount").value;
@@ -222,6 +223,7 @@ loadWithdrawRequests();
 
   document.querySelector('input[readonly]').value =
     "https://nirmalhridoy.github.io/refer-earn/?ref=" + user.uid;
+      loadReferralUsers(user.uid);
 });
     
     document.getElementById("logoutBtn").onclick = async () => {
