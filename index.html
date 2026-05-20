@@ -34,6 +34,7 @@
 
   <div class="box" id="adminPanel" style="display:none;">
   <h2>Admin Panel</h2>
+    <p><strong>Pending Requests:</strong> <span id="pendingCount">0</span></p>
   <p>Here you will manage users and withdraw requests.</p>
     <div id="withdrawList"></div>
   </div>
@@ -156,6 +157,7 @@ document.getElementById("withdrawAmount").value = "";
   const snapshot = await getDocs(collection(db, "withdrawRequests"));
 
   list.innerHTML = "<h3>Withdraw Requests</h3>";
+      let pending = 0;
 
   snapshot.forEach((doc) => {
     const data = doc.data();
@@ -247,11 +249,15 @@ loadWithdrawRequests();
 
   snapshot.forEach((doc) => {
     const data = doc.data();
+    if (data.status === "pending") {
+  pending++;
+    }
 
     if (data.referredBy === uid) {
       list.innerHTML += "<p>" + data.email + "</p>";
     }
   });
+      document.getElementById("pendingCount").innerText = pending;
   }
     </script>
 </body>
