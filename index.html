@@ -35,6 +35,7 @@
   <div class="box" id="adminPanel" style="display:none;">
   <h2>Admin Panel</h2>
     <p><strong>Pending Requests:</strong> <span id="pendingCount">0</span></p>
+    <p><strong>Total Users:</strong> <span id="userCount">0</span></p>
   <p>Here you will manage users and withdraw requests.</p>
     <div id="withdrawList"></div>
   </div>
@@ -177,6 +178,7 @@ document.getElementById("withdrawAmount").value = "";
 }
 
 loadWithdrawRequests();
+    loadUserCount();
     window.approveWithdraw = async (requestId, uid, amount) => {
   const userRef = doc(db, "users", uid);
   const userSnap = await getDoc(userRef);
@@ -258,7 +260,13 @@ loadWithdrawRequests();
     }
   });
       document.getElementById("pendingCount").innerText = pending;
-  }
+      
+  }async function loadUserCount() {
+  const snapshot = await getDocs(collection(db, "users"));
+
+  document.getElementById("userCount").innerText =
+    snapshot.size;
+    }
     </script>
 </body>
 </html>
