@@ -5,44 +5,88 @@
   <title>Refer Earn</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
-    body { font-family: Arial, sans-serif; max-width: 700px; margin: 40px auto; padding: 20px; }
-    .box { border: 1px solid #ddd; padding: 20px; border-radius: 8px; }
-    button { padding: 10px 16px; cursor: pointer; }
-    input { padding: 8px; width: 100%; margin: 8px 0; }
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 700px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+    .box {
+      border: 1px solid #ddd;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+    button {
+      padding: 10px 16px;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+    input {
+      padding: 8px;
+      width: 100%;
+      margin: 8px 0;
+      box-sizing: border-box;
+    }
   </style>
 </head>
 <body>
+
   <h1>Refer Earn</h1>
+
   <button id="loginBtn">Login with Google</button>
-<p id="userInfo"></p>
+  <p id="userInfo"></p>
   <button id="logoutBtn" style="display:none;">Logout</button>
+
   <div class="box">
     <h2>User Dashboard</h2>
-    <p><strong>Balance:</strong> 10৳</p>
-    <p><strong>Total Referrals:</strong> <span id="refCount">0</span></p>
-    <p><strong>Referral Users:</strong></p>
-<div id="refList"></div>
-    <p><strong>Your Referral Link:</strong></p>
-    <input value="https://your-site.vercel.app/?ref=YOUR_ID" readonly>
-    <button id="copyBtn">Copy Referral Link</button>
-    <input id="withdrawNumber" type="tel" placeholder="Enter bKash/Nagad number">
-<input id="withdrawAmount" type="number" placeholder="Enter amount">
-    <button id="withdrawBtn">Withdraw</button>
-  </div>
 
-  <hr>
+    <p><strong>Balance:</strong> <span id="balance">0</span>৳</p>
+
+    <p><strong>Total Referrals:</strong> <span id="refCount">0</span></p>
+
+    <p><strong>Referral Users:</strong></p>
+    <div id="refList"></div>
+
+    <p><strong>Your Referral Link:</strong></p>
+    <input id="refLink" readonly>
+    <button id="copyBtn">Copy Referral Link</button>
+
+    <input id="withdrawNumber" type="tel" placeholder="Enter bKash/Nagad number">
+    <input id="withdrawAmount" type="number" placeholder="Enter amount">
+    <button id="withdrawBtn">Withdraw</button>
+
+    <p><strong>My Withdraw History:</strong></p>
+    <div id="myWithdraws"></div>
+  </div>
 
   <div class="box" id="adminPanel" style="display:none;">
-  <h2>Admin Panel</h2>
+    <h2>Admin Panel</h2>
     <p><strong>Pending Requests:</strong> <span id="pendingCount">0</span></p>
     <p><strong>Total Users:</strong> <span id="userCount">0</span></p>
-  <p>Here you will manage users and withdraw requests.</p>
     <div id="withdrawList"></div>
   </div>
-  <script type="module">
+
+<script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  collection,
+  addDoc,
+  getDocs
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+import {
+  getAuth,
+  GoogleAuthProvider,
+  signInWithPopup,
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBnP9QJgg6d874QB-a4meFbprLMEufRzuY",
@@ -60,32 +104,35 @@ const auth = getAuth(app);
 
 document.getElementById("loginBtn").onclick = async () => {
   const provider = new GoogleAuthProvider();
-  const result = await signInWithPopup(auth, provider);
-  const user = result.user;
+  await signInWithPopup(auth, provider);
+};
+
+onAuthStateChanged(auth, async (user) => {
+  if (!user) return;
 
   document.getElementById("userInfo").innerText =
     "Logged in: " + user.email;
+
   document.getElementById("loginBtn").style.display = "none";
   document.getElementById("logoutBtn").style.display = "inline-block";
+
+  if (user.email === "antorahmed0185@gmail.com") {
+    document.getElementById("adminPanel").style.display = "block";
+  }
 
   const userRef = doc(db, "users", user.uid);
   const snap = await getDoc(userRef);
 
-  let balance;
+  const params = new URLSearchParams(window.location.search);
+  const ref = params.get("ref");
 
-if (snap.exists()) {
-  balance = snap.data().balance || 0;
-} else {
-  balance = 0;
-  await setDoc(userRef, {
-  balance: 0,
-  email: user.email,
-  referrals: 0
-    referredBy: ref || null
-});
-    // referral check
-    const params = new URLSearchParams(window.location.search);
-    const ref = params.get("ref");
+  if (!snap.exists()) {
+    await setDoc(userRef, {
+      balance: 0,
+      email: user.email,
+      referrals: 0,
+      referredBy: ref || null
+    });
 
     if (ref && ref !== user.uid) {
       const refRef = doc(db, "users", ref);
@@ -95,73 +142,148 @@ if (snap.exists()) {
         const oldBalance = refSnap.data().balance || 0;
         const oldRefs = refSnap.data().referrals || 0;
 
-await updateDoc(refRef, {
-  balance: oldBalance + 10,
-  referrals: oldRefs + 1
-});     }
+        await updateDoc(refRef, {
+          balance: oldBalance + 10,
+          referrals: oldRefs + 1
+        });
+      }
     }
   }
-document.querySelector("strong").parentNode.innerHTML =
-  "<strong>Balance:</strong> " + balance + "৳";
+
+  loadUserData(user.uid);
+  loadReferralUsers(user.uid);
+  loadMyWithdraws(user.uid);
+  loadWithdrawRequests();
+  loadUserCount();
+});
+
+async function loadUserData(uid) {
+  const snap = await getDoc(doc(db, "users", uid));
+
+  if (!snap.exists()) return;
+
+  const data = snap.data();
+
+  document.getElementById("balance").innerText =
+    data.balance || 0;
+
   document.getElementById("refCount").innerText =
-  snap.data().referrals || 0;
-  
-  document.querySelector('input[readonly]').value =
-  "https://nirmalhridoy.github.io/refer-earn/?ref=" + user.uid;
-    loadReferralUsers(user.uid);
-    loadMyWithdraws(user.uid);};
-    document.getElementById("withdrawBtn").onclick = async () => {
-  const number = document.getElementById("withdrawNumber").value;
-  const amount = document.getElementById("withdrawAmount").value;
+    data.referrals || 0;
+
+  document.getElementById("refLink").value =
+    "https://nirmalhridoy.github.io/refer-earn/?ref=" + uid;
+}
+
+document.getElementById("withdrawBtn").onclick = async () => {
+  const number =
+    document.getElementById("withdrawNumber").value;
+
+  const amount =
+    document.getElementById("withdrawAmount").value;
 
   if (!number || !amount) {
     alert("Fill all fields");
     return;
   }
-      if (number.length !== 11) {
-  alert("Enter valid 11-digit number");
-  return;
-      }
+
+  if (number.length !== 11) {
+    alert("Enter valid 11-digit number");
+    return;
+  }
+
+  if (Number(amount) < 100) {
+    alert("Minimum withdraw is 100৳");
+    return;
+  }
 
   const user = auth.currentUser;
-      const userRef = doc(db, "users", user.uid);
-const userSnap = await getDoc(userRef);
-const currentBalance = userSnap.data().balance || 0;
-      if (Number(amount) < 100) {
-  alert("Minimum withdraw is 100৳");
-  return;
-      }
 
-if (Number(amount) > currentBalance) {
-  alert("Insufficient balance");
-  return;
-}
   if (!user) {
     alert("Login first");
+    return;
+  }
+
+  const userSnap =
+    await getDoc(doc(db, "users", user.uid));
+
+  const currentBalance =
+    userSnap.data().balance || 0;
+
+  if (Number(amount) > currentBalance) {
+    alert("Insufficient balance");
     return;
   }
 
   await addDoc(collection(db, "withdrawRequests"), {
     email: user.email,
     uid: user.uid,
-    number: number,
-    amount: amount,
+    number,
+    amount,
     status: "pending"
   });
 
   alert("Withdraw request submitted!");
-      document.getElementById("withdrawNumber").value = "";
-document.getElementById("withdrawAmount").value = "";
-};
-    async function loadWithdrawRequests() {
-  const list = document.getElementById("withdrawList");
-  const snapshot = await getDocs(collection(db, "withdrawRequests"));
 
-  list.innerHTML = "<h3>Withdraw Requests</h3>";
-      let pending = 0;
+  document.getElementById("withdrawNumber").value = "";
+  document.getElementById("withdrawAmount").value = "";
+
+  loadMyWithdraws(user.uid);
+  loadWithdrawRequests();
+}
+
+async function loadMyWithdraws(uid) {
+  const box = document.getElementById("myWithdraws");
+  box.innerHTML = "";
+
+  const snapshot =
+    await getDocs(collection(db, "withdrawRequests"));
 
   snapshot.forEach((doc) => {
     const data = doc.data();
+
+    if (data.uid === uid) {
+      box.innerHTML +=
+        "<p>" + data.amount + "৳ - " +
+        data.status + "</p>";
+    }
+  });
+}
+
+async function loadReferralUsers(uid) {
+  const list = document.getElementById("refList");
+  list.innerHTML = "";
+
+  const snapshot =
+    await getDocs(collection(db, "users"));
+
+  snapshot.forEach((doc) => {
+    const data = doc.data();
+
+    if (data.referredBy === uid) {
+      list.innerHTML +=
+        "<p>" + data.email + "</p>";
+    }
+  });
+}
+
+async function loadWithdrawRequests() {
+  const list =
+    document.getElementById("withdrawList");
+
+  list.innerHTML =
+    "<h3>Withdraw Requests</h3>";
+
+  const snapshot =
+    await getDocs(collection(db, "withdrawRequests"));
+
+  let pending = 0;
+
+  snapshot.forEach((docSnap) => {
+    const data = docSnap.data();
+
+    if (data.status === "pending") {
+      pending++;
+    }
 
     list.innerHTML += `
       <div style="border:1px solid #ccc; padding:10px; margin:10px 0;">
@@ -169,108 +291,74 @@ document.getElementById("withdrawAmount").value = "";
         <p><strong>Number:</strong> ${data.number}</p>
         <p><strong>Amount:</strong> ${data.amount}৳</p>
         <p><strong>Status:</strong> ${data.status}</p>
-        ${data.status === "pending"
-  ? `<button onclick="approveWithdraw('${doc.id}', '${data.uid}', ${data.amount}')">Approve</button>`
-  : ""}
+        ${
+          data.status === "pending"
+          ? `<button onclick="approveWithdraw('${docSnap.id}','${data.uid}',${data.amount})">Approve</button>`
+          : ""
+        }
       </div>
     `;
   });
+
+  document.getElementById("pendingCount").innerText =
+    pending;
 }
 
-loadWithdrawRequests();
-    loadUserCount();
-    window.approveWithdraw = async (requestId, uid, amount) => {
+window.approveWithdraw = async (
+  requestId,
+  uid,
+  amount
+) => {
   const userRef = doc(db, "users", uid);
   const userSnap = await getDoc(userRef);
 
   if (!userSnap.exists()) return;
 
-  const oldBalance = userSnap.data().balance || 0;
-  const newBalance = oldBalance - amount;
+  const oldBalance =
+    userSnap.data().balance || 0;
 
   await updateDoc(userRef, {
-    balance: newBalance
+    balance: oldBalance - amount
   });
 
-  const requestRef = doc(db, "withdrawRequests", requestId);
-  await updateDoc(requestRef, {
-    status: "approved"
-  });
+  await updateDoc(
+    doc(db, "withdrawRequests", requestId),
+    {
+      status: "approved"
+    }
+  );
 
   alert("Withdraw approved!");
-      loadWithdrawRequests();
-loadUserCount();
-loadMyWithdraws(uid);
-      
-  location.reload();
+
+  loadUserData(uid);
+  loadMyWithdraws(uid);
+  loadWithdrawRequests();
 };
-    onAuthStateChanged(auth, async (user) => {
-  if (!user) return;
 
-  document.getElementById("userInfo").innerText =
-    "Logged in: " + user.email;
-      document.getElementById("loginBtn").style.display = "none";
-      document.getElementById("logoutBtn").style.display = "inline-block";
-      if (user.email === "antorahmed0185@gmail.com") {
-  document.getElementById("adminPanel").style.display = "block";
-      }
-      if (user.email === "antorahmed0185@gmail.com") {
-  document.getElementById("adminPanel").style.display = "block";
-      }
+async function loadUserCount() {
+  const snapshot =
+    await getDocs(collection(db, "users"));
 
-  const userRef = doc(db, "users", user.uid);
-  const snap = await getDoc(userRef);
+  document.getElementById("userCount").innerText =
+    snapshot.size;
+}
 
-  if (snap.exists()) {
-    const balance = snap.data().balance || 0;
-
-    document.querySelector("strong").parentNode.innerHTML =
-      "<strong>Balance:</strong> " + balance + "৳";
-  }
-      document.getElementById("refCount").innerText =
-  snap.data().referrals || 0;
-
-  document.querySelector('input[readonly]').value =
-    "https://nirmalhridoy.github.io/refer-earn/?ref=" + user.uid;
-      loadReferralUsers(user.uid);
-      loadMyWithdraws(user.uid);
-});
-    
-    document.getElementById("logoutBtn").onclick = async () => {
-  await signOut(auth);
-  location.reload();
-};
-    document.getElementById("copyBtn").onclick = async () => {
-  const link = document.querySelector('input[readonly]').value;
+document.getElementById("copyBtn").onclick =
+async () => {
+  const link =
+    document.getElementById("refLink").value;
 
   await navigator.clipboard.writeText(link);
 
   alert("Referral link copied!");
 };
-    async function loadReferralUsers(uid) {
-  const list = document.getElementById("refList");
-  list.innerHTML = "";
 
-  const snapshot = await getDocs(collection(db, "users"));
+document.getElementById("logoutBtn").onclick =
+async () => {
+  await signOut(auth);
+  location.reload();
+};
+</script>
 
-  snapshot.forEach((doc) => {
-    const data = doc.data();
-    if (data.status === "pending") {
-  pending++;
-    }
-
-    if (data.referredBy === uid) {
-      list.innerHTML += "<p>" + data.email + "</p>";
-    }
-  });
-      document.getElementById("pendingCount").innerText = pending;
-      
-  }async function loadUserCount() {
-  const snapshot = await getDocs(collection(db, "users"));
-
-  document.getElementById("userCount").innerText =
-    snapshot.size;
-    }
-    </script>
 </body>
 </html>
