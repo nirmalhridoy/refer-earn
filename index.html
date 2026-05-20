@@ -99,22 +99,6 @@ padding:10px;
 border-radius:10px;
 margin-top:10px;
 }
-
-.requestCard{
-border:1px solid #ddd;
-padding:12px;
-margin-top:10px;
-border-radius:10px;
-background:#fafafa;
-}
-
-.approveBtn{
-background:#16a34a;
-}
-
-.approveBtn:hover{
-background:#166534;
-}
 </style>
 </head>
 <body>
@@ -156,15 +140,6 @@ background:#166534;
 
 <p><strong>My Withdraw History:</strong></p>
 <div id="myWithdraws" class="listBox"></div>
-</div>
-
-<div class="box" id="adminPanel" style="display:none;">
-<h2>Admin Panel</h2>
-
-<p><strong>Pending Requests:</strong> <span id="pendingCount">0</span></p>
-<p><strong>Total Users:</strong> <span id="userCount">0</span></p>
-
-<div id="withdrawList"></div>
 </div>
 
 </div>
@@ -212,41 +187,37 @@ await signInWithPopup(auth,provider);
 onAuthStateChanged(auth,async(user)=>{
 if(!user)return;
 
-document.getElementById("userInfo").innerText=
-"Logged in: "+user.email;
+document.getElementById("userInfo").innerText =
+"Logged in: " + user.email;
 
-document.getElementById("loginBtn").style.display="none";
-document.getElementById("logoutBtn").style.display="inline-block";
+document.getElementById("loginBtn").style.display = "none";
+document.getElementById("logoutBtn").style.display = "inline-block";
 
-if(user.email==="antorahmed0185@gmail.com"){
-document.getElementById("adminPanel").style.display="block";
-}
+const userRef = doc(db,"users",user.uid);
+const snap = await getDoc(userRef);
 
-const userRef=doc(db,"users",user.uid);
-const snap=await getDoc(userRef);
-
-const params=new URLSearchParams(window.location.search);
-const ref=params.get("ref");
+const params = new URLSearchParams(window.location.search);
+const ref = params.get("ref");
 
 if(!snap.exists()){
 await setDoc(userRef,{
 balance:0,
 email:user.email,
 referrals:0,
-referredBy:ref||null
+referredBy:ref || null
 });
 
-if(ref && ref!==user.uid){
-const refRef=doc(db,"users",ref);
-const refSnap=await getDoc(refRef);
+if(ref && ref !== user.uid){
+const refRef = doc(db,"users",ref);
+const refSnap = await getDoc(refRef);
 
 if(refSnap.exists()){
-const oldBalance=refSnap.data().balance||0;
-const oldRefs=refSnap.data().referrals||0;
+const oldBalance = refSnap.data().balance || 0;
+const oldRefs = refSnap.data().referrals || 0;
 
 await updateDoc(refRef,{
-balance:oldBalance+10,
-referrals:oldRefs+1
+balance: oldBalance + 10,
+referrals: oldRefs + 1
 });
 }
 }
@@ -255,26 +226,28 @@ referrals:oldRefs+1
 loadUserData(user.uid);
 loadReferralUsers(user.uid);
 loadMyWithdraws(user.uid);
-loadWithdrawRequests();
-loadUserCount();
 });
 
 async function loadUserData(uid){
-const snap=await getDoc(doc(db,"users",uid));
-if(!snap.exists())return;
+const snap = await getDoc(doc(db,"users",uid));
+if(!snap.exists()) return;
 
-const data=snap.data();
+const data = snap.data();
 
-document.getElementById("balance").innerText=data.balance||0;
-document.getElementById("refCount").innerText=data.referrals||0;
-document.getElementById("refLink").value=
-"https://nirmalhridoy.github.io/refer-earn/?ref="+uid;
+document.getElementById("balance").innerText =
+data.balance || 0;
+
+document.getElementById("refCount").innerText =
+data.referrals || 0;
+
+document.getElementById("refLink").value =
+"https://nirmalhridoy.github.io/refer-earn/?ref=" + uid;
 }
 
-document.getElementById("withdrawBtn").onclick=async()=>{
-const method=document.getElementById("paymentMethod").value;
-const number=document.getElementById("withdrawNumber").value;
-const amount=document.getElementById("withdrawAmount").value;
+document.getElementById("withdrawBtn").onclick = async ()=>{
+const method = document.getElementById("paymentMethod").value;
+const number = document.getElementById("withdrawNumber").value;
+const amount = document.getElementById("withdrawAmount").value;
 
 if(!method){
 alert("Select payment method");
@@ -286,26 +259,26 @@ alert("Fill all fields");
 return;
 }
 
-if(number.length!==11){
+if(number.length !== 11){
 alert("Enter valid 11-digit number");
 return;
 }
 
-if(Number(amount)<100){
+if(Number(amount) < 100){
 alert("Minimum withdraw is 100৳");
 return;
 }
 
-const user=auth.currentUser;
+const user = auth.currentUser;
 if(!user){
 alert("Login first");
 return;
 }
 
-const userSnap=await getDoc(doc(db,"users",user.uid));
-const currentBalance=userSnap.data().balance||0;
+const userSnap = await getDoc(doc(db,"users",user.uid));
+const currentBalance = userSnap.data().balance || 0;
 
-if(Number(amount)>currentBalance){
+if(Number(amount) > currentBalance){
 alert("Insufficient balance");
 return;
 }
@@ -321,114 +294,52 @@ status:"pending"
 
 alert("Withdraw request submitted!");
 
-document.getElementById("paymentMethod").value="";
-document.getElementById("withdrawNumber").value="";
-document.getElementById("withdrawAmount").value="";
+document.getElementById("paymentMethod").value = "";
+document.getElementById("withdrawNumber").value = "";
+document.getElementById("withdrawAmount").value = "";
 
 loadMyWithdraws(user.uid);
-loadWithdrawRequests();
 };
 
 async function loadMyWithdraws(uid){
-const box=document.getElementById("myWithdraws");
-box.innerHTML="";
+const box = document.getElementById("myWithdraws");
+box.innerHTML = "";
 
-const snapshot=await getDocs(collection(db,"withdrawRequests"));
+const snapshot = await getDocs(collection(db,"withdrawRequests"));
 
 snapshot.forEach((doc)=>{
-const data=doc.data();
+const data = doc.data();
 
-if(data.uid===uid){
+if(data.uid === uid){
 box.innerHTML +=
-"<p>"+data.method+" | "+data.amount+"৳ - "+data.status+"</p>";
+"<p>" + data.method + " | " + data.amount + "৳ - " + data.status + "</p>";
 }
 });
 }
 
 async function loadReferralUsers(uid){
-const list=document.getElementById("refList");
-list.innerHTML="";
+const list = document.getElementById("refList");
+list.innerHTML = "";
 
-const snapshot=await getDocs(collection(db,"users"));
+const snapshot = await getDocs(collection(db,"users"));
 
 snapshot.forEach((doc)=>{
-const data=doc.data();
+const data = doc.data();
 
-if(data.referredBy===uid){
+if(data.referredBy === uid){
 list.innerHTML +=
-"<p>"+data.email+"</p>";
+"<p>" + data.email + "</p>";
 }
 });
 }
 
-async function loadWithdrawRequests(){
-const list=document.getElementById("withdrawList");
-list.innerHTML="<h3>Withdraw Requests</h3>";
-
-const snapshot=await getDocs(collection(db,"withdrawRequests"));
-
-let pending=0;
-
-snapshot.forEach((docSnap)=>{
-const data=docSnap.data();
-
-if(data.status==="pending"){
-pending++;
-}
-
-list.innerHTML += `
-<div class="requestCard">
-<p><strong>Email:</strong> ${data.email}</p>
-<p><strong>Method:</strong> ${data.method}</p>
-<p><strong>Number:</strong> ${data.number}</p>
-<p><strong>Amount:</strong> ${data.amount}৳</p>
-<p><strong>Status:</strong> ${data.status}</p>
-
-${data.status==="pending"
-? `<button class="approveBtn" onclick="approveWithdraw('${docSnap.id}','${data.uid}',${data.amount})">Approve</button>`
-: ""}
-</div>
-`;
-});
-
-document.getElementById("pendingCount").innerText=pending;
-}
-
-window.approveWithdraw=async(requestId,uid,amount)=>{
-const userRef=doc(db,"users",uid);
-const userSnap=await getDoc(userRef);
-
-if(!userSnap.exists()) return;
-
-const oldBalance=userSnap.data().balance||0;
-
-await updateDoc(userRef,{
-balance:oldBalance-amount
-});
-
-await updateDoc(doc(db,"withdrawRequests",requestId),{
-status:"approved"
-});
-
-alert("Withdraw approved!");
-
-loadUserData(uid);
-loadMyWithdraws(uid);
-loadWithdrawRequests();
-};
-
-async function loadUserCount(){
-const snapshot=await getDocs(collection(db,"users"));
-document.getElementById("userCount").innerText=snapshot.size;
-}
-
-document.getElementById("copyBtn").onclick=async()=>{
-const link=document.getElementById("refLink").value;
+document.getElementById("copyBtn").onclick = async ()=>{
+const link = document.getElementById("refLink").value;
 await navigator.clipboard.writeText(link);
 alert("Referral link copied!");
 };
 
-document.getElementById("logoutBtn").onclick=async()=>{
+document.getElementById("logoutBtn").onclick = async ()=>{
 await signOut(auth);
 location.reload();
 };
