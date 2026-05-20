@@ -20,6 +20,8 @@
     <h2>User Dashboard</h2>
     <p><strong>Balance:</strong> 10৳</p>
     <p><strong>Total Referrals:</strong> <span id="refCount">0</span></p>
+    <p><strong>Referral Users:</strong></p>
+<div id="refList"></div>
     <p><strong>Your Referral Link:</strong></p>
     <input value="https://your-site.vercel.app/?ref=YOUR_ID" readonly>
     <button id="copyBtn">Copy Referral Link</button>
@@ -77,6 +79,7 @@ if (snap.exists()) {
   balance: 0,
   email: user.email,
   referrals: 0
+    referredBy: ref || null
 });
     // referral check
     const params = new URLSearchParams(window.location.search);
@@ -220,6 +223,7 @@ loadWithdrawRequests();
   document.querySelector('input[readonly]').value =
     "https://nirmalhridoy.github.io/refer-earn/?ref=" + user.uid;
 });
+    
     document.getElementById("logoutBtn").onclick = async () => {
   await signOut(auth);
   location.reload();
@@ -231,6 +235,20 @@ loadWithdrawRequests();
 
   alert("Referral link copied!");
 };
+    async function loadReferralUsers(uid) {
+  const list = document.getElementById("refList");
+  list.innerHTML = "";
+
+  const snapshot = await getDocs(collection(db, "users"));
+
+  snapshot.forEach((doc) => {
+    const data = doc.data();
+
+    if (data.referredBy === uid) {
+      list.innerHTML += "<p>" + data.email + "</p>";
+    }
+  });
+  }
     </script>
 </body>
 </html>
