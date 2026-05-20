@@ -98,6 +98,8 @@ await updateDoc(refRef, {
   }
 document.querySelector("strong").parentNode.innerHTML =
   "<strong>Balance:</strong> " + balance + "৳";
+  document.getElementById("refCount").innerText =
+  snap.data().referrals || 0;
   
   document.querySelector('input[readonly]').value =
   "https://nirmalhridoy.github.io/refer-earn/?ref=" + user.uid;};
@@ -212,6 +214,8 @@ loadWithdrawRequests();
     document.querySelector("strong").parentNode.innerHTML =
       "<strong>Balance:</strong> " + balance + "৳";
   }
+      document.getElementById("refCount").innerText =
+  snap.data().referrals || 0;
 
   document.querySelector('input[readonly]').value =
     "https://nirmalhridoy.github.io/refer-earn/?ref=" + user.uid;
