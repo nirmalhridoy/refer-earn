@@ -12,26 +12,22 @@ padding:0;
 box-sizing:border-box;
 font-family:Arial,sans-serif;
 }
-
 body{
 background:linear-gradient(135deg,#4f46e5,#9333ea);
 min-height:100vh;
 padding:20px;
 color:#222;
 }
-
 .container{
 max-width:800px;
 margin:auto;
 }
-
 h1{
 text-align:center;
 color:white;
 margin-bottom:20px;
 font-size:32px;
 }
-
 .box{
 background:white;
 padding:20px;
@@ -39,16 +35,13 @@ border-radius:15px;
 margin-bottom:20px;
 box-shadow:0 8px 25px rgba(0,0,0,0.15);
 }
-
 h2{
 margin-bottom:15px;
 color:#4f46e5;
 }
-
 p{
 margin:8px 0;
 }
-
 button{
 padding:12px 18px;
 border:none;
@@ -60,11 +53,9 @@ font-weight:bold;
 margin-top:10px;
 transition:0.3s;
 }
-
 button:hover{
 background:#3730a3;
 }
-
 input, select{
 width:100%;
 padding:12px;
@@ -73,26 +64,21 @@ border-radius:8px;
 margin-top:10px;
 outline:none;
 }
-
 input:focus, select:focus{
 border-color:#4f46e5;
 }
-
 #userInfo{
 text-align:center;
 color:white;
 margin-top:10px;
 margin-bottom:10px;
 }
-
 #logoutBtn{
 background:#dc2626;
 }
-
 #logoutBtn:hover{
 background:#991b1b;
 }
-
 .listBox{
 background:#f8fafc;
 padding:10px;
@@ -154,7 +140,8 @@ setDoc,
 updateDoc,
 collection,
 addDoc,
-getDocs
+getDocs,
+onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 import {
@@ -180,12 +167,12 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 
 document.getElementById("loginBtn").onclick = async ()=>{
-const provider=new GoogleAuthProvider();
-await signInWithPopup(auth,provider);
+const provider = new GoogleAuthProvider();
+await signInWithPopup(auth, provider);
 };
 
-onAuthStateChanged(auth,async(user)=>{
-if(!user)return;
+onAuthStateChanged(auth, async(user)=>{
+if(!user) return;
 
 document.getElementById("userInfo").innerText =
 "Logged in: " + user.email;
@@ -223,26 +210,27 @@ referrals: oldRefs + 1
 }
 }
 
-loadUserData(user.uid);
-loadReferralUsers(user.uid);
-loadMyWithdraws(user.uid);
-});
+document.getElementById("refLink").value =
+"https://nirmalhridoy.github.io/refer-earn/?ref=" + user.uid;
 
-async function loadUserData(uid){
-const snap = await getDoc(doc(db,"users",uid));
-if(!snap.exists()) return;
-
-const data = snap.data();
-
+onSnapshot(doc(db,"users",user.uid),(docSnap)=>{
+if(docSnap.exists()){
+const data = docSnap.data();
 document.getElementById("balance").innerText =
 data.balance || 0;
 
 document.getElementById("refCount").innerText =
 data.referrals || 0;
-
-document.getElementById("refLink").value =
-"https://nirmalhridoy.github.io/refer-earn/?ref=" + uid;
 }
+});
+
+loadReferralUsers(user.uid);
+loadMyWithdraws(user.uid);
+
+onSnapshot(collection(db,"withdrawRequests"),()=>{
+loadMyWithdraws(user.uid);
+});
+});
 
 document.getElementById("withdrawBtn").onclick = async ()=>{
 const method = document.getElementById("paymentMethod").value;
@@ -294,11 +282,9 @@ status:"pending"
 
 alert("Withdraw request submitted!");
 
-document.getElementById("paymentMethod").value = "";
-document.getElementById("withdrawNumber").value = "";
-document.getElementById("withdrawAmount").value = "";
-
-loadMyWithdraws(user.uid);
+document.getElementById("paymentMethod").value="";
+document.getElementById("withdrawNumber").value="";
+document.getElementById("withdrawAmount").value="";
 };
 
 async function loadMyWithdraws(uid){
@@ -346,4 +332,4 @@ location.reload();
 </script>
 
 </body>
-</html>
+  </html>
