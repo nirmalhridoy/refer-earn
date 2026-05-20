@@ -65,7 +65,7 @@ button:hover{
 background:#3730a3;
 }
 
-input{
+input, select{
 width:100%;
 padding:12px;
 border:1px solid #ccc;
@@ -74,7 +74,7 @@ margin-top:10px;
 outline:none;
 }
 
-input:focus{
+input:focus, select:focus{
 border-color:#4f46e5;
 }
 
@@ -142,6 +142,12 @@ background:#166534;
 <p><strong>Your Referral Link:</strong></p>
 <input id="refLink" readonly>
 <button id="copyBtn">Copy Referral Link</button>
+
+<select id="paymentMethod">
+<option value="">Select Payment Method</option>
+<option value="bKash">bKash</option>
+<option value="Nagad">Nagad</option>
+</select>
 
 <input id="withdrawNumber" type="tel" placeholder="Enter bKash/Nagad number">
 <input id="withdrawAmount" type="number" placeholder="Enter amount">
@@ -266,8 +272,14 @@ document.getElementById("refLink").value=
 }
 
 document.getElementById("withdrawBtn").onclick=async()=>{
+const method=document.getElementById("paymentMethod").value;
 const number=document.getElementById("withdrawNumber").value;
 const amount=document.getElementById("withdrawAmount").value;
+
+if(!method){
+alert("Select payment method");
+return;
+}
 
 if(!number || !amount){
 alert("Fill all fields");
@@ -301,13 +313,15 @@ return;
 await addDoc(collection(db,"withdrawRequests"),{
 email:user.email,
 uid:user.uid,
-number,
-amount,
+method:method,
+number:number,
+amount:amount,
 status:"pending"
 });
 
 alert("Withdraw request submitted!");
 
+document.getElementById("paymentMethod").value="";
 document.getElementById("withdrawNumber").value="";
 document.getElementById("withdrawAmount").value="";
 
@@ -326,7 +340,7 @@ const data=doc.data();
 
 if(data.uid===uid){
 box.innerHTML +=
-"<p>"+data.amount+"৳ - "+data.status+"</p>";
+"<p>"+data.method+" | "+data.amount+"৳ - "+data.status+"</p>";
 }
 });
 }
@@ -365,6 +379,7 @@ pending++;
 list.innerHTML += `
 <div class="requestCard">
 <p><strong>Email:</strong> ${data.email}</p>
+<p><strong>Method:</strong> ${data.method}</p>
 <p><strong>Number:</strong> ${data.number}</p>
 <p><strong>Amount:</strong> ${data.amount}৳</p>
 <p><strong>Status:</strong> ${data.status}</p>
@@ -383,7 +398,7 @@ window.approveWithdraw=async(requestId,uid,amount)=>{
 const userRef=doc(db,"users",uid);
 const userSnap=await getDoc(userRef);
 
-if(!userSnap.exists())return;
+if(!userSnap.exists()) return;
 
 const oldBalance=userSnap.data().balance||0;
 
@@ -404,19 +419,16 @@ loadWithdrawRequests();
 
 async function loadUserCount(){
 const snapshot=await getDocs(collection(db,"users"));
-document.getElementById("userCount").innerText=
-snapshot.size;
+document.getElementById("userCount").innerText=snapshot.size;
 }
 
-document.getElementById("copyBtn").onclick=
-async()=>{
+document.getElementById("copyBtn").onclick=async()=>{
 const link=document.getElementById("refLink").value;
 await navigator.clipboard.writeText(link);
 alert("Referral link copied!");
 };
 
-document.getElementById("logoutBtn").onclick=
-async()=>{
+document.getElementById("logoutBtn").onclick=async()=>{
 await signOut(auth);
 location.reload();
 };
