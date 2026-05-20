@@ -198,6 +198,10 @@ loadWithdrawRequests();
   });
 
   alert("Withdraw approved!");
+      loadWithdrawRequests();
+loadUserCount();
+loadMyWithdraws(uid);
+      
   location.reload();
 };
     onAuthStateChanged(auth, async (user) => {
