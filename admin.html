@@ -6,328 +6,255 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
-}
-body{
-background:linear-gradient(135deg,#1e3a8a,#7c3aed);
-min-height:100vh;
-padding:20px;
-}
-.container{
-max-width:800px;
-margin:auto;
-}
-h1{
-text-align:center;
-color:white;
-margin-bottom:20px;
-}
-.box{
-background:white;
-padding:20px;
-border-radius:15px;
-box-shadow:0 8px 25px rgba(0,0,0,0.15);
-margin-bottom:20px;
-}
-button{
-padding:10px 16px;
-border:none;
-border-radius:8px;
-cursor:pointer;
-font-weight:bold;
-margin-top:10px;
-background:#2563eb;
-color:white;
-}
-.approveBtn{
-background:#16a34a;
-}
-.requestCard{
-border:1px solid #ddd;
-padding:12px;
-margin-top:10px;
-border-radius:10px;
-background:#fafafa;
-}
-#adminPanel{
-display:none;
-}
-#loginArea{
-text-align:center;
-}
-#status{
-color:white;
-text-align:center;
-margin-top:10px;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
+body{background:linear-gradient(135deg,#1e3a8a,#7c3aed);min-height:100vh;padding:20px;}
+.container{max-width:900px;margin:auto;}
+h1{text-align:center;color:white;margin-bottom:20px;}
+.box{background:white;padding:20px;border-radius:15px;margin-bottom:20px;}
+button{padding:10px 14px;border:none;border-radius:8px;cursor:pointer;font-weight:bold;margin-top:8px;}
+.approve{background:#16a34a;color:white;}
+.reject{background:#dc2626;color:white;}
+.card{border:1px solid #ddd;padding:10px;border-radius:10px;margin-top:10px;background:#fafafa;}
+#adminPanel{display:none;}
+#status{text-align:center;color:white;}
 </style>
 </head>
+
 <body>
 
 <div class="container">
 
-<h1>Refer Earn Admin Panel</h1>
+<h1>Admin Panel</h1>
 
 <div id="loginArea">
-<button id="adminLoginBtn">
-Admin Login with Google
-</button>
+<button id="loginBtn">Admin Login</button>
 <p id="status"></p>
 </div>
 
-<div class="box" id="adminPanel">
+<div id="adminPanel">
 
+<div class="box">
+<h2>Share Requests (+5৳)</h2>
+<div id="shareList"></div>
+</div>
+
+<div class="box">
 <h2>Activation Requests</h2>
-<div id="activationList"></div>
+<div id="actList"></div>
+</div>
 
-<hr style="margin:20px 0;">
-
+<div class="box">
 <h2>Withdraw Requests</h2>
 <div id="withdrawList"></div>
+</div>
 
 </div>
 
 </div>
 
 <script type="module">
-import { initializeApp }
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
-getFirestore,
-collection,
-getDocs,
-doc,
-getDoc,
-updateDoc,
-onSnapshot
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
+getFirestore,collection,doc,getDoc,updateDoc,onSnapshot
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import {
-getAuth,
-GoogleAuthProvider,
-signInWithPopup,
-onAuthStateChanged
-}
-from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+getAuth,GoogleAuthProvider,signInWithPopup,onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-const firebaseConfig = {
-apiKey: "AIzaSyBnP9QJgg6d874QB-a4meFbprLMEufRzuY",
-authDomain: "refer-earn-73e38.firebaseapp.com",
-projectId: "refer-earn-73e38",
-storageBucket: "refer-earn-73e38.firebasestorage.app",
-messagingSenderId: "323369987305",
-appId: "1:323369987305:web:7c8eead19bff6454f4d478"
+const app=initializeApp({
+apiKey:"AIzaSyBnP9QJgg6d874QB-a4meFbprLMEufRzuY",
+authDomain:"refer-earn-73e38.firebaseapp.com",
+projectId:"refer-earn-73e38"
+});
+
+const db=getFirestore(app);
+const auth=getAuth(app);
+
+const ADMIN_EMAIL="antorahmed0185@gmail.com";
+
+/* LOGIN */
+document.getElementById("loginBtn").onclick=async()=>{
+await signInWithPopup(auth,new GoogleAuthProvider());
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);
-
-const ADMIN_EMAIL = "antorahmed0185@gmail.com";
-
-document.getElementById("adminLoginBtn").onclick =
-async ()=>{
-const provider = new GoogleAuthProvider();
-await signInWithPopup(auth, provider);
-};
-
+/* AUTH */
 onAuthStateChanged(auth,(user)=>{
-
-if(!user) return;
+if(!user)return;
 
 if(user.email!==ADMIN_EMAIL){
-document.getElementById("status").innerText=
-"Access denied";
+document.getElementById("status").innerText="Not admin";
 return;
 }
 
-document.getElementById("loginArea").style.display=
-"none";
+document.getElementById("loginArea").style.display="none";
+document.getElementById("adminPanel").style.display="block";
 
-document.getElementById("adminPanel").style.display=
-"block";
-
-loadActivationRequests();
-loadWithdrawRequests();
-
+loadShare();
+loadActivation();
+loadWithdraw();
 });
 
-/* ACTIVATION REQUESTS */
-function loadActivationRequests(){
-
-onSnapshot(
-collection(db,"activationRequests"),
-(snapshot)=>{
-
-const box=
-document.getElementById("activationList");
-
+/* SHARE REQUESTS */
+function loadShare(){
+onSnapshot(collection(db,"shareRequests"),(snap)=>{
+let box=document.getElementById("shareList");
 box.innerHTML="";
 
-snapshot.forEach((docSnap)=>{
+snap.forEach(d=>{
+let data=d.data();
 
-const data=docSnap.data();
-
-box.innerHTML += `
-<div class="requestCard">
-<p><b>${data.email}</b></p>
-<p>Number: ${data.number}</p>
-<p>TrxID: ${data.trxId}</p>
+box.innerHTML+=`
+<div class="card">
+<p>${data.email}</p>
 <p>Status: ${data.status}</p>
 
-${data.status==="pending"
-? `
-<button class="approveBtn"
-onclick="approveActivation(
-'${docSnap.id}',
-'${data.uid}'
-)">
-Approve
+<button class="approve"
+onclick="approveShare('${d.id}','${data.uid}')">
+Approve +5৳
 </button>
-`
-:""}
+
+<button class="reject"
+onclick="rejectShare('${d.id}')">
+Reject
+</button>
 </div>
 `;
+});
+});
+}
 
+/* APPROVE SHARE */
+window.approveShare=async(id,uid)=>{
+
+const userRef=doc(db,"users",uid);
+const snap=await getDoc(userRef);
+
+await updateDoc(userRef,{
+balance:(snap.data().balance||0)+5
 });
 
+await updateDoc(doc(db,"shareRequests",id),{
+status:"approved"
+});
+
+alert("Approved +5৳");
+};
+
+/* REJECT SHARE */
+window.rejectShare=async(id)=>{
+await updateDoc(doc(db,"shareRequests",id),{
+status:"rejected"
+});
+};
+
+/* ACTIVATION */
+function loadActivation(){
+onSnapshot(collection(db,"activationRequests"),(snap)=>{
+let box=document.getElementById("actList");
+box.innerHTML="";
+
+snap.forEach(d=>{
+let data=d.data();
+
+box.innerHTML+=`
+<div class="card">
+<p>${data.email}</p>
+<p>${data.number}</p>
+<p>${data.trxId}</p>
+<p>${data.status}</p>
+
+<button class="approve"
+onclick="approveAct('${d.id}','${data.uid}')">
+Approve
+</button>
+
+<button class="reject"
+onclick="rejectAct('${d.id}')">
+Reject
+</button>
+</div>
+`;
+});
 });
 }
 
 /* APPROVE ACTIVATION */
-window.approveActivation =
-async(requestId,uid)=>{
+window.approveAct=async(id,uid)=>{
 
 const userRef=doc(db,"users",uid);
-
-const userSnap=
-await getDoc(userRef);
-
-if(!userSnap.exists()) return;
-
-const userData=userSnap.data();
+const snap=await getDoc(userRef);
 
 await updateDoc(userRef,{
 active:true,
-balance:(userData.balance||0)+50
+balance:(snap.data().balance||0)+50
 });
 
-/* 5 LEVEL COMMISSION */
-const levels=[50,10,5,2.5,1];
-
-let currentRef=userData.referredBy;
-
-for(let i=0;i<5;i++){
-
-if(!currentRef) break;
-
-const refRef=
-doc(db,"users",currentRef);
-
-const refSnap=
-await getDoc(refRef);
-
-if(!refSnap.exists()) break;
-
-const refData=
-refSnap.data();
-
-await updateDoc(refRef,{
-balance:
-(refData.balance||0)+levels[i]
-});
-
-currentRef=
-refData.referredBy;
-}
-
-await updateDoc(
-doc(db,"activationRequests",requestId),
-{
+await updateDoc(doc(db,"activationRequests",id),{
 status:"approved"
-}
-);
+});
 
-alert("Activation approved!");
-
+alert("User activated");
 };
 
-/* WITHDRAW REQUESTS */
-function loadWithdrawRequests(){
+/* REJECT ACTIVATION */
+window.rejectAct=async(id)=>{
+await updateDoc(doc(db,"activationRequests",id),{
+status:"rejected"
+});
+};
 
-onSnapshot(
-collection(db,"withdrawRequests"),
-(snapshot)=>{
-
-const box=
-document.getElementById("withdrawList");
-
+/* WITHDRAW */
+function loadWithdraw(){
+onSnapshot(collection(db,"withdrawRequests"),(snap)=>{
+let box=document.getElementById("withdrawList");
 box.innerHTML="";
 
-snapshot.forEach((docSnap)=>{
+snap.forEach(d=>{
+let data=d.data();
 
-const data=docSnap.data();
-
-box.innerHTML += `
-<div class="requestCard">
-<p><b>${data.email}</b></p>
-<p>${data.method}</p>
-<p>${data.number}</p>
-<p>${data.amount}৳</p>
+box.innerHTML+=`
+<div class="card">
+<p>${data.email}</p>
+<p>${data.amount}</p>
 <p>${data.status}</p>
 
-${data.status==="pending"
-? `
-<button class="approveBtn"
-onclick="approveWithdraw(
-'${docSnap.id}',
-'${data.uid}',
-${data.amount}
-)">
+<button class="approve"
+onclick="approveWithdraw('${d.id}','${data.uid}',${data.amount})">
 Approve
 </button>
-`
-:""}
+
+<button class="reject"
+onclick="rejectWithdraw('${d.id}')">
+Reject
+</button>
 </div>
 `;
-
 });
-
 });
 }
 
 /* APPROVE WITHDRAW */
-window.approveWithdraw =
-async(requestId,uid,amount)=>{
+window.approveWithdraw=async(id,uid,amount)=>{
 
-const userRef=
-doc(db,"users",uid);
+const ref=doc(db,"users",uid);
+const snap=await getDoc(ref);
 
-const snap=
-await getDoc(userRef);
-
-const oldBalance=
-snap.data().balance||0;
-
-await updateDoc(userRef,{
-balance:oldBalance-amount
+await updateDoc(ref,{
+balance:(snap.data().balance||0)-amount
 });
 
-await updateDoc(
-doc(db,"withdrawRequests",requestId),
-{
+await updateDoc(doc(db,"withdrawRequests",id),{
 status:"approved"
-}
-);
+});
 
-alert("Withdraw approved!");
+alert("Withdraw approved");
+};
 
+/* REJECT WITHDRAW */
+window.rejectWithdraw=async(id)=>{
+await updateDoc(doc(db,"withdrawRequests",id),{
+status:"rejected"
+});
 };
 
 </script>
