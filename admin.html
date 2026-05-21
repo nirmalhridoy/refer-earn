@@ -12,31 +12,27 @@ padding:0;
 box-sizing:border-box;
 font-family:Arial,sans-serif;
 }
-
 body{
 background:linear-gradient(135deg,#1e3a8a,#7c3aed);
 min-height:100vh;
 padding:20px;
 }
-
 .container{
 max-width:800px;
 margin:auto;
 }
-
 h1{
 text-align:center;
 color:white;
 margin-bottom:20px;
 }
-
 .box{
 background:white;
 padding:20px;
 border-radius:15px;
 box-shadow:0 8px 25px rgba(0,0,0,0.15);
+margin-bottom:20px;
 }
-
 button{
 padding:10px 16px;
 border:none;
@@ -47,19 +43,9 @@ margin-top:10px;
 background:#2563eb;
 color:white;
 }
-
-button:hover{
-background:#1d4ed8;
-}
-
 .approveBtn{
 background:#16a34a;
 }
-
-.approveBtn:hover{
-background:#166534;
-}
-
 .requestCard{
 border:1px solid #ddd;
 padding:12px;
@@ -67,15 +53,12 @@ margin-top:10px;
 border-radius:10px;
 background:#fafafa;
 }
-
 #adminPanel{
 display:none;
 }
-
 #loginArea{
 text-align:center;
 }
-
 #status{
 color:white;
 text-align:center;
@@ -90,20 +73,22 @@ margin-top:10px;
 <h1>Refer Earn Admin Panel</h1>
 
 <div id="loginArea">
-<button id="adminLoginBtn">Admin Login with Google</button>
+<button id="adminLoginBtn">
+Admin Login with Google
+</button>
 <p id="status"></p>
 </div>
 
 <div class="box" id="adminPanel">
-<h2>Dashboard</h2>
 
-<p><strong>Pending Requests:</strong>
-<span id="pendingCount">0</span></p>
+<h2>Activation Requests</h2>
+<div id="activationList"></div>
 
-<p><strong>Total Users:</strong>
-<span id="userCount">0</span></p>
+<hr style="margin:20px 0;">
 
+<h2>Withdraw Requests</h2>
 <div id="withdrawList"></div>
+
 </div>
 
 </div>
@@ -118,7 +103,8 @@ collection,
 getDocs,
 doc,
 getDoc,
-updateDoc
+updateDoc,
+onSnapshot
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -136,8 +122,7 @@ authDomain: "refer-earn-73e38.firebaseapp.com",
 projectId: "refer-earn-73e38",
 storageBucket: "refer-earn-73e38.firebasestorage.app",
 messagingSenderId: "323369987305",
-appId: "1:323369987305:web:7c8eead19bff6454f4d478",
-measurementId: "G-Z0WLNVH8YZ"
+appId: "1:323369987305:web:7c8eead19bff6454f4d478"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -152,87 +137,186 @@ const provider = new GoogleAuthProvider();
 await signInWithPopup(auth, provider);
 };
 
-onAuthStateChanged(auth, async(user)=>{
+onAuthStateChanged(auth,(user)=>{
+
 if(!user) return;
 
-if(user.email !== ADMIN_EMAIL){
-document.getElementById("status").innerText =
-"Access denied. Not admin.";
+if(user.email!==ADMIN_EMAIL){
+document.getElementById("status").innerText=
+"Access denied";
 return;
 }
 
-document.getElementById("status").innerText =
-"Logged in: " + user.email;
-
-document.getElementById("loginArea").style.display =
+document.getElementById("loginArea").style.display=
 "none";
 
-document.getElementById("adminPanel").style.display =
+document.getElementById("adminPanel").style.display=
 "block";
 
+loadActivationRequests();
 loadWithdrawRequests();
-loadUserCount();
+
 });
 
-async function loadWithdrawRequests(){
-const list =
-document.getElementById("withdrawList");
+/* ACTIVATION REQUESTS */
+function loadActivationRequests(){
 
-list.innerHTML =
-"<h3>Withdraw Requests</h3>";
+onSnapshot(
+collection(db,"activationRequests"),
+(snapshot)=>{
 
-const snapshot =
-await getDocs(collection(db,"withdrawRequests"));
+const box=
+document.getElementById("activationList");
 
-let pending = 0;
+box.innerHTML="";
 
 snapshot.forEach((docSnap)=>{
-const data = docSnap.data();
 
-if(data.status === "pending"){
-pending++;
-}
+const data=docSnap.data();
 
-list.innerHTML += `
+box.innerHTML += `
 <div class="requestCard">
-<p><strong>Email:</strong> ${data.email}</p>
-<p><strong>Method:</strong> ${data.method}</p>
-<p><strong>Number:</strong> ${data.number}</p>
-<p><strong>Amount:</strong> ${data.amount}৳</p>
-<p><strong>Status:</strong> ${data.status}</p>
+<p><b>${data.email}</b></p>
+<p>Number: ${data.number}</p>
+<p>TrxID: ${data.trxId}</p>
+<p>Status: ${data.status}</p>
 
 ${data.status==="pending"
-? `<button class="approveBtn"
-onclick="approveWithdraw('${docSnap.id}',
-'${data.uid}',
-${data.amount})">
+? `
+<button class="approveBtn"
+onclick="approveActivation(
+'${docSnap.id}',
+'${data.uid}'
+)">
 Approve
-</button>`
-: ""}
+</button>
+`
+:""}
 </div>
 `;
+
 });
 
-document.getElementById("pendingCount").innerText =
-pending;
+});
 }
 
-window.approveWithdraw =
-async(requestId, uid, amount)=>{
+/* APPROVE ACTIVATION */
+window.approveActivation =
+async(requestId,uid)=>{
 
-const userRef =
-doc(db,"users",uid);
+const userRef=doc(db,"users",uid);
 
-const userSnap =
+const userSnap=
 await getDoc(userRef);
 
 if(!userSnap.exists()) return;
 
-const oldBalance =
-userSnap.data().balance || 0;
+const userData=userSnap.data();
 
 await updateDoc(userRef,{
-balance: oldBalance - amount
+active:true,
+balance:(userData.balance||0)+50
+});
+
+/* 5 LEVEL COMMISSION */
+const levels=[50,10,5,2.5,1];
+
+let currentRef=userData.referredBy;
+
+for(let i=0;i<5;i++){
+
+if(!currentRef) break;
+
+const refRef=
+doc(db,"users",currentRef);
+
+const refSnap=
+await getDoc(refRef);
+
+if(!refSnap.exists()) break;
+
+const refData=
+refSnap.data();
+
+await updateDoc(refRef,{
+balance:
+(refData.balance||0)+levels[i]
+});
+
+currentRef=
+refData.referredBy;
+}
+
+await updateDoc(
+doc(db,"activationRequests",requestId),
+{
+status:"approved"
+}
+);
+
+alert("Activation approved!");
+
+};
+
+/* WITHDRAW REQUESTS */
+function loadWithdrawRequests(){
+
+onSnapshot(
+collection(db,"withdrawRequests"),
+(snapshot)=>{
+
+const box=
+document.getElementById("withdrawList");
+
+box.innerHTML="";
+
+snapshot.forEach((docSnap)=>{
+
+const data=docSnap.data();
+
+box.innerHTML += `
+<div class="requestCard">
+<p><b>${data.email}</b></p>
+<p>${data.method}</p>
+<p>${data.number}</p>
+<p>${data.amount}৳</p>
+<p>${data.status}</p>
+
+${data.status==="pending"
+? `
+<button class="approveBtn"
+onclick="approveWithdraw(
+'${docSnap.id}',
+'${data.uid}',
+${data.amount}
+)">
+Approve
+</button>
+`
+:""}
+</div>
+`;
+
+});
+
+});
+}
+
+/* APPROVE WITHDRAW */
+window.approveWithdraw =
+async(requestId,uid,amount)=>{
+
+const userRef=
+doc(db,"users",uid);
+
+const snap=
+await getDoc(userRef);
+
+const oldBalance=
+snap.data().balance||0;
+
+await updateDoc(userRef,{
+balance:oldBalance-amount
 });
 
 await updateDoc(
@@ -244,17 +328,8 @@ status:"approved"
 
 alert("Withdraw approved!");
 
-loadWithdrawRequests();
 };
 
-async function loadUserCount(){
-const snapshot =
-await getDocs(collection(db,"users"));
-
-document.getElementById("userCount").innerText =
-snapshot.size;
-}
 </script>
-
 </body>
-  </html>
+</html>
