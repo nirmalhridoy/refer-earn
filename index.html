@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Refer Earn</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+body{
+background:linear-gradient(135deg,#4f46e5,#9333ea);
+min-height:100vh;
+padding:20px;
+color:#222;
+}
+.container{
+max-width:800px;
+margin:auto;
+}
+h1{
+text-align:center;
+color:white;
+margin-bottom:20px;
+font-size:32px;
+}
+.box{
+background:white;
+padding:20px;
+border-radius:15px;
+margin-bottom:20px;
+box-shadow:0 8px 25px rgba(0,0,0,0.15);
+}
+h2{
+margin-bottom:15px;
+color:#4f46e5;
+}
+p{
+margin:8px 0;
+}
+button{
+padding:12px 18px;
+border:none;
+border-radius:8px;
+background:#4f46e5;
+color:white;
+cursor:pointer;
+font-weight:bold;
+margin-top:10px;
+}
+button:hover{
+background:#3730a3;
+}
+input,select{
+width:100%;
+padding:12px;
+border:1px solid #ccc;
+border-radius:8px;
+margin-top:10px;
+}
+#userInfo{
+text-align:center;
+color:white;
+margin:10px 0;
+}
+#logoutBtn{
+background:#dc2626;
+}
+#logoutBtn:hover{
+background:#991b1b;
+}
+.listBox{
+background:#f8fafc;
+padding:10px;
+border-radius:10px;
+margin-top:10px;
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<h1>Refer Earn</h1>
+
+<div style="text-align:center;">
+<button id="loginBtn">Login with Google</button>
+<p id="userInfo"></p>
+<button id="logoutBtn" style="display:none;">Logout</button>
+</div>
+
+<div class="box">
+<h2>User Dashboard</h2>
+
+<p><strong>Balance:</strong> <span id="balance">0</span>৳</p>
+<p><strong>Total Referrals:</strong> <span id="refCount">0</span></p>
+
+<p><strong>Referral Users:</strong></p>
+<div id="refList" class="listBox"></div>
+
+<p><strong>Your Referral Link:</strong></p>
+<input id="refLink" readonly>
+<button id="copyBtn">Copy Referral Link</button>
+
+<select id="paymentMethod">
+<option value="">Select Payment Method</option>
+<option value="bKash">bKash</option>
+<option value="Nagad">Nagad</option>
+</select>
+
+<input id="withdrawNumber" type="tel" placeholder="Enter bKash/Nagad number">
+<input id="withdrawAmount" type="number" placeholder="Enter amount">
+<button id="withdrawBtn">Withdraw</button>
+
+<p><strong>My Withdraw History:</strong></p>
+<div id="myWithdraws" class="listBox"></div>
+</div>
+
+<div class="box">
+<h2>Leaderboard (Top Referrers)</h2>
+<div id="leaderboard" class="listBox"></div>
+</div>
+
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+doc,
+getDoc,
+setDoc,
+updateDoc,
+collection,
+addDoc,
+query,
+getDocs,
+onSnapshot
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+import {
+getAuth,
+GoogleAuthProvider,
+signInWithPopup,
+onAuthStateChanged,
+signOut
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+apiKey: "AIzaSyBnP9QJgg6d874QB-a4meFbprLMEufRzuY",
+authDomain: "refer-earn-73e38.firebaseapp.com",
+projectId: "refer-earn-73e38",
+storageBucket: "refer-earn-73e38.firebasestorage.app",
+messagingSenderId: "323369987305",
+appId: "1:323369987305:web:7c8eead19bff6454f4d478"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+document.getElementById("loginBtn").onclick = async ()=>{
+const provider = new GoogleAuthProvider();
+await signInWithPopup(auth, provider);
+};
+
+onAuthStateChanged(auth, async(user)=>{
+
+if(!user)return;
+
+document.getElementById("userInfo").innerText =
+"Logged in: " + user.email;
+
+document.getElementById("loginBtn").style.display="none";
+document.getElementById("logoutBtn").style.display="inline-block";
+
+const userRef = doc(db,"users",user.uid);
+const snap = await getDoc(userRef);
+
+const ref =
+new URLSearchParams(window.location.search).get("ref");
+
+if(!snap.exists()){
+
+await setDoc(userRef,{
+balance:0,
+email:user.email,
+referrals:0,
+referredBy:ref || null
+});
+
+if(ref && ref!==user.uid){
+
+const refRef = doc(db,"users",ref);
+const refSnap = await getDoc(refRef);
+
+if(refSnap.exists()){
+
+await updateDoc(refRef,{
+balance:(refSnap.data().balance || 0)+10,
+referrals:(refSnap.data().referrals || 0)+1
+});
+
+}
+}
+}
+
+liveUserData(user.uid);
+liveReferralUsers(user.uid);
+liveWithdrawHistory(user.uid);
+liveLeaderboard();
+
+});
+
+function liveUserData(uid){
+
+onSnapshot(doc(db,"users",uid),(snap)=>{
+
+if(!snap.exists()) return;
+
+const data = snap.data();
+
+document.getElementById("balance").innerText =
+data.balance || 0;
+
+document.getElementById("refCount").innerText =
+data.referrals || 0;
+
+document.getElementById("refLink").value =
+"https://nirmalhridoy.github.io/refer-earn/?ref="+uid;
+
+});
+}
+
+function liveReferralUsers(uid){
+
+const list = document.getElementById("refList");
+
+onSnapshot(collection(db,"users"),(snapshot)=>{
+
+list.innerHTML="";
+
+snapshot.forEach((docSnap)=>{
+
+const data = docSnap.data();
+
+if(data.referredBy===uid){
+list.innerHTML += "<p>"+data.email+"</p>";
+}
+
+});
+
+});
+}
+
+function liveWithdrawHistory(uid){
+
+const box = document.getElementById("myWithdraws");
+
+onSnapshot(collection(db,"withdrawRequests"),(snapshot)=>{
+
+box.innerHTML="";
+
+snapshot.forEach((docSnap)=>{
+
+const data = docSnap.data();
+
+if(data.uid===uid){
+
+box.innerHTML +=
+"<p>"+data.method+
+" | "+data.amount+
+"৳ - "+data.status+
+"</p>";
+
+}
+
+});
+
+});
+}
+
+function liveLeaderboard(){
+
+const box = document.getElementById("leaderboard");
+
+onSnapshot(collection(db,"users"),(snapshot)=>{
+
+let users=[];
+
+snapshot.forEach((docSnap)=>{
+users.push(docSnap.data());
+});
+
+users.sort((a,b)=>
+(b.referrals||0)-(a.referrals||0)
+);
+
+box.innerHTML="";
+
+users.slice(0,10).forEach((u,i)=>{
+
+box.innerHTML +=
+"<p>"+(i+1)+
+". "+u.email+
+" - "+(u.referrals||0)+
+" referrals</p>";
+
+});
+
+});
+}
+
+document.getElementById("withdrawBtn").onclick =
+async ()=>{
+
+const method =
+document.getElementById("paymentMethod").value;
+
+const number =
+document.getElementById("withdrawNumber").value;
+
+const amount =
+document.getElementById("withdrawAmount").value;
+
+if(!method || !number || !amount){
+alert("Fill all fields");
+return;
+}
+
+const user = auth.currentUser;
+
+const userSnap =
+await getDoc(doc(db,"users",user.uid));
+
+const balance =
+userSnap.data().balance || 0;
+
+if(Number(amount)>balance){
+alert("Insufficient balance");
+return;
+}
+
+await addDoc(
+collection(db,"withdrawRequests"),
+{
+email:user.email,
+uid:user.uid,
+method,
+number,
+amount,
+status:"pending"
+}
+);
+
+alert("Withdraw request submitted!");
+
+document.getElementById("paymentMethod").value="";
+document.getElementById("withdrawNumber").value="";
+document.getElementById("withdrawAmount").value="";
+};
+
+document.getElementById("copyBtn").onclick =
+async ()=>{
+
+await navigator.clipboard.writeText(
+document.getElementById("refLink").value
+);
+
+alert("Referral link copied!");
+
+};
+
+document.getElementById("logoutBtn").onclick =
+async ()=>{
+
+await signOut(auth);
+location.reload();
+
+};
+</script>
+
+</body>
+                                </html>
