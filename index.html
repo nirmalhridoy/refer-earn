@@ -6,81 +6,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
-}
-body{
-background:linear-gradient(135deg,#4f46e5,#9333ea);
-min-height:100vh;
-padding:20px;
-color:#222;
-}
-.container{
-max-width:800px;
-margin:auto;
-}
-h1{
-text-align:center;
-color:white;
-margin-bottom:20px;
-font-size:32px;
-}
-.box{
-background:white;
-padding:20px;
-border-radius:15px;
-margin-bottom:20px;
-box-shadow:0 8px 25px rgba(0,0,0,0.15);
-}
-h2{
-margin-bottom:15px;
-color:#4f46e5;
-}
-p{
-margin:8px 0;
-}
-button{
-padding:12px 18px;
-border:none;
-border-radius:8px;
-background:#4f46e5;
-color:white;
-cursor:pointer;
-font-weight:bold;
-margin-top:10px;
-}
-button:hover{
-background:#3730a3;
-}
-input,select{
-width:100%;
-padding:12px;
-border:1px solid #ccc;
-border-radius:8px;
-margin-top:10px;
-}
-#userInfo{
-text-align:center;
-color:white;
-margin:10px 0;
-}
-#logoutBtn{
-background:#dc2626;
-}
-#logoutBtn:hover{
-background:#991b1b;
-}
-.listBox{
-background:#f8fafc;
-padding:10px;
-border-radius:10px;
-margin-top:10px;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
+body{background:linear-gradient(135deg,#4f46e5,#9333ea);min-height:100vh;padding:20px;color:#222;}
+.container{max-width:800px;margin:auto;}
+h1{text-align:center;color:white;margin-bottom:20px;font-size:32px;}
+.box{background:white;padding:20px;border-radius:15px;margin-bottom:20px;box-shadow:0 8px 25px rgba(0,0,0,0.15);}
+h2{margin-bottom:15px;color:#4f46e5;}
+p{margin:8px 0;}
+button{padding:12px 18px;border:none;border-radius:8px;background:#4f46e5;color:white;cursor:pointer;font-weight:bold;margin-top:10px;}
+button:hover{background:#3730a3;}
+input,select{width:100%;padding:12px;border:1px solid #ccc;border-radius:8px;margin-top:10px;}
+#userInfo{text-align:center;color:white;margin:10px 0;}
+#logoutBtn{background:#dc2626;}
+#logoutBtn:hover{background:#991b1b;}
+.listBox{background:#f8fafc;padding:10px;border-radius:10px;margin-top:10px;}
+.smallBox{background:#fff7ed;padding:10px;border-radius:10px;margin-top:10px;border:1px solid #fdba74;}
 </style>
 </head>
+
 <body>
 
 <div class="container">
@@ -93,338 +36,203 @@ margin-top:10px;
 <button id="logoutBtn" style="display:none;">Logout</button>
 </div>
 
+<!-- FACEBOOK -->
+<div class="box">
+<h2>Bonus Task</h2>
+
+<button onclick="window.open('https://www.facebook.com/profile.php?id=61587170180010','_blank')">
+Go to Facebook Profile
+</button>
+
+<p>Post share kore screenshot upload korle +5৳ bonus</p>
+
+<input type="file" id="screenshot">
+
+<button id="uploadShareBtn">Submit Screenshot</button>
+
+<p style="color:red;margin-top:10px;">
+⚠️ Screenshot submit na korle withdraw issue hole authority responsible na
+</p>
+</div>
+
+<!-- DASHBOARD -->
 <div class="box">
 <h2>User Dashboard</h2>
 
 <p><strong>Balance:</strong> <span id="balance">0</span>৳</p>
 <p><strong>Total Referrals:</strong> <span id="refCount">0</span></p>
 
-<p><strong>Referral Users:</strong></p>
-<div id="refList" class="listBox"></div>
-
 <p><strong>Your Referral Link:</strong></p>
 <input id="refLink" readonly>
 <button id="copyBtn">Copy Referral Link</button>
 
-<!-- ACTIVATION BOX START -->
+<p><strong>Referral Users:</strong></p>
+<div id="refList" class="listBox"></div>
+
 <div id="activationBox" class="box">
 <h2>Activate Account</h2>
 
-<p>
-রেফারেল সিস্টেম চালু করতে ১০০ টাকা
-<b>01944545512</b> নাম্বারে
-bKash অথবা Nagad এ Send Money করুন।
-</p>
+<input id="payNumber" placeholder="Payment Number">
+<input id="trxId" placeholder="Transaction ID">
 
-<p>
-তারপর নিজের নাম্বার ও transaction ID দিন।
-সবকিছু ঠিক থাকলে account active হবে
-এবং সাথে সাথে <b>50৳</b> যোগ হবে।
-</p>
-
-<input id="payNumber" type="tel" placeholder="Your payment number">
-<input id="trxId" type="text" placeholder="Transaction ID">
 <button id="activateBtn">Submit Activation</button>
-
 <p id="activeStatus"></p>
 </div>
-<!-- ACTIVATION BOX END -->
-  <!-- Withdraw Section -->
-<div class="box">
-
-<h2>User Actions</h2>
-
-<select id="paymentMethod">
-<option value="">Select Payment Method</option>
-<option value="bKash">bKash</option>
-<option value="Nagad">Nagad</option>
-</select>
-
-<input id="withdrawNumber" type="tel" placeholder="Enter bKash/Nagad number">
-<input id="withdrawAmount" type="number" placeholder="Enter amount">
-<button id="withdrawBtn">Withdraw</button>
-
-<p><strong>My Withdraw History:</strong></p>
-<div id="myWithdraws" class="listBox"></div>
 
 </div>
 
-<!-- Leaderboard -->
+<!-- WITHDRAW -->
 <div class="box">
-<h2>Leaderboard (Top Referrers)</h2>
-<div id="leaderboard" class="listBox"></div>
+<h2>Withdraw</h2>
+
+<div class="smallBox" id="withdrawRules"></div>
+
+<select id="paymentMethod">
+<option value="">Select Method</option>
+<option>bKash</option>
+<option>Nagad</option>
+</select>
+
+<input id="withdrawNumber" placeholder="Number">
+<input id="withdrawAmount" type="number" placeholder="Amount">
+
+<button id="withdrawBtn">Withdraw</button>
+
+<div id="myWithdraws" class="listBox"></div>
+</div>
+
+<!-- LEADERBOARD -->
+<div class="box">
+<h2>Leaderboard</h2>
+<div id="leaderboard"></div>
 </div>
 
 </div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
 import {
-getFirestore,
-doc,
-getDoc,
-setDoc,
-updateDoc,
-collection,
-addDoc,
-getDocs,
-onSnapshot
+getFirestore, doc, getDoc, setDoc, updateDoc,
+collection, addDoc, getDocs, onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
 import {
-getAuth,
-GoogleAuthProvider,
-signInWithPopup,
-onAuthStateChanged,
-signOut
+getAuth, GoogleAuthProvider, signInWithPopup,
+onAuthStateChanged, signOut
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
-apiKey: "AIzaSyBnP9QJgg6d874QB-a4meFbprLMEufRzuY",
-authDomain: "refer-earn-73e38.firebaseapp.com",
-projectId: "refer-earn-73e38",
-storageBucket: "refer-earn-73e38.firebasestorage.app",
-messagingSenderId: "323369987305",
-appId: "1:323369987305:web:7c8eead19bff6454f4d478"
+apiKey:"AIzaSyBnP9QJgg6d874QB-a4meFbprLMEufRzuY",
+authDomain:"refer-earn-73e38.firebaseapp.com",
+projectId:"refer-earn-73e38"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);
+const app=initializeApp(firebaseConfig);
+const db=getFirestore(app);
+const auth=getAuth(app);
 
 /* LOGIN */
-document.getElementById("loginBtn").onclick = async ()=>{
-const provider = new GoogleAuthProvider();
-await signInWithPopup(auth, provider);
+document.getElementById("loginBtn").onclick=async()=>{
+await signInWithPopup(auth,new GoogleAuthProvider());
 };
 
-/* AUTH */
-onAuthStateChanged(auth, async(user)=>{
+/* USER */
+onAuthStateChanged(auth,async(user)=>{
+if(!user)return;
 
-if(!user) return;
+document.getElementById("userInfo").innerText="Logged in: "+user.email;
 
-document.getElementById("userInfo").innerText =
-"Logged in: " + user.email;
+const ref=new URLSearchParams(location.search).get("ref");
 
-document.getElementById("loginBtn").style.display="none";
-document.getElementById("logoutBtn").style.display="inline-block";
-
-const userRef = doc(db,"users",user.uid);
-const snap = await getDoc(userRef);
-
-const ref = new URLSearchParams(window.location.search).get("ref");
+const userRef=doc(db,"users",user.uid);
+const snap=await getDoc(userRef);
 
 if(!snap.exists()){
-
 await setDoc(userRef,{
-balance:0,
-email:user.email,
-referrals:0,
-referredBy:ref || null,
-active:false
-});
-
-if(ref && ref !== user.uid){
-const refRef = doc(db,"users",ref);
-const refSnap = await getDoc(refRef);
-
-if(refSnap.exists()){
-await updateDoc(refRef,{
-balance:(refSnap.data().balance || 0)+10,
-referrals:(refSnap.data().referrals || 0)+1
+balance:0,email:user.email,referrals:0,referredBy:ref||null,active:false
 });
 }
-}
-}
 
-liveUserData(user.uid);
-liveReferralUsers(user.uid);
-liveWithdrawHistory(user.uid);
-liveLeaderboard();
-
+load(user.uid);
 });
 
-/* LIVE USER DATA */
-function liveUserData(uid){
+/* LOAD */
+function load(uid){
 
 onSnapshot(doc(db,"users",uid),(snap)=>{
+const d=snap.data();
+document.getElementById("balance").innerText=d.balance||0;
+document.getElementById("refCount").innerText=d.referrals||0;
+document.getElementById("refLink").value="https://referearn.site.live/?ref="+uid;
 
-if(!snap.exists()) return;
-
-const data = snap.data();
-
-document.getElementById("balance").innerText =
-data.balance || 0;
-
-document.getElementById("refCount").innerText =
-data.referrals || 0;
-
-document.getElementById("refLink").value =
-"https://referearn.site.live/?ref="+uid;
-
-/* ACTIVE STATUS */
-if(data.active){
-document.getElementById("activeStatus").innerText =
-"✅ Account Active";
-document.getElementById("activationBox").style.display="none";
-}else{
-document.getElementById("activeStatus").innerText =
-"❌ Account Not Active";
-}
-
+ruleBox(d);
 });
 }
 
-/* ACTIVATION REQUEST */
-document.getElementById("activateBtn").onclick = async ()=>{
+/* RULES */
+function ruleBox(d){
+let txt="";
+if((d.balance||0)>=1000) txt="Need 12 referrals";
+else if((d.balance||0)>=500) txt="Need 6 referrals";
+else if((d.balance||0)>=250) txt="Need 3 referrals";
+else txt="Withdraw available after threshold";
 
-const payNumber = document.getElementById("payNumber").value;
-const trxId = document.getElementById("trxId").value;
-
-if(!payNumber || !trxId){
-alert("Fill all fields");
-return;
+document.getElementById("withdrawRules").innerText=txt;
 }
 
-const user = auth.currentUser;
+/* SHARE REQUEST */
+document.getElementById("uploadShareBtn").onclick=async()=>{
 
-await addDoc(collection(db,"activationRequests"),{
+const file=document.getElementById("screenshot").files[0];
+const user=auth.currentUser;
+
+if(!file)return alert("Upload screenshot first");
+
+await addDoc(collection(db,"shareRequests"),{
 uid:user.uid,
 email:user.email,
-number:payNumber,
-trxId:trxId,
-status:"pending"
+status:"pending",
+createdAt:Date.now()
 });
 
-alert("Activation request sent!");
-
-document.getElementById("payNumber").value="";
-document.getElementById("trxId").value="";
+alert("+5৳ request sent (admin approval needed)");
 };
 
-/* REFERRALS */
-function liveReferralUsers(uid){
-
-const list = document.getElementById("refList");
-
-onSnapshot(collection(db,"users"),(snapshot)=>{
-
-list.innerHTML="";
-
-snapshot.forEach((docSnap)=>{
-
-const data = docSnap.data();
-
-if(data.referredBy===uid){
-list.innerHTML += "<p>"+data.email+"</p>";
-}
-
-});
-
-});
-}
-
 /* WITHDRAW */
-document.getElementById("withdrawBtn").onclick = async ()=>{
+document.getElementById("withdrawBtn").onclick=async()=>{
 
-const user = auth.currentUser;
-const userSnap = await getDoc(doc(db,"users",user.uid));
+const user=auth.currentUser;
+const snap=await getDoc(doc(db,"users",user.uid));
 
-if(!userSnap.data().active){
-alert("Activate account first");
-return;
-}
+if(!snap.data().active)return alert("Activate first");
 
-const method = document.getElementById("paymentMethod").value;
-const number = document.getElementById("withdrawNumber").value;
-const amount = document.getElementById("withdrawAmount").value;
+const amount=document.getElementById("withdrawAmount").value;
 
-if(!method || !number || !amount){
-alert("Fill all fields");
-return;
-}
+if(Number(amount)<100)return alert("Min 100৳");
 
-if(Number(amount) > (userSnap.data().balance || 0)){
-alert("Insufficient balance");
-return;
-}
+if(Number(amount)>snap.data().balance)return alert("Not enough balance");
 
 await addDoc(collection(db,"withdrawRequests"),{
-email:user.email,
 uid:user.uid,
-method,
-number,
+email:user.email,
 amount,
 status:"pending"
 });
 
-alert("Withdraw request submitted!");
+alert("Withdraw sent");
 };
 
-/* WITHDRAW HISTORY */
-function liveWithdrawHistory(uid){
-
-onSnapshot(collection(db,"withdrawRequests"),(snapshot)=>{
-
-const box = document.getElementById("myWithdraws");
-box.innerHTML="";
-
-snapshot.forEach((docSnap)=>{
-
-const d = docSnap.data();
-
-if(d.uid===uid){
-box.innerHTML +=
-"<p>"+d.method+" | "+d.amount+"৳ - "+d.status+"</p>";
-}
-
-});
-
-});
-}
-
-/* LEADERBOARD */
-function liveLeaderboard(){
-
-onSnapshot(collection(db,"users"),(snapshot)=>{
-
-let users=[];
-
-snapshot.forEach((docSnap)=>{
-users.push(docSnap.data());
-});
-
-users.sort((a,b)=>
-(b.referrals||0)-(a.referrals||0)
-);
-
-const box = document.getElementById("leaderboard");
-box.innerHTML="";
-
-users.slice(0,10).forEach((u,i)=>{
-box.innerHTML +=
-"<p>"+(i+1)+". "+u.email+" - "+(u.referrals||0)+" referrals</p>";
-});
-
-});
-}
-
-/* COPY LINK */
-document.getElementById("copyBtn").onclick = async ()=>{
-await navigator.clipboard.writeText(
-document.getElementById("refLink").value
-);
-alert("Copied!");
+/* COPY */
+document.getElementById("copyBtn").onclick=async()=>{
+await navigator.clipboard.writeText(document.getElementById("refLink").value);
+alert("Copied");
 };
 
 /* LOGOUT */
-document.getElementById("logoutBtn").onclick = async ()=>{
+document.getElementById("logoutBtn").onclick=async()=>{
 await signOut(auth);
 location.reload();
 };
-
 </script>
 
 </body>
-  </html>
+</html>
