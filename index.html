@@ -106,6 +106,34 @@ margin-top:10px;
 <input id="refLink" readonly>
 <button id="copyBtn">Copy Referral Link</button>
 
+<!-- ACTIVATION BOX START -->
+<div id="activationBox" class="box">
+<h2>Activate Account</h2>
+
+<p>
+রেফারেল সিস্টেম চালু করতে ১০০ টাকা
+<b>01944545512</b> নাম্বারে
+bKash অথবা Nagad এ Send Money করুন।
+</p>
+
+<p>
+তারপর নিজের নাম্বার ও transaction ID দিন।
+সবকিছু ঠিক থাকলে account active হবে
+এবং সাথে সাথে <b>50৳</b> যোগ হবে।
+</p>
+
+<input id="payNumber" type="tel" placeholder="Your payment number">
+<input id="trxId" type="text" placeholder="Transaction ID">
+<button id="activateBtn">Submit Activation</button>
+
+<p id="activeStatus"></p>
+</div>
+<!-- ACTIVATION BOX END -->
+  <!-- Withdraw Section -->
+<div class="box">
+
+<h2>User Actions</h2>
+
 <select id="paymentMethod">
 <option value="">Select Payment Method</option>
 <option value="bKash">bKash</option>
@@ -118,8 +146,10 @@ margin-top:10px;
 
 <p><strong>My Withdraw History:</strong></p>
 <div id="myWithdraws" class="listBox"></div>
+
 </div>
 
+<!-- Leaderboard -->
 <div class="box">
 <h2>Leaderboard (Top Referrers)</h2>
 <div id="leaderboard" class="listBox"></div>
@@ -138,7 +168,6 @@ setDoc,
 updateDoc,
 collection,
 addDoc,
-query,
 getDocs,
 onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -164,14 +193,16 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
+/* LOGIN */
 document.getElementById("loginBtn").onclick = async ()=>{
 const provider = new GoogleAuthProvider();
 await signInWithPopup(auth, provider);
 };
 
+/* AUTH */
 onAuthStateChanged(auth, async(user)=>{
 
-if(!user)return;
+if(!user) return;
 
 document.getElementById("userInfo").innerText =
 "Logged in: " + user.email;
@@ -182,8 +213,7 @@ document.getElementById("logoutBtn").style.display="inline-block";
 const userRef = doc(db,"users",user.uid);
 const snap = await getDoc(userRef);
 
-const ref =
-new URLSearchParams(window.location.search).get("ref");
+const ref = new URLSearchParams(window.location.search).get("ref");
 
 if(!snap.exists()){
 
@@ -191,21 +221,19 @@ await setDoc(userRef,{
 balance:0,
 email:user.email,
 referrals:0,
-referredBy:ref || null
+referredBy:ref || null,
+active:false
 });
 
-if(ref && ref!==user.uid){
-
+if(ref && ref !== user.uid){
 const refRef = doc(db,"users",ref);
 const refSnap = await getDoc(refRef);
 
 if(refSnap.exists()){
-
 await updateDoc(refRef,{
 balance:(refSnap.data().balance || 0)+10,
 referrals:(refSnap.data().referrals || 0)+1
 });
-
 }
 }
 }
@@ -217,6 +245,7 @@ liveLeaderboard();
 
 });
 
+/* LIVE USER DATA */
 function liveUserData(uid){
 
 onSnapshot(doc(db,"users",uid),(snap)=>{
@@ -234,9 +263,47 @@ data.referrals || 0;
 document.getElementById("refLink").value =
 "https://referearn.site.live/?ref="+uid;
 
+/* ACTIVE STATUS */
+if(data.active){
+document.getElementById("activeStatus").innerText =
+"✅ Account Active";
+document.getElementById("activationBox").style.display="none";
+}else{
+document.getElementById("activeStatus").innerText =
+"❌ Account Not Active";
+}
+
 });
 }
 
+/* ACTIVATION REQUEST */
+document.getElementById("activateBtn").onclick = async ()=>{
+
+const payNumber = document.getElementById("payNumber").value;
+const trxId = document.getElementById("trxId").value;
+
+if(!payNumber || !trxId){
+alert("Fill all fields");
+return;
+}
+
+const user = auth.currentUser;
+
+await addDoc(collection(db,"activationRequests"),{
+uid:user.uid,
+email:user.email,
+number:payNumber,
+trxId:trxId,
+status:"pending"
+});
+
+alert("Activation request sent!");
+
+document.getElementById("payNumber").value="";
+document.getElementById("trxId").value="";
+};
+
+/* REFERRALS */
 function liveReferralUsers(uid){
 
 const list = document.getElementById("refList");
@@ -258,26 +325,58 @@ list.innerHTML += "<p>"+data.email+"</p>";
 });
 }
 
-function liveWithdrawHistory(uid){
+/* WITHDRAW */
+document.getElementById("withdrawBtn").onclick = async ()=>{
 
-const box = document.getElementById("myWithdraws");
+const user = auth.currentUser;
+const userSnap = await getDoc(doc(db,"users",user.uid));
+
+if(!userSnap.data().active){
+alert("Activate account first");
+return;
+}
+
+const method = document.getElementById("paymentMethod").value;
+const number = document.getElementById("withdrawNumber").value;
+const amount = document.getElementById("withdrawAmount").value;
+
+if(!method || !number || !amount){
+alert("Fill all fields");
+return;
+}
+
+if(Number(amount) > (userSnap.data().balance || 0)){
+alert("Insufficient balance");
+return;
+}
+
+await addDoc(collection(db,"withdrawRequests"),{
+email:user.email,
+uid:user.uid,
+method,
+number,
+amount,
+status:"pending"
+});
+
+alert("Withdraw request submitted!");
+};
+
+/* WITHDRAW HISTORY */
+function liveWithdrawHistory(uid){
 
 onSnapshot(collection(db,"withdrawRequests"),(snapshot)=>{
 
+const box = document.getElementById("myWithdraws");
 box.innerHTML="";
 
 snapshot.forEach((docSnap)=>{
 
-const data = docSnap.data();
+const d = docSnap.data();
 
-if(data.uid===uid){
-
+if(d.uid===uid){
 box.innerHTML +=
-"<p>"+data.method+
-" | "+data.amount+
-"৳ - "+data.status+
-"</p>";
-
+"<p>"+d.method+" | "+d.amount+"৳ - "+d.status+"</p>";
 }
 
 });
@@ -285,9 +384,8 @@ box.innerHTML +=
 });
 }
 
+/* LEADERBOARD */
 function liveLeaderboard(){
-
-const box = document.getElementById("leaderboard");
 
 onSnapshot(collection(db,"users"),(snapshot)=>{
 
@@ -301,89 +399,32 @@ users.sort((a,b)=>
 (b.referrals||0)-(a.referrals||0)
 );
 
+const box = document.getElementById("leaderboard");
 box.innerHTML="";
 
 users.slice(0,10).forEach((u,i)=>{
-
 box.innerHTML +=
-"<p>"+(i+1)+
-". "+u.email+
-" - "+(u.referrals||0)+
-" referrals</p>";
-
+"<p>"+(i+1)+". "+u.email+" - "+(u.referrals||0)+" referrals</p>";
 });
 
 });
 }
 
-document.getElementById("withdrawBtn").onclick =
-async ()=>{
-
-const method =
-document.getElementById("paymentMethod").value;
-
-const number =
-document.getElementById("withdrawNumber").value;
-
-const amount =
-document.getElementById("withdrawAmount").value;
-
-if(!method || !number || !amount){
-alert("Fill all fields");
-return;
-}
-
-const user = auth.currentUser;
-
-const userSnap =
-await getDoc(doc(db,"users",user.uid));
-
-const balance =
-userSnap.data().balance || 0;
-
-if(Number(amount)>balance){
-alert("Insufficient balance");
-return;
-}
-
-await addDoc(
-collection(db,"withdrawRequests"),
-{
-email:user.email,
-uid:user.uid,
-method,
-number,
-amount,
-status:"pending"
-}
-);
-
-alert("Withdraw request submitted!");
-
-document.getElementById("paymentMethod").value="";
-document.getElementById("withdrawNumber").value="";
-document.getElementById("withdrawAmount").value="";
-};
-
-document.getElementById("copyBtn").onclick =
-async ()=>{
-
+/* COPY LINK */
+document.getElementById("copyBtn").onclick = async ()=>{
 await navigator.clipboard.writeText(
 document.getElementById("refLink").value
 );
-
-alert("Referral link copied!");
-
+alert("Copied!");
 };
 
-document.getElementById("logoutBtn").onclick =
-async ()=>{
-
+/* LOGOUT */
+document.getElementById("logoutBtn").onclick = async ()=>{
 await signOut(auth);
 location.reload();
-
 };
+
 </script>
 
 </body>
-                                </html>
+  </html>
