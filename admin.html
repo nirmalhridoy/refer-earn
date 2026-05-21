@@ -2,39 +2,34 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Refer Earn Admin</title>
+<title>Admin Dashboard</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif;}
-body{background:linear-gradient(135deg,#1e3a8a,#7c3aed);min-height:100vh;padding:20px;}
-.container{max-width:900px;margin:auto;}
-h1{text-align:center;color:white;margin-bottom:20px;}
-.box{background:white;padding:20px;border-radius:15px;margin-bottom:20px;}
-button{padding:10px 14px;border:none;border-radius:8px;cursor:pointer;font-weight:bold;margin-top:8px;}
-.approve{background:#16a34a;color:white;}
-.reject{background:#dc2626;color:white;}
-.card{border:1px solid #ddd;padding:10px;border-radius:10px;margin-top:10px;background:#fafafa;}
-#adminPanel{display:none;}
-#status{text-align:center;color:white;}
+body{font-family:Arial;background:#0f172a;padding:20px;color:white;}
+h1{text-align:center;}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:20px 0;}
+.card{background:#1e293b;padding:15px;border-radius:10px;text-align:center;}
+.box{background:white;color:black;padding:15px;border-radius:10px;margin-top:20px;}
+button{padding:8px 12px;border:none;border-radius:6px;cursor:pointer;margin-top:5px;}
+.approve{background:green;color:white;}
+.reject{background:red;color:white;}
 </style>
 </head>
 
 <body>
 
-<div class="container">
+<h1>Admin Dashboard Pro</h1>
 
-<h1>Admin Panel</h1>
-
-<div id="loginArea">
-<button id="loginBtn">Admin Login</button>
-<p id="status"></p>
+<div class="grid">
+<div class="card"><h3 id="totalUsers">0</h3><p>Total Users</p></div>
+<div class="card"><h3 id="activeUsers">0</h3><p>Active Users</p></div>
+<div class="card"><h3 id="pendingW">0</h3><p>Pending Withdraw</p></div>
+<div class="card"><h3 id="pendingA">0</h3><p>Pending Activation</p></div>
 </div>
 
-<div id="adminPanel">
-
 <div class="box">
-<h2>Share Requests (+5৳)</h2>
+<h2>Share Requests</h2>
 <div id="shareList"></div>
 </div>
 
@@ -48,14 +43,10 @@ button{padding:10px 14px;border:none;border-radius:8px;cursor:pointer;font-weigh
 <div id="withdrawList"></div>
 </div>
 
-</div>
-
-</div>
-
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
-getFirestore,collection,doc,getDoc,updateDoc,onSnapshot
+getFirestore,collection,doc,getDoc,updateDoc,onSnapshot,getDocs
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import {
 getAuth,GoogleAuthProvider,signInWithPopup,onAuthStateChanged
@@ -70,193 +61,140 @@ projectId:"refer-earn-73e38"
 const db=getFirestore(app);
 const auth=getAuth(app);
 
-const ADMIN_EMAIL="antorahmed0185@gmail.com";
+const ADMIN="antorahmed0185@gmail.com";
 
 /* LOGIN */
-document.getElementById("loginBtn").onclick=async()=>{
-await signInWithPopup(auth,new GoogleAuthProvider());
+document.body.onload=async()=>{
+onAuthStateChanged(auth,async(user)=>{
+if(!user||user.email!==ADMIN)return;
+
+loadStats();
+loadAll();
+});
 };
 
-/* AUTH */
-onAuthStateChanged(auth,(user)=>{
-if(!user)return;
+/* STATS */
+async function loadStats(){
 
-if(user.email!==ADMIN_EMAIL){
-document.getElementById("status").innerText="Not admin";
-return;
-}
+const users=await getDocs(collection(db,"users"));
+document.getElementById("totalUsers").innerText=users.size;
 
-document.getElementById("loginArea").style.display="none";
-document.getElementById("adminPanel").style.display="block";
+let active=0;
+users.forEach(u=>{
+if(u.data().active)active++;
+});
+document.getElementById("activeUsers").innerText=active;
 
-loadShare();
-loadActivation();
-loadWithdraw();
+/* pending activation */
+onSnapshot(collection(db,"activationRequests"),snap=>{
+let p=0;
+snap.forEach(d=>{
+if(d.data().status==="pending")p++;
+});
+document.getElementById("pendingA").innerText=p;
 });
 
-/* SHARE REQUESTS */
-function loadShare(){
-onSnapshot(collection(db,"shareRequests"),(snap)=>{
+/* pending withdraw */
+onSnapshot(collection(db,"withdrawRequests"),snap=>{
+let p=0;
+snap.forEach(d=>{
+if(d.data().status==="pending")p++;
+});
+document.getElementById("pendingW").innerText=p;
+});
+}
+
+/* LOAD ALL */
+function loadAll(){
+
+/* SHARE */
+onSnapshot(collection(db,"shareRequests"),snap=>{
 let box=document.getElementById("shareList");
 box.innerHTML="";
-
 snap.forEach(d=>{
 let data=d.data();
 
 box.innerHTML+=`
-<div class="card">
-<p>${data.email}</p>
-<p>Status: ${data.status}</p>
+<p>${data.email} - ${data.status}
+<button class="approve" onclick="approveShare('${d.id}','${data.uid}')">Approve</button>
+<button class="reject" onclick="rejectShare('${d.id}')">Reject</button>
+</p>`;
+});
+});
 
-<button class="approve"
-onclick="approveShare('${d.id}','${data.uid}')">
-Approve +5৳
-</button>
+/* ACTIVATION */
+onSnapshot(collection(db,"activationRequests"),snap=>{
+let box=document.getElementById("actList");
+box.innerHTML="";
+snap.forEach(d=>{
+let data=d.data();
 
-<button class="reject"
-onclick="rejectShare('${d.id}')">
-Reject
-</button>
-</div>
-`;
+box.innerHTML+=`
+<p>${data.email} - ${data.status}
+<button class="approve" onclick="approveAct('${d.id}','${data.uid}')">Approve</button>
+<button class="reject" onclick="rejectAct('${d.id}')">Reject</button>
+</p>`;
+});
+});
+
+/* WITHDRAW */
+onSnapshot(collection(db,"withdrawRequests"),snap=>{
+let box=document.getElementById("withdrawList");
+box.innerHTML="";
+snap.forEach(d=>{
+let data=d.data();
+
+box.innerHTML+=`
+<p>${data.email} - ${data.amount}
+<button class="approve" onclick="approveWithdraw('${d.id}','${data.uid}',${data.amount})">Approve</button>
+<button class="reject" onclick="rejectWithdraw('${d.id}')">Reject</button>
+</p>`;
 });
 });
 }
 
-/* APPROVE SHARE */
+/* SHARE APPROVE */
 window.approveShare=async(id,uid)=>{
-
-const userRef=doc(db,"users",uid);
-const snap=await getDoc(userRef);
-
-await updateDoc(userRef,{
-balance:(snap.data().balance||0)+5
-});
-
-await updateDoc(doc(db,"shareRequests",id),{
-status:"approved"
-});
-
-alert("Approved +5৳");
+const ref=doc(db,"users",uid);
+const s=await getDoc(ref);
+await updateDoc(ref,{balance:(s.data().balance||0)+5});
+await updateDoc(doc(db,"shareRequests",id),{status:"approved"});
 };
 
-/* REJECT SHARE */
+/* SHARE REJECT */
 window.rejectShare=async(id)=>{
-await updateDoc(doc(db,"shareRequests",id),{
-status:"rejected"
-});
+await updateDoc(doc(db,"shareRequests",id),{status:"rejected"});
 };
 
 /* ACTIVATION */
-function loadActivation(){
-onSnapshot(collection(db,"activationRequests"),(snap)=>{
-let box=document.getElementById("actList");
-box.innerHTML="";
-
-snap.forEach(d=>{
-let data=d.data();
-
-box.innerHTML+=`
-<div class="card">
-<p>${data.email}</p>
-<p>${data.number}</p>
-<p>${data.trxId}</p>
-<p>${data.status}</p>
-
-<button class="approve"
-onclick="approveAct('${d.id}','${data.uid}')">
-Approve
-</button>
-
-<button class="reject"
-onclick="rejectAct('${d.id}')">
-Reject
-</button>
-</div>
-`;
-});
-});
-}
-
-/* APPROVE ACTIVATION */
 window.approveAct=async(id,uid)=>{
-
-const userRef=doc(db,"users",uid);
-const snap=await getDoc(userRef);
-
-await updateDoc(userRef,{
-active:true,
-balance:(snap.data().balance||0)+50
-});
-
-await updateDoc(doc(db,"activationRequests",id),{
-status:"approved"
-});
-
-alert("User activated");
+const ref=doc(db,"users",uid);
+const s=await getDoc(ref);
+await updateDoc(ref,{active:true,balance:(s.data().balance||0)+50});
+await updateDoc(doc(db,"activationRequests",id),{status:"approved"});
 };
 
-/* REJECT ACTIVATION */
 window.rejectAct=async(id)=>{
-await updateDoc(doc(db,"activationRequests",id),{
-status:"rejected"
-});
+await updateDoc(doc(db,"activationRequests",id),{status:"rejected"});
 };
 
 /* WITHDRAW */
-function loadWithdraw(){
-onSnapshot(collection(db,"withdrawRequests"),(snap)=>{
-let box=document.getElementById("withdrawList");
-box.innerHTML="";
-
-snap.forEach(d=>{
-let data=d.data();
-
-box.innerHTML+=`
-<div class="card">
-<p>${data.email}</p>
-<p>${data.amount}</p>
-<p>${data.status}</p>
-
-<button class="approve"
-onclick="approveWithdraw('${d.id}','${data.uid}',${data.amount})">
-Approve
-</button>
-
-<button class="reject"
-onclick="rejectWithdraw('${d.id}')">
-Reject
-</button>
-</div>
-`;
-});
-});
-}
-
-/* APPROVE WITHDRAW */
 window.approveWithdraw=async(id,uid,amount)=>{
-
 const ref=doc(db,"users",uid);
-const snap=await getDoc(ref);
+const s=await getDoc(ref);
 
-await updateDoc(ref,{
-balance:(snap.data().balance||0)-amount
-});
+let bal=s.data().balance||0;
+if(bal<amount)return alert("Not enough balance");
 
-await updateDoc(doc(db,"withdrawRequests",id),{
-status:"approved"
-});
-
-alert("Withdraw approved");
+await updateDoc(ref,{balance:bal-amount});
+await updateDoc(doc(db,"withdrawRequests",id),{status:"approved"});
 };
 
-/* REJECT WITHDRAW */
 window.rejectWithdraw=async(id)=>{
-await updateDoc(doc(db,"withdrawRequests",id),{
-status:"rejected"
-});
+await updateDoc(doc(db,"withdrawRequests",id),{status:"rejected"});
 };
 
 </script>
+
 </body>
 </html>
