@@ -2,199 +2,549 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Admin Dashboard</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Refer Earn Admin</title>
 
 <style>
-body{font-family:Arial;background:#0f172a;padding:20px;color:white;}
-h1{text-align:center;}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:20px 0;}
-.card{background:#1e293b;padding:15px;border-radius:10px;text-align:center;}
-.box{background:white;color:black;padding:15px;border-radius:10px;margin-top:20px;}
-button{padding:8px 12px;border:none;border-radius:6px;cursor:pointer;margin-top:5px;}
-.approve{background:green;color:white;}
-.reject{background:red;color:white;}
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+min-height:100vh;
+padding:16px;
+background:linear-gradient(135deg,#0f172a,#1e3a8a);
+color:white;
+}
+
+.container{
+max-width:1000px;
+margin:auto;
+}
+
+.hero{
+padding:24px;
+border-radius:24px;
+background:rgba(255,255,255,.12);
+backdrop-filter:blur(10px);
+margin-bottom:20px;
+box-shadow:0 10px 30px rgba(0,0,0,.2);
+}
+
+.hero h1{
+font-size:30px;
+margin-bottom:8px;
+}
+
+.stats{
+display:grid;
+grid-template-columns:
+repeat(auto-fit,minmax(180px,1fr));
+gap:14px;
+margin-top:18px;
+}
+
+.stat{
+background:rgba(255,255,255,.15);
+padding:16px;
+border-radius:16px;
+text-align:center;
+}
+
+.stat b{
+display:block;
+font-size:24px;
+margin-top:5px;
+}
+
+.card{
+background:white;
+color:#111827;
+padding:18px;
+border-radius:18px;
+margin-bottom:18px;
+box-shadow:0 10px 25px rgba(0,0,0,.12);
+}
+
+.card h2{
+color:#4338ca;
+margin-bottom:12px;
+}
+
+.request{
+border:1px solid #ddd;
+padding:12px;
+border-radius:12px;
+margin-top:10px;
+background:#f8fafc;
+}
+
+button{
+border:none;
+padding:10px 14px;
+border-radius:10px;
+font-weight:bold;
+cursor:pointer;
+margin-top:8px;
+margin-right:6px;
+}
+
+.approve{
+background:#16a34a;
+color:white;
+}
+
+.reject{
+background:#dc2626;
+color:white;
+}
+
+#loginBtn{
+background:#4f46e5;
+color:white;
+}
+
+#adminPanel{
+display:none;
+}
+
+#status{
+margin-top:10px;
+}
+
+@media(max-width:640px){
+.hero h1{
+font-size:24px;
+}
+}
 </style>
 </head>
-
 <body>
 
-<h1>Admin Dashboard Pro</h1>
+<div class="container">
 
-<div class="grid">
-<div class="card"><h3 id="totalUsers">0</h3><p>Total Users</p></div>
-<div class="card"><h3 id="activeUsers">0</h3><p>Active Users</p></div>
-<div class="card"><h3 id="pendingW">0</h3><p>Pending Withdraw</p></div>
-<div class="card"><h3 id="pendingA">0</h3><p>Pending Activation</p></div>
+<div class="hero">
+<h1>Refer Earn Admin Panel</h1>
+
+<button id="loginBtn">
+Admin Login
+</button>
+
+<p id="status"></p>
+
+<div class="stats">
+<div class="stat">
+Total Users
+<b id="totalUsers">0</b>
 </div>
 
-<div class="box">
-<h2>Share Requests</h2>
+<div class="stat">
+Active Users
+<b id="activeUsers">0</b>
+</div>
+
+<div class="stat">
+Pending Activation
+<b id="pendingA">0</b>
+</div>
+
+<div class="stat">
+Pending Withdraw
+<b id="pendingW">0</b>
+</div>
+</div>
+</div>
+
+<div id="adminPanel">
+
+<div class="card">
+<h2>Share Requests (+5৳)</h2>
 <div id="shareList"></div>
 </div>
 
-<div class="box">
+<div class="card">
 <h2>Activation Requests</h2>
 <div id="actList"></div>
 </div>
 
-<div class="box">
+<div class="card">
 <h2>Withdraw Requests</h2>
 <div id="withdrawList"></div>
 </div>
 
+</div>
 <script type="module">
-import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
 import {
-getFirestore,collection,doc,getDoc,updateDoc,onSnapshot,getDocs
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+getFirestore,
+collection,
+doc,
+getDoc,
+getDocs,
+updateDoc,
+onSnapshot
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
 import {
-getAuth,GoogleAuthProvider,signInWithPopup,onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+getAuth,
+GoogleAuthProvider,
+signInWithPopup,
+onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
-const app=initializeApp({
-apiKey:"AIzaSyBnP9QJgg6d874QB-a4meFbprLMEufRzuY",
-authDomain:"refer-earn-73e38.firebaseapp.com",
-projectId:"refer-earn-73e38"
-});
+const firebaseConfig = {
+apiKey: "AIzaSyBnP9QJgg6d874QB-a4meFbprLMEufRzuY",
+authDomain: "refer-earn-73e38.firebaseapp.com",
+projectId: "refer-earn-73e38",
+storageBucket: "refer-earn-73e38.firebasestorage.app",
+messagingSenderId: "323369987305",
+appId: "1:323369987305:web:7c8eead19bff6454f4d478"
+};
 
-const db=getFirestore(app);
-const auth=getAuth(app);
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
 
-const ADMIN="antorahmed0185@gmail.com";
+const ADMIN_EMAIL = "antorahmed0185@gmail.com";
 
 /* LOGIN */
-document.body.onload=async()=>{
-onAuthStateChanged(auth,async(user)=>{
-if(!user||user.email!==ADMIN)return;
+document.getElementById("loginBtn").onclick =
+async ()=>{
+await signInWithPopup(
+auth,
+new GoogleAuthProvider()
+);
+};
+
+/* AUTH CHECK */
+onAuthStateChanged(auth, async(user)=>{
+
+if(!user) return;
+
+if(user.email!==ADMIN_EMAIL){
+document.getElementById("status").innerText =
+"❌ Access denied";
+return;
+}
+
+document.getElementById("status").innerText =
+"✅ Logged in: " + user.email;
+
+document.getElementById("adminPanel").style.display =
+"block";
 
 loadStats();
-loadAll();
-});
-};
+loadShare();
+loadActivation();
+loadWithdraw();
 
-/* STATS */
+});
+
+/* DASHBOARD STATS */
 async function loadStats(){
 
-const users=await getDocs(collection(db,"users"));
-document.getElementById("totalUsers").innerText=users.size;
+const users =
+await getDocs(collection(db,"users"));
 
-let active=0;
-users.forEach(u=>{
-if(u.data().active)active++;
+let total = users.size;
+let active = 0;
+
+users.forEach(d=>{
+if(d.data().active) active++;
 });
-document.getElementById("activeUsers").innerText=active;
 
-/* pending activation */
-onSnapshot(collection(db,"activationRequests"),snap=>{
-let p=0;
+document.getElementById("totalUsers").innerText =
+total;
+
+document.getElementById("activeUsers").innerText =
+active;
+
+onSnapshot(
+collection(db,"activationRequests"),
+(snap)=>{
+let pending=0;
 snap.forEach(d=>{
-if(d.data().status==="pending")p++;
+if(d.data().status==="pending"){
+pending++;
+}
 });
-document.getElementById("pendingA").innerText=p;
+document.getElementById("pendingA").innerText =
+pending;
 });
 
-/* pending withdraw */
-onSnapshot(collection(db,"withdrawRequests"),snap=>{
-let p=0;
+onSnapshot(
+collection(db,"withdrawRequests"),
+(snap)=>{
+let pending=0;
 snap.forEach(d=>{
-if(d.data().status==="pending")p++;
+if(d.data().status==="pending"){
+pending++;
+}
 });
-document.getElementById("pendingW").innerText=p;
+document.getElementById("pendingW").innerText =
+pending;
+});
+
+}
+
+/* SHARE REQUESTS */
+function loadShare(){
+
+onSnapshot(
+collection(db,"shareRequests"),
+(snap)=>{
+
+let box =
+document.getElementById("shareList");
+
+box.innerHTML="";
+
+snap.forEach(d=>{
+
+let data=d.data();
+
+box.innerHTML += `
+<div class="request">
+<p><b>${data.email}</b></p>
+<p>Status: ${data.status}</p>
+
+<button class="approve"
+onclick="approveShare('${d.id}','${data.uid}')">
+Approve +5৳
+</button>
+
+<button class="reject"
+onclick="rejectShare('${d.id}')">
+Reject
+</button>
+</div>
+`;
+
+});
+
 });
 }
 
-/* LOAD ALL */
-function loadAll(){
+/* APPROVE SHARE */
+window.approveShare =
+async(id,uid)=>{
 
-/* SHARE */
-onSnapshot(collection(db,"shareRequests"),snap=>{
-let box=document.getElementById("shareList");
+const ref=
+doc(db,"users",uid);
+
+const snap=
+await getDoc(ref);
+
+const bal=
+snap.data().balance || 0;
+
+await updateDoc(ref,{
+balance: bal + 5
+});
+
+await updateDoc(
+doc(db,"shareRequests",id),
+{
+status:"approved"
+}
+);
+
+alert("Share approved");
+};
+
+/* REJECT SHARE */
+window.rejectShare =
+async(id)=>{
+
+await updateDoc(
+doc(db,"shareRequests",id),
+{
+status:"rejected"
+}
+);
+
+};
+
+/* ACTIVATION REQUESTS */
+function loadActivation(){
+
+onSnapshot(
+collection(db,"activationRequests"),
+(snap)=>{
+
+let box=
+document.getElementById("actList");
+
 box.innerHTML="";
+
 snap.forEach(d=>{
+
 let data=d.data();
 
-box.innerHTML+=`
-<p>${data.email} - ${data.status}
-<button class="approve" onclick="approveShare('${d.id}','${data.uid}')">Approve</button>
-<button class="reject" onclick="rejectShare('${d.id}')">Reject</button>
-</p>`;
-});
+box.innerHTML += `
+<div class="request">
+<p><b>${data.email}</b></p>
+<p>Number: ${data.number}</p>
+<p>TrxID: ${data.trxId}</p>
+<p>Status: ${data.status}</p>
+
+<button class="approve"
+onclick="approveAct('${d.id}','${data.uid}')">
+Approve
+</button>
+
+<button class="reject"
+onclick="rejectAct('${d.id}')">
+Reject
+</button>
+</div>
+`;
+
 });
 
-/* ACTIVATION */
-onSnapshot(collection(db,"activationRequests"),snap=>{
-let box=document.getElementById("actList");
-box.innerHTML="";
-snap.forEach(d=>{
-let data=d.data();
-
-box.innerHTML+=`
-<p>${data.email} - ${data.status}
-<button class="approve" onclick="approveAct('${d.id}','${data.uid}')">Approve</button>
-<button class="reject" onclick="rejectAct('${d.id}')">Reject</button>
-</p>`;
-});
-});
-
-/* WITHDRAW */
-onSnapshot(collection(db,"withdrawRequests"),snap=>{
-let box=document.getElementById("withdrawList");
-box.innerHTML="";
-snap.forEach(d=>{
-let data=d.data();
-
-box.innerHTML+=`
-<p>${data.email} - ${data.amount}
-<button class="approve" onclick="approveWithdraw('${d.id}','${data.uid}',${data.amount})">Approve</button>
-<button class="reject" onclick="rejectWithdraw('${d.id}')">Reject</button>
-</p>`;
-});
 });
 }
 
-/* SHARE APPROVE */
-window.approveShare=async(id,uid)=>{
-const ref=doc(db,"users",uid);
-const s=await getDoc(ref);
-await updateDoc(ref,{balance:(s.data().balance||0)+5});
-await updateDoc(doc(db,"shareRequests",id),{status:"approved"});
+/* APPROVE ACTIVATION */
+window.approveAct =
+async(id,uid)=>{
+
+const ref=
+doc(db,"users",uid);
+
+const snap=
+await getDoc(ref);
+
+const bal=
+snap.data().balance || 0;
+
+await updateDoc(ref,{
+active:true,
+balance: bal + 50
+});
+
+await updateDoc(
+doc(db,"activationRequests",id),
+{
+status:"approved"
+}
+);
+
+alert("User activated");
 };
 
-/* SHARE REJECT */
-window.rejectShare=async(id)=>{
-await updateDoc(doc(db,"shareRequests",id),{status:"rejected"});
+/* REJECT ACTIVATION */
+window.rejectAct =
+async(id)=>{
+
+await updateDoc(
+doc(db,"activationRequests",id),
+{
+status:"rejected"
+}
+);
+
 };
 
-/* ACTIVATION */
-window.approveAct=async(id,uid)=>{
-const ref=doc(db,"users",uid);
-const s=await getDoc(ref);
-await updateDoc(ref,{active:true,balance:(s.data().balance||0)+50});
-await updateDoc(doc(db,"activationRequests",id),{status:"approved"});
+/* WITHDRAW REQUESTS */
+function loadWithdraw(){
+
+onSnapshot(
+collection(db,"withdrawRequests"),
+(snap)=>{
+
+let box=
+document.getElementById("withdrawList");
+
+box.innerHTML="";
+
+snap.forEach(d=>{
+
+let data=d.data();
+
+box.innerHTML += `
+<div class="request">
+<p><b>${data.email}</b></p>
+<p>${data.method}</p>
+<p>${data.number}</p>
+<p>${data.amount}৳</p>
+<p>Status: ${data.status}</p>
+
+<button class="approve"
+onclick="approveWithdraw(
+'${d.id}',
+'${data.uid}',
+${data.amount}
+)">
+Approve
+</button>
+
+<button class="reject"
+onclick="rejectWithdraw('${d.id}')">
+Reject
+</button>
+</div>
+`;
+
+});
+
+});
+}
+
+/* APPROVE WITHDRAW */
+window.approveWithdraw =
+async(id,uid,amount)=>{
+
+const ref=
+doc(db,"users",uid);
+
+const snap=
+await getDoc(ref);
+
+const bal=
+snap.data().balance || 0;
+
+if(bal < amount){
+alert("Insufficient user balance");
+return;
+}
+
+await updateDoc(ref,{
+balance: bal - amount
+});
+
+await updateDoc(
+doc(db,"withdrawRequests",id),
+{
+status:"approved"
+}
+);
+
+alert("Withdraw approved");
 };
 
-window.rejectAct=async(id)=>{
-await updateDoc(doc(db,"activationRequests",id),{status:"rejected"});
-};
+/* REJECT WITHDRAW */
+window.rejectWithdraw =
+async(id)=>{
 
-/* WITHDRAW */
-window.approveWithdraw=async(id,uid,amount)=>{
-const ref=doc(db,"users",uid);
-const s=await getDoc(ref);
+await updateDoc(
+doc(db,"withdrawRequests",id),
+{
+status:"rejected"
+}
+);
 
-let bal=s.data().balance||0;
-if(bal<amount)return alert("Not enough balance");
-
-await updateDoc(ref,{balance:bal-amount});
-await updateDoc(doc(db,"withdrawRequests",id),{status:"approved"});
-};
-
-window.rejectWithdraw=async(id)=>{
-await updateDoc(doc(db,"withdrawRequests",id),{status:"rejected"});
 };
 
 </script>
 
+</div>
 </body>
 </html>
