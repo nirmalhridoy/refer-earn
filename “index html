@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Refer Earn</title>
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+min-height:100vh;
+padding:16px;
+background:linear-gradient(135deg,#4338ca,#7c3aed 45%,#a855f7);
+color:#111827;
+}
+
+.container{
+max-width:960px;
+margin:auto;
+}
+
+.hero{
+padding:24px;
+border-radius:24px;
+background:rgba(255,255,255,.15);
+backdrop-filter:blur(12px);
+color:white;
+box-shadow:0 10px 30px rgba(0,0,0,.15);
+margin-bottom:18px;
+}
+
+.hero h1{
+font-size:32px;
+margin-bottom:8px;
+}
+
+.hero p{
+opacity:.95;
+}
+
+.topbar{
+display:flex;
+gap:10px;
+align-items:center;
+justify-content:space-between;
+flex-wrap:wrap;
+margin-top:16px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:16px;
+}
+
+.card{
+background:rgba(255,255,255,.92);
+border-radius:22px;
+padding:18px;
+box-shadow:0 10px 30px rgba(0,0,0,.12);
+margin-bottom:16px;
+}
+
+.card h2{
+color:#4f46e5;
+margin-bottom:12px;
+font-size:20px;
+}
+
+.statRow{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+margin:12px 0;
+}
+
+.stat{
+background:#eef2ff;
+border-radius:16px;
+padding:14px;
+text-align:center;
+}
+
+.stat b{
+display:block;
+font-size:22px;
+color:#312e81;
+}
+
+button{
+border:none;
+border-radius:12px;
+padding:12px 16px;
+background:#4f46e5;
+color:white;
+font-weight:bold;
+cursor:pointer;
+transition:.25s;
+margin-top:10px;
+}
+
+button:hover{
+transform:translateY(-1px) scale(1.02);
+background:#4338ca;
+}
+
+#logoutBtn{
+background:#dc2626;
+}
+
+#logoutBtn:hover{
+background:#b91c1c;
+}
+
+input,select{
+width:100%;
+padding:12px;
+border:1px solid #d1d5db;
+border-radius:12px;
+margin-top:10px;
+}
+
+.listBox{
+background:#f8fafc;
+border-radius:14px;
+padding:12px;
+max-height:220px;
+overflow:auto;
+}
+
+.notice{
+background:#fff7ed;
+border:1px solid #fdba74;
+color:#9a3412;
+padding:10px;
+border-radius:12px;
+margin-top:10px;
+}
+
+#userInfo{
+color:white;
+font-weight:bold;
+}
+
+@media(max-width:640px){
+.hero h1{
+font-size:26px;
+}
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<div class="hero">
+<h1>Refer Earn</h1>
+<p>Invite friends, complete tasks, and earn rewards.</p>
+
+<div class="topbar">
+<button id="loginBtn">Login with Google</button>
+<p id="userInfo"></p>
+<button id="logoutBtn" style="display:none;">Logout</button>
+</div>
+</div>
+
+<div class="grid">
+
+<div class="card">
+<h2>User Dashboard</h2>
+
+<div class="statRow">
+<div class="stat">
+Balance
+<b><span id="balance">0</span>৳</b>
+</div>
+
+<div class="stat">
+Referrals
+<b><span id="refCount">0</span></b>
+</div>
+</div>
+
+<p><strong>Your Referral Link</strong></p>
+<input id="refLink" readonly>
+<button id="copyBtn">Copy Referral Link</button>
+
+<p style="margin-top:14px;">
+<strong>Referral Users</strong>
+</p>
+
+<div id="refList" class="listBox"></div>
+</div>
+
+<div class="card" id="activationBox">
+<h2>Activate Account</h2>
+
+<p>
+Send <b>100৳</b> to
+<b>01944545512</b>
+via bKash/Nagad
+</p>
+
+<input id="payNumber"
+placeholder="Your payment number">
+
+<input id="trxId"
+placeholder="Transaction ID">
+
+<button id="activateBtn">
+Submit Activation
+</button>
+
+<p id="activeStatus"
+style="margin-top:10px;"></p>
+</div>
+
+</div>
+
+<div class="card">
+<h2>Bonus Task (+5৳)</h2>
+
+<button onclick="
+window.open(
+'https://www.facebook.com/profile.php?id=61587170180010',
+'_blank'
+)">
+Open Facebook Profile
+</button>
+
+<p style="margin-top:10px;">
+Share the first post and upload screenshot
+</p>
+
+<input type="file" id="screenshot">
+
+<button id="uploadShareBtn">
+Submit Screenshot
+</button>
+
+<div class="notice">
+Post share না করলে withdraw issue হলে
+কর্তৃপক্ষ দায়ী থাকবে না।
+</div>
+</div>
+
+<div class="card">
+<h2>Withdraw</h2>
+
+<div id="withdrawRules"
+class="notice"></div>
+
+<select id="paymentMethod">
+<option value="">
+Select Payment Method
+</option>
+<option>bKash</option>
+<option>Nagad</option>
+</select>
+
+<input id="withdrawNumber"
+placeholder="Enter number">
+
+<input id="withdrawAmount"
+type="number"
+placeholder="Enter amount">
+<button id="withdrawBtn">
+Withdraw
+</button>
+
+<p style="margin-top:14px;">
+<strong>My Withdraw History</strong>
+</p>
+
+<div id="myWithdraws" class="listBox"></div>
+</div>
+
+<div class="card">
+<h2>Leaderboard 🏆</h2>
+<div id="leaderboard" class="listBox"></div>
+</div>
+
+</div>
+
+<script type="module">
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+doc,
+getDoc,
+setDoc,
+updateDoc,
+collection,
+addDoc,
+getDocs,
+onSnapshot
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+import {
+getAuth,
+GoogleAuthProvider,
+signInWithPopup,
+onAuthStateChanged,
+signOut
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig = {
+apiKey: "AIzaSyBnP9QJgg6d874QB-a4meFbprLMEufRzuY",
+authDomain: "refer-earn-73e38.firebaseapp.com",
+projectId: "refer-earn-73e38",
+storageBucket: "refer-earn-73e38.firebasestorage.app",
+messagingSenderId: "323369987305",
+appId: "1:323369987305:web:7c8eead19bff6454f4d478"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+/* LOGIN */
+document.getElementById("loginBtn").onclick =
+async ()=>{
+await signInWithPopup(
+auth,
+new GoogleAuthProvider()
+);
+};
+
+/* AUTH */
+onAuthStateChanged(auth, async(user)=>{
+
+if(!user) return;
+
+document.getElementById("userInfo").innerText =
+"Logged in: " + user.email;
+
+document.getElementById("loginBtn").style.display =
+"none";
+
+document.getElementById("logoutBtn").style.display =
+"inline-block";
+
+const userRef = doc(db,"users",user.uid);
+const snap = await getDoc(userRef);
+
+const ref =
+new URLSearchParams(
+window.location.search
+).get("ref");
+
+/* NEW USER */
+if(!snap.exists()){
+
+await setDoc(userRef,{
+balance:0,
+email:user.email,
+referrals:0,
+referredBy:ref || null,
+active:false
+});
+
+if(ref && ref!==user.uid){
+
+const refRef=doc(db,"users",ref);
+const refSnap=await getDoc(refRef);
+
+if(refSnap.exists()){
+await updateDoc(refRef,{
+balance:(refSnap.data().balance||0)+10,
+referrals:(refSnap.data().referrals||0)+1
+});
+}
+}
+}
+
+liveUser(user.uid);
+liveReferrals(user.uid);
+liveWithdraws(user.uid);
+liveLeaderboard();
+
+});
+
+/* LIVE USER */
+function liveUser(uid){
+
+onSnapshot(doc(db,"users",uid),(snap)=>{
+
+if(!snap.exists()) return;
+
+const data=snap.data();
+
+document.getElementById("balance").innerText =
+data.balance || 0;
+
+document.getElementById("refCount").innerText =
+data.referrals || 0;
+
+document.getElementById("refLink").value =
+window.location.origin + "/?ref=" + uid;
+
+if(data.active){
+document.getElementById("activeStatus").innerText =
+"✅ Account Active";
+
+document.getElementById("activationBox").style.display =
+"none";
+}else{
+document.getElementById("activeStatus").innerText =
+"❌ Account Not Active";
+}
+
+/* Withdraw rules */
+let txt="";
+let refs=data.referrals||0;
+let bal=data.balance||0;
+
+if(bal>=250 && refs<3){
+txt="Need 3 referrals for 250৳ withdraw";
+}
+else if(bal>=500 && refs<6){
+txt="Need 6 referrals for 500৳ withdraw";
+}
+else if(bal>=1000 && refs<12){
+txt="Need 12 referrals for 1000৳ withdraw";
+}
+
+document.getElementById("withdrawRules").innerText =
+txt;
+
+});
+}
+
+/* ACTIVATE */
+document.getElementById("activateBtn").onclick =
+async()=>{
+
+const num=
+document.getElementById("payNumber").value;
+
+const trx=
+document.getElementById("trxId").value;
+
+if(!num || !trx){
+alert("Fill all fields");
+return;
+}
+
+const user=auth.currentUser;
+
+await addDoc(
+collection(db,"activationRequests"),
+{
+uid:user.uid,
+email:user.email,
+number:num,
+trxId:trx,
+status:"pending"
+}
+);
+
+alert("Activation request sent");
+
+document.getElementById("payNumber").value="";
+document.getElementById("trxId").value="";
+};
+
+/* SHARE BONUS */
+document.getElementById("uploadShareBtn").onclick =
+async()=>{
+
+const file =
+document.getElementById("screenshot").files[0];
+
+if(!file){
+alert("Choose screenshot first");
+return;
+}
+
+const user=auth.currentUser;
+
+await addDoc(
+collection(db,"shareRequests"),
+{
+uid:user.uid,
+email:user.email,
+status:"pending"
+}
+);
+
+alert("Screenshot submitted");
+};
+
+/* REFERRALS */
+function liveReferrals(uid){
+
+onSnapshot(collection(db,"users"),(snap)=>{
+
+let box=
+document.getElementById("refList");
+
+box.innerHTML="";
+
+snap.forEach(d=>{
+let data=d.data();
+
+if(data.referredBy===uid){
+box.innerHTML +=
+"<p>"+data.email+"</p>";
+}
+});
+
+});
+}
+
+/* WITHDRAW */
+document.getElementById("withdrawBtn").onclick =
+async()=>{
+
+const method=
+document.getElementById("paymentMethod").value;
+
+const number=
+document.getElementById("withdrawNumber").value;
+
+const amount=
+Number(
+document.getElementById("withdrawAmount").value
+);
+
+if(!method||!number||!amount){
+alert("Fill all fields");
+return;
+}
+
+const user=auth.currentUser;
+const snap=await getDoc(
+doc(db,"users",user.uid)
+);
+
+const data=snap.data();
+
+if(!data.active){
+alert("Activate account first");
+return;
+}
+
+if(amount>data.balance){
+alert("Insufficient balance");
+return;
+}
+
+await addDoc(
+collection(db,"withdrawRequests"),
+{
+uid:user.uid,
+email:user.email,
+method,
+number,
+amount,
+status:"pending"
+}
+);
+
+alert("Withdraw request submitted");
+
+document.getElementById("paymentMethod").value="";
+document.getElementById("withdrawNumber").value="";
+document.getElementById("withdrawAmount").value="";
+};
+
+/* WITHDRAW HISTORY */
+function liveWithdraws(uid){
+
+onSnapshot(
+collection(db,"withdrawRequests"),
+(snap)=>{
+
+let box=
+document.getElementById("myWithdraws");
+
+box.innerHTML="";
+
+snap.forEach(d=>{
+let data=d.data();
+
+if(data.uid===uid){
+box.innerHTML +=
+"<p>"+data.method+
+" | "+data.amount+
+"৳ - "+data.status+
+"</p>";
+}
+});
+
+});
+}
+
+/* LEADERBOARD */
+function liveLeaderboard(){
+
+onSnapshot(
+collection(db,"users"),
+(snap)=>{
+
+let users=[];
+
+snap.forEach(d=>{
+users.push(d.data());
+});
+
+users.sort(
+(a,b)=>
+(b.referrals||0)-
+(a.referrals||0)
+);
+
+let box=
+document.getElementById("leaderboard");
+
+box.innerHTML="";
+
+users.slice(0,10).forEach((u,i)=>{
+
+let medal="";
+if(i===0) medal="🥇 ";
+if(i===1) medal="🥈 ";
+if(i===2) medal="🥉 ";
+
+box.innerHTML +=
+"<p>"+medal+
+u.email+
+" - "+(u.referrals||0)+
+" referrals</p>";
+});
+
+});
+}
+
+/* COPY */
+document.getElementById("copyBtn").onclick =
+async()=>{
+
+await navigator.clipboard.writeText(
+document.getElementById("refLink").value
+);
+
+alert("Copied!");
+};
+
+/* LOGOUT */
+document.getElementById("logoutBtn").onclick =
+async()=>{
+await signOut(auth);
+location.reload();
+};
+
+</script>
+
+</body>
+</html>
