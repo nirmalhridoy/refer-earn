@@ -191,7 +191,7 @@ const ADMIN_EMAIL=
 "antorahmed0185@gmail.com";
 
 const TELEGRAM_BOT_TOKEN=
-"8876000207:AAEvPrrD9zsoSO8DgMbnnPzwdTw7Iowlmf4";
+"YOUR_BOT_TOKEN";
 
 const TELEGRAM_CHAT_ID=
 "-5240659078";
@@ -212,7 +212,6 @@ text:text
 );
 }
 
-/* LOGIN */
 document.getElementById("loginBtn").onclick=
 async()=>{
 await signInWithPopup(
@@ -221,7 +220,6 @@ new GoogleAuthProvider()
 );
 };
 
-/* AUTH */
 onAuthStateChanged(auth,async(user)=>{
 
 if(!user)return;
@@ -242,10 +240,8 @@ loadStats();
 loadShare();
 loadActivation();
 loadWithdraw();
-
 });
 
-/* STATS */
 async function loadStats(){
 
 const users=
@@ -262,13 +258,12 @@ users.size;
 
 document.getElementById("activeUsers").innerText=
 active;
-
-onSnapshot(
+  onSnapshot(
 collection(db,"activationRequests"),
 (snap)=>{
 let p=0;
 snap.forEach(d=>{
-if(d.data().status==="pending")p++;
+if(d.data().status==="pending") p++;
 });
 document.getElementById("pendingA").innerText=p;
 });
@@ -278,14 +273,13 @@ collection(db,"withdrawRequests"),
 (snap)=>{
 let p=0;
 snap.forEach(d=>{
-if(d.data().status==="pending")p++;
+if(d.data().status==="pending") p++;
 });
 document.getElementById("pendingW").innerText=p;
 });
-
 }
 
-/* SHARE */
+/* SHARE REQUESTS */
 function loadShare(){
 
 onSnapshot(
@@ -294,19 +288,21 @@ collection(db,"shareRequests"),
 
 let box=
 document.getElementById("shareList");
+
 box.innerHTML="";
 
 snap.forEach(d=>{
+
 let data=d.data();
 
 box.innerHTML+=`
 <div class="request">
-<p>${data.email}</p>
-<p>${data.status}</p>
+<p><b>${data.email}</b></p>
+<p>Status: ${data.status}</p>
 
 <button class="approve"
 onclick="approveShare('${d.id}','${data.uid}')">
-Approve +5
+Approve +5৳
 </button>
 
 <button class="reject"
@@ -316,18 +312,21 @@ Reject
 </div>
 `;
 });
-
 });
 }
 
 window.approveShare=
 async(id,uid)=>{
 
-const ref=doc(db,"users",uid);
-const snap=await getDoc(ref);
+const ref=
+doc(db,"users",uid);
+
+const snap=
+await getDoc(ref);
 
 await updateDoc(ref,{
-balance:(snap.data().balance||0)+5
+balance:
+(snap.data().balance||0)+5
 });
 
 await updateDoc(
@@ -342,15 +341,18 @@ alert("Share approved");
 
 window.rejectShare=
 async(id)=>{
+
 await updateDoc(
 doc(db,"shareRequests",id),
 {
 status:"rejected"
 }
 );
+
+alert("Share rejected");
 };
 
-/* ACTIVATION */
+/* ACTIVATION REQUESTS */
 function loadActivation(){
 
 onSnapshot(
@@ -359,16 +361,19 @@ collection(db,"activationRequests"),
 
 let box=
 document.getElementById("actList");
+
 box.innerHTML="";
 
 snap.forEach(d=>{
+
 let data=d.data();
 
 box.innerHTML+=`
 <div class="request">
-<p>${data.email}</p>
-<p>${data.number}</p>
-<p>${data.trxId}</p>
+<p><b>${data.email}</b></p>
+<p>Number: ${data.number}</p>
+<p>TRX ID: ${data.trxId}</p>
+<p>Status: ${data.status}</p>
 
 <button class="approve"
 onclick="approveAct('${d.id}','${data.uid}')">
@@ -382,19 +387,22 @@ Reject
 </div>
 `;
 });
-
 });
 }
 
 window.approveAct=
 async(id,uid)=>{
 
-const ref=doc(db,"users",uid);
-const snap=await getDoc(ref);
+const ref=
+doc(db,"users",uid);
+
+const snap=
+await getDoc(ref);
 
 await updateDoc(ref,{
 active:true,
-balance:(snap.data().balance||0)+50
+balance:
+(snap.data().balance||0)+50
 });
 
 await updateDoc(
@@ -404,20 +412,23 @@ status:"approved"
 }
 );
 
-alert("Activated");
+alert("Account activated");
 };
 
 window.rejectAct=
 async(id)=>{
+
 await updateDoc(
 doc(db,"activationRequests",id),
 {
 status:"rejected"
 }
 );
+
+alert("Activation rejected");
 };
 
-/* WITHDRAW */
+/* WITHDRAW REQUESTS */
 function loadWithdraw(){
 
 onSnapshot(
@@ -426,17 +437,20 @@ collection(db,"withdrawRequests"),
 
 let box=
 document.getElementById("withdrawList");
+
 box.innerHTML="";
 
 snap.forEach(d=>{
+
 let data=d.data();
 
 box.innerHTML+=`
 <div class="request">
-<p>${data.email}</p>
+<p><b>${data.email}</b></p>
 <p>${data.method}</p>
 <p>${data.number}</p>
 <p>${data.amount}৳</p>
+<p>Status: ${data.status}</p>
 
 <button class="approve"
 onclick="approveWithdraw(
@@ -454,17 +468,20 @@ Reject
 </div>
 `;
 });
-
 });
 }
 
 window.approveWithdraw=
 async(id,uid,amount)=>{
 
-const ref=doc(db,"users",uid);
-const snap=await getDoc(ref);
+const ref=
+doc(db,"users",uid);
 
-let bal=snap.data().balance||0;
+const snap=
+await getDoc(ref);
+
+let bal=
+snap.data().balance||0;
 
 if(bal<amount){
 alert("Insufficient balance");
@@ -497,18 +514,22 @@ await sendTelegram(
 "Amount: "+data.amount+"৳"
 );
 
-alert("Approved + Telegram sent");
+alert("Withdraw approved + Telegram sent");
 };
 
 window.rejectWithdraw=
 async(id)=>{
+
 await updateDoc(
 doc(db,"withdrawRequests",id),
 {
 status:"rejected"
 }
 );
+
+alert("Withdraw rejected");
 };
+
 </script>
 
 </body>
