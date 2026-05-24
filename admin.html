@@ -35,7 +35,8 @@ margin-bottom:10px;
 }
 .stats{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+grid-template-columns:
+repeat(auto-fit,minmax(180px,1fr));
 gap:14px;
 margin-top:16px;
 }
@@ -101,14 +102,32 @@ display:none;
 <div class="hero">
 <h1>Refer Earn Admin Panel</h1>
 
-<button id="loginBtn">Admin Login</button>
+<button id="loginBtn">
+Admin Login
+</button>
+
 <p id="status"></p>
 
 <div class="stats">
-<div class="stat">Total Users <b id="totalUsers">0</b></div>
-<div class="stat">Active Users <b id="activeUsers">0</b></div>
-<div class="stat">Pending Activation <b id="pendingA">0</b></div>
-<div class="stat">Pending Withdraw <b id="pendingW">0</b></div>
+<div class="stat">
+Total Users
+<b id="totalUsers">0</b>
+</div>
+
+<div class="stat">
+Active Users
+<b id="activeUsers">0</b>
+</div>
+
+<div class="stat">
+Pending Activation
+<b id="pendingA">0</b>
+</div>
+
+<div class="stat">
+Pending Withdraw
+<b id="pendingW">0</b>
+</div>
 </div>
 </div>
 
@@ -141,7 +160,6 @@ getFirestore,
 collection,
 doc,
 getDoc,
-getDocs,
 updateDoc,
 onSnapshot
 }
@@ -170,31 +188,31 @@ const app=initializeApp(firebaseConfig);
 const db=getFirestore(app);
 const auth=getAuth(app);
 
-const ADMIN_EMAIL="antorahmed0185@gmail.com";
+const ADMIN_EMAIL=
+"antorahmed0185@gmail.com";
 
-const TELEGRAM_BOT_TOKEN=
+const BOT_TOKEN=
 "8876000207:AAEvPrrD9zsoSO8DgMbnnPzwdTw7Iowlmf4";
 
-const TELEGRAM_CHAT_ID=
+const CHAT_ID=
 "-5240659078";
 
 async function sendTelegram(text){
 await fetch(
-`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
+`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
 {
 method:"POST",
 headers:{
 "Content-Type":"application/json"
 },
 body:JSON.stringify({
-chat_id:TELEGRAM_CHAT_ID,
+chat_id:CHAT_ID,
 text:text
 })
 }
 );
 }
 
-/* LOGIN */
 document.getElementById("loginBtn").onclick=
 async()=>{
 await setPersistence(
@@ -208,7 +226,6 @@ new GoogleAuthProvider()
 );
 };
 
-/* AUTH CHECK */
 onAuthStateChanged(auth,(user)=>{
 
 if(!user) return;
@@ -234,12 +251,12 @@ loadActivation();
 loadWithdraw();
 });
 
-/* STATS */
 function loadStats(){
 
 onSnapshot(
 collection(db,"users"),
 (snap)=>{
+
 let active=0;
 
 snap.forEach(d=>{
@@ -252,29 +269,36 @@ snap.size;
 document.getElementById("activeUsers").innerText=
 active;
 });
-
-onSnapshot(
+  onSnapshot(
 collection(db,"activationRequests"),
 (snap)=>{
+
 let p=0;
+
 snap.forEach(d=>{
 if(d.data().status==="pending") p++;
 });
-document.getElementById("pendingA").innerText=p;
+
+document.getElementById("pendingA").innerText=
+p;
 });
 
 onSnapshot(
 collection(db,"withdrawRequests"),
 (snap)=>{
+
 let p=0;
+
 snap.forEach(d=>{
 if(d.data().status==="pending") p++;
 });
-document.getElementById("pendingW").innerText=p;
+
+document.getElementById("pendingW").innerText=
+p;
 });
 }
 
-/* SHARE */
+/* SHARE REQUESTS */
 function loadShare(){
 
 onSnapshot(
@@ -295,23 +319,26 @@ box.innerHTML+=`
 <p><b>${data.email}</b></p>
 <p>Status: ${data.status}</p>
 
-<button class="approve"
-onclick="approveShare('${d.id}','${data.uid}')">
+<button class="approve shareApprove"
+data-id="${d.id}"
+data-uid="${data.uid}">
 Approve +5৳
 </button>
 
-<button class="reject"
-onclick="rejectShare('${d.id}')">
+<button class="reject shareReject"
+data-id="${d.id}">
 Reject
 </button>
 </div>
 `;
 });
-});
-}
 
-window.approveShare=
-async(id,uid)=>{
+document.querySelectorAll(".shareApprove")
+.forEach(btn=>{
+btn.onclick=async()=>{
+
+const id=btn.dataset.id;
+const uid=btn.dataset.uid;
 
 const ref=doc(db,"users",uid);
 const snap=await getDoc(ref);
@@ -329,9 +356,13 @@ status:"approved"
 
 alert("Share approved");
 };
+});
 
-window.rejectShare=
-async(id)=>{
+document.querySelectorAll(".shareReject")
+.forEach(btn=>{
+btn.onclick=async()=>{
+
+const id=btn.dataset.id;
 
 await updateDoc(
 doc(db,"shareRequests",id),
@@ -342,8 +373,12 @@ status:"rejected"
 
 alert("Rejected");
 };
+});
 
-/* ACTIVATION */
+});
+}
+
+/* ACTIVATION REQUESTS */
 function loadActivation(){
 
 onSnapshot(
@@ -362,27 +397,30 @@ let data=d.data();
 box.innerHTML+=`
 <div class="request">
 <p><b>${data.email}</b></p>
-<p>${data.number}</p>
-<p>${data.trxId}</p>
+<p>Number: ${data.number}</p>
+<p>TRX ID: ${data.trxId}</p>
 <p>Status: ${data.status}</p>
 
-<button class="approve"
-onclick="approveAct('${d.id}','${data.uid}')">
+<button class="approve actApprove"
+data-id="${d.id}"
+data-uid="${data.uid}">
 Approve
 </button>
 
-<button class="reject"
-onclick="rejectAct('${d.id}')">
+<button class="reject actReject"
+data-id="${d.id}">
 Reject
 </button>
 </div>
 `;
 });
-});
-}
 
-window.approveAct=
-async(id,uid)=>{
+document.querySelectorAll(".actApprove")
+.forEach(btn=>{
+btn.onclick=async()=>{
+
+const id=btn.dataset.id;
+const uid=btn.dataset.uid;
 
 const ref=doc(db,"users",uid);
 const snap=await getDoc(ref);
@@ -401,9 +439,13 @@ status:"approved"
 
 alert("Activation approved");
 };
+});
 
-window.rejectAct=
-async(id)=>{
+document.querySelectorAll(".actReject")
+.forEach(btn=>{
+btn.onclick=async()=>{
+
+const id=btn.dataset.id;
 
 await updateDoc(
 doc(db,"activationRequests",id),
@@ -414,8 +456,12 @@ status:"rejected"
 
 alert("Rejected");
 };
+});
 
-/* WITHDRAW */
+});
+}
+
+/* WITHDRAW REQUESTS */
 function loadWithdraw(){
 
 onSnapshot(
@@ -439,32 +485,35 @@ box.innerHTML+=`
 <p>${data.amount}৳</p>
 <p>Status: ${data.status}</p>
 
-<button class="approve"
-onclick="approveWithdraw(
-'${d.id}',
-'${data.uid}',
-${data.amount}
-)">
+<button class="approve withdrawApprove"
+data-id="${d.id}"
+data-uid="${data.uid}"
+data-amount="${data.amount}">
 Approve
 </button>
 
-<button class="reject"
-onclick="rejectWithdraw('${d.id}')">
+<button class="reject withdrawReject"
+data-id="${d.id}">
 Reject
 </button>
 </div>
 `;
 });
-});
-}
 
-window.approveWithdraw=
-async(id,uid,amount)=>{
+document.querySelectorAll(".withdrawApprove")
+.forEach(btn=>{
+btn.onclick=async()=>{
+
+const id=btn.dataset.id;
+const uid=btn.dataset.uid;
+const amount=
+Number(btn.dataset.amount);
 
 const ref=doc(db,"users",uid);
 const snap=await getDoc(ref);
 
-let bal=snap.data().balance||0;
+let bal=
+snap.data().balance||0;
 
 if(bal<amount){
 alert("Insufficient balance");
@@ -497,11 +546,17 @@ await sendTelegram(
 "Amount: "+data.amount+"৳"
 );
 
-alert("Withdraw approved + Telegram sent");
+alert(
+"Withdraw approved + Telegram sent"
+);
 };
+});
 
-window.rejectWithdraw=
-async(id)=>{
+document.querySelectorAll(".withdrawReject")
+.forEach(btn=>{
+btn.onclick=async()=>{
+
+const id=btn.dataset.id;
 
 await updateDoc(
 doc(db,"withdrawRequests",id),
@@ -512,6 +567,10 @@ status:"rejected"
 
 alert("Rejected");
 };
+});
+
+});
+}
 </script>
 
 </body>
