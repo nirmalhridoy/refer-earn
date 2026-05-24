@@ -35,8 +35,7 @@ margin-bottom:10px;
 }
 .stats{
 display:grid;
-grid-template-columns:
-repeat(auto-fit,minmax(180px,1fr));
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
 gap:14px;
 margin-top:16px;
 }
@@ -102,32 +101,14 @@ display:none;
 <div class="hero">
 <h1>Refer Earn Admin Panel</h1>
 
-<button id="loginBtn">
-Admin Login
-</button>
-
+<button id="loginBtn">Admin Login</button>
 <p id="status"></p>
 
 <div class="stats">
-<div class="stat">
-Total Users
-<b id="totalUsers">0</b>
-</div>
-
-<div class="stat">
-Active Users
-<b id="activeUsers">0</b>
-</div>
-
-<div class="stat">
-Pending Activation
-<b id="pendingA">0</b>
-</div>
-
-<div class="stat">
-Pending Withdraw
-<b id="pendingW">0</b>
-</div>
+<div class="stat">Total Users <b id="totalUsers">0</b></div>
+<div class="stat">Active Users <b id="activeUsers">0</b></div>
+<div class="stat">Pending Activation <b id="pendingA">0</b></div>
+<div class="stat">Pending Withdraw <b id="pendingW">0</b></div>
 </div>
 </div>
 
@@ -170,7 +151,9 @@ import {
 getAuth,
 GoogleAuthProvider,
 signInWithPopup,
-onAuthStateChanged
+onAuthStateChanged,
+setPersistence,
+browserLocalPersistence
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
@@ -189,12 +172,14 @@ const auth=getAuth(app);
 
 const ADMIN_EMAIL="antorahmed0185@gmail.com";
 
-const TELEGRAM_BOT_TOKEN="8876000207:AAEvPrrD9zsoSO8DgMbnnPzwdTw7Iowlmf4";
+const TELEGRAM_BOT_TOKEN=
+"8876000207:AAEvPrrD9zsoSO8DgMbnnPzwdTw7Iowlmf4";
 
-const TELEGRAM_CHAT_ID="-5240659078";
+const TELEGRAM_CHAT_ID=
+"-5240659078";
 
 async function sendTelegram(text){
-return await fetch(
+await fetch(
 `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
 {
 method:"POST",
@@ -209,17 +194,24 @@ text:text
 );
 }
 
+/* LOGIN */
 document.getElementById("loginBtn").onclick=
 async()=>{
+await setPersistence(
+auth,
+browserLocalPersistence
+);
+
 await signInWithPopup(
 auth,
 new GoogleAuthProvider()
 );
 };
 
-onAuthStateChanged(auth,async(user)=>{
+/* AUTH CHECK */
+onAuthStateChanged(auth,(user)=>{
 
-if(!user)return;
+if(!user) return;
 
 if(user.email!==ADMIN_EMAIL){
 document.getElementById("status").innerText=
@@ -230,6 +222,9 @@ return;
 document.getElementById("status").innerText=
 "Logged in: "+user.email;
 
+document.getElementById("loginBtn").style.display=
+"none";
+
 document.getElementById("adminPanel").style.display=
 "block";
 
@@ -239,23 +234,26 @@ loadActivation();
 loadWithdraw();
 });
 
-async function loadStats(){
+/* STATS */
+function loadStats(){
 
-const users=
-await getDocs(collection(db,"users"));
-
+onSnapshot(
+collection(db,"users"),
+(snap)=>{
 let active=0;
 
-users.forEach(d=>{
+snap.forEach(d=>{
 if(d.data().active) active++;
 });
 
 document.getElementById("totalUsers").innerText=
-users.size;
+snap.size;
 
 document.getElementById("activeUsers").innerText=
 active;
-  onSnapshot(
+});
+
+onSnapshot(
 collection(db,"activationRequests"),
 (snap)=>{
 let p=0;
@@ -276,16 +274,20 @@ document.getElementById("pendingW").innerText=p;
 });
 }
 
-/* SHARE REQUESTS */
+/* SHARE */
 function loadShare(){
+
 onSnapshot(
 collection(db,"shareRequests"),
 (snap)=>{
 
-let box=document.getElementById("shareList");
+let box=
+document.getElementById("shareList");
+
 box.innerHTML="";
 
 snap.forEach(d=>{
+
 let data=d.data();
 
 box.innerHTML+=`
@@ -308,7 +310,9 @@ Reject
 });
 }
 
-window.approveShare=async(id,uid)=>{
+window.approveShare=
+async(id,uid)=>{
+
 const ref=doc(db,"users",uid);
 const snap=await getDoc(ref);
 
@@ -318,38 +322,48 @@ balance:(snap.data().balance||0)+5
 
 await updateDoc(
 doc(db,"shareRequests",id),
-{ status:"approved" }
+{
+status:"approved"
+}
 );
 
 alert("Share approved");
 };
 
-window.rejectShare=async(id)=>{
+window.rejectShare=
+async(id)=>{
+
 await updateDoc(
 doc(db,"shareRequests",id),
-{ status:"rejected" }
+{
+status:"rejected"
+}
 );
 
-alert("Share rejected");
+alert("Rejected");
 };
 
-/* ACTIVATION REQUESTS */
+/* ACTIVATION */
 function loadActivation(){
+
 onSnapshot(
 collection(db,"activationRequests"),
 (snap)=>{
 
-let box=document.getElementById("actList");
+let box=
+document.getElementById("actList");
+
 box.innerHTML="";
 
 snap.forEach(d=>{
+
 let data=d.data();
 
 box.innerHTML+=`
 <div class="request">
 <p><b>${data.email}</b></p>
-<p>Number: ${data.number}</p>
-<p>TRX ID: ${data.trxId}</p>
+<p>${data.number}</p>
+<p>${data.trxId}</p>
 <p>Status: ${data.status}</p>
 
 <button class="approve"
@@ -367,7 +381,9 @@ Reject
 });
 }
 
-window.approveAct=async(id,uid)=>{
+window.approveAct=
+async(id,uid)=>{
+
 const ref=doc(db,"users",uid);
 const snap=await getDoc(ref);
 
@@ -378,31 +394,41 @@ balance:(snap.data().balance||0)+50
 
 await updateDoc(
 doc(db,"activationRequests",id),
-{ status:"approved" }
+{
+status:"approved"
+}
 );
 
-alert("Account activated");
+alert("Activation approved");
 };
 
-window.rejectAct=async(id)=>{
+window.rejectAct=
+async(id)=>{
+
 await updateDoc(
 doc(db,"activationRequests",id),
-{ status:"rejected" }
+{
+status:"rejected"
+}
 );
 
-alert("Activation rejected");
+alert("Rejected");
 };
 
-/* WITHDRAW REQUESTS */
+/* WITHDRAW */
 function loadWithdraw(){
+
 onSnapshot(
 collection(db,"withdrawRequests"),
 (snap)=>{
 
-let box=document.getElementById("withdrawList");
+let box=
+document.getElementById("withdrawList");
+
 box.innerHTML="";
 
 snap.forEach(d=>{
+
 let data=d.data();
 
 box.innerHTML+=`
@@ -432,9 +458,9 @@ Reject
 });
 }
 
-window.approveWithdraw=async(id,uid,amount)=>{
+window.approveWithdraw=
+async(id,uid,amount)=>{
 
-try{
 const ref=doc(db,"users",uid);
 const snap=await getDoc(ref);
 
@@ -451,10 +477,13 @@ balance:bal-amount
 
 await updateDoc(
 doc(db,"withdrawRequests",id),
-{ status:"approved" }
+{
+status:"approved"
+}
 );
 
-const req=await getDoc(
+const req=
+await getDoc(
 doc(db,"withdrawRequests",id)
 );
 
@@ -469,23 +498,20 @@ await sendTelegram(
 );
 
 alert("Withdraw approved + Telegram sent");
-
-}catch(error){
-console.log(error);
-alert("Withdraw approved but Telegram failed");
-}
-
 };
 
-window.rejectWithdraw=async(id)=>{
+window.rejectWithdraw=
+async(id)=>{
+
 await updateDoc(
 doc(db,"withdrawRequests",id),
-{ status:"rejected" }
+{
+status:"rejected"
+}
 );
 
-alert("Withdraw rejected");
+alert("Rejected");
 };
-
 </script>
 
 </body>
