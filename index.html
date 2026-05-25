@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Refer Earn</title>
 
 <style>
@@ -12,7 +12,6 @@ padding:0;
 box-sizing:border-box;
 font-family:Arial,sans-serif;
 }
-
 body{
 min-height:100vh;
 padding:16px;
@@ -22,18 +21,15 @@ linear-gradient(-45deg,#4f46e5,#7c3aed,#2563eb,#9333ea);
 background-size:400% 400%;
 animation:bgMove 12s ease infinite;
 }
-
 @keyframes bgMove{
 0%{background-position:0% 50%;}
 50%{background-position:100% 50%;}
 100%{background-position:0% 50%;}
 }
-
 .container{
 max-width:900px;
 margin:auto;
 }
-
 .hero{
 padding:24px;
 border-radius:24px;
@@ -41,24 +37,30 @@ background:rgba(255,255,255,.12);
 backdrop-filter:blur(14px);
 box-shadow:0 10px 30px rgba(0,0,0,.25);
 margin-bottom:18px;
+text-align:center;
 }
-
+.logo{
+width:130px;
+height:130px;
+border-radius:22px;
+object-fit:cover;
+margin-bottom:12px;
+box-shadow:0 8px 25px rgba(0,0,0,.25);
+}
 .hero h1{
 font-size:32px;
 margin-bottom:8px;
 }
-
 .hero p{
 opacity:.9;
 }
-
 .topBtns{
 margin-top:16px;
 display:flex;
 gap:10px;
+justify-content:center;
 flex-wrap:wrap;
 }
-
 button{
 border:none;
 padding:12px 16px;
@@ -66,17 +68,14 @@ border-radius:12px;
 cursor:pointer;
 font-weight:bold;
 }
-
 .primary{
 background:white;
 color:#4338ca;
 }
-
 .danger{
 background:#dc2626;
 color:white;
 }
-
 .card{
 background:rgba(255,255,255,.15);
 backdrop-filter:blur(12px);
@@ -85,11 +84,9 @@ border-radius:20px;
 margin-bottom:18px;
 box-shadow:0 10px 25px rgba(0,0,0,.2);
 }
-
 .card h2{
 margin-bottom:14px;
 }
-
 .stats{
 display:grid;
 grid-template-columns:
@@ -97,38 +94,29 @@ repeat(auto-fit,minmax(180px,1fr));
 gap:14px;
 margin-bottom:18px;
 }
-
 .stat{
 background:rgba(255,255,255,.12);
 padding:18px;
 border-radius:18px;
 text-align:center;
 }
-
 .stat span{
 display:block;
 font-size:28px;
 font-weight:bold;
 margin-top:8px;
 }
-
-.progressWrap{
-margin-top:12px;
-}
-
 .progressBar{
 height:12px;
 border-radius:20px;
 background:rgba(255,255,255,.2);
 overflow:hidden;
 }
-
 .progressFill{
 height:100%;
 width:0%;
 background:#22c55e;
 }
-
 input,select{
 width:100%;
 padding:12px;
@@ -137,14 +125,12 @@ border-radius:12px;
 margin-top:10px;
 outline:none;
 }
-
 .listBox{
 background:rgba(255,255,255,.12);
 padding:12px;
 border-radius:14px;
 margin-top:10px;
 }
-
 .badge{
 display:inline-block;
 padding:4px 10px;
@@ -152,42 +138,27 @@ border-radius:20px;
 font-size:12px;
 font-weight:bold;
 }
-
 .pending{
 background:#facc15;
 color:#111;
 }
-
 .approved{
 background:#22c55e;
 color:white;
 }
-
 .rejected{
 background:#ef4444;
 color:white;
 }
-
-a.fbLink{
+.fbLink{
 display:inline-block;
 margin-top:8px;
 color:white;
 font-weight:bold;
 text-decoration:underline;
 }
-
 #logoutBtn{
 display:none;
-}
-
-#userInfo{
-margin-top:10px;
-}
-
-@media(max-width:640px){
-.hero h1{
-font-size:26px;
-}
 }
 </style>
 </head>
@@ -196,6 +167,12 @@ font-size:26px;
 <div class="container">
 
 <div class="hero">
+
+<img
+class="logo"
+src="https://raw.githubusercontent.com/nirmalhridoy/refer-earn/main/logo.jpg"
+alt="Refer Earn Logo">
+
 <h1>Refer Earn</h1>
 <p>Earn by referrals and sharing posts</p>
 
@@ -227,11 +204,9 @@ Referrals
 <div class="card">
 <h2>Referral Progress</h2>
 
-<div class="progressWrap">
 <div class="progressBar">
 <div id="progressFill"
 class="progressFill"></div>
-</div>
 </div>
 
 <p id="progressText"
@@ -278,16 +253,14 @@ Submit Activation
 </button>
 
 <p id="activeStatus"
-style="margin-top:10px;">
-</p>
+style="margin-top:10px;"></p>
 </div>
 
 <div class="card">
 <h2>Facebook Share Task (+5৳)</h2>
 
 <p>
-Share the first post on Facebook
-and submit screenshot.
+Share first post and submit screenshot
 </p>
 
 <a class="fbLink"
@@ -312,10 +285,17 @@ Submit Screenshot
 <h2>Withdraw</h2>
 
 <p id="withdrawRules"></p>
+
 <select id="paymentMethod">
-<option value="">Select Payment Method</option>
-<option value="bKash">bKash</option>
-<option value="Nagad">Nagad</option>
+<option value="">
+Select Payment Method
+</option>
+<option value="bKash">
+bKash
+</option>
+<option value="Nagad">
+Nagad
+</option>
 </select>
 
 <input id="withdrawNumber"
@@ -381,7 +361,6 @@ const app=initializeApp(firebaseConfig);
 const db=getFirestore(app);
 const auth=getAuth(app);
 
-/* LOGIN */
 document.getElementById("loginBtn").onclick=
 async()=>{
 await signInWithPopup(
@@ -390,13 +369,12 @@ new GoogleAuthProvider()
 );
 };
 
-/* AUTH */
 onAuthStateChanged(auth,async(user)=>{
 
 if(!user) return;
 
 document.getElementById("userInfo").innerText=
-"Logged in: " + user.email;
+"Logged in: "+user.email;
 
 document.getElementById("loginBtn").style.display=
 "none";
@@ -404,8 +382,11 @@ document.getElementById("loginBtn").style.display=
 document.getElementById("logoutBtn").style.display=
 "inline-block";
 
-const userRef=doc(db,"users",user.uid);
-const snap=await getDoc(userRef);
+const userRef=
+doc(db,"users",user.uid);
+
+const snap=
+await getDoc(userRef);
 
 const ref=
 new URLSearchParams(
@@ -423,13 +404,20 @@ active:false
 });
 
 if(ref && ref!==user.uid){
-const refRef=doc(db,"users",ref);
-const refSnap=await getDoc(refRef);
+
+const refRef=
+doc(db,"users",ref);
+
+const refSnap=
+await getDoc(refRef);
 
 if(refSnap.exists()){
+
 await updateDoc(refRef,{
-balance:(refSnap.data().balance||0)+10,
-referrals:(refSnap.data().referrals||0)+1
+balance:
+(refSnap.data().balance||0)+10,
+referrals:
+(refSnap.data().referrals||0)+1
 });
 }
 }
@@ -441,9 +429,7 @@ liveWithdraws(user.uid);
 liveLeaderboard();
 
 });
-
-/* LIVE USER */
-function liveUser(uid){
+  function liveUser(uid){
 
 onSnapshot(
 doc(db,"users",uid),
@@ -457,13 +443,15 @@ let bal=data.balance||0;
 let refs=data.referrals||0;
 
 document.getElementById("balance").innerText=
-bal + "৳";
+bal+"৳";
 
 document.getElementById("refCount").innerText=
 refs;
 
 document.getElementById("refLink").value=
-window.location.origin + "/refer-earn/?ref="+uid
+window.location.origin+
+window.location.pathname+
+"?ref="+uid;
 
 document.getElementById("progressText")
 .innerText=
@@ -487,17 +475,16 @@ document.getElementById("activeStatus")
 .innerText="❌ Not Active";
 }
 
-/* Withdraw rules */
 let txt="";
 
 if(bal>=250 && refs<3){
-txt="Need 3 referrals for 250৳";
+txt="Need 3 referrals for 250৳ withdraw";
 }
 else if(bal>=500 && refs<6){
-txt="Need 6 referrals for 500৳";
+txt="Need 6 referrals for 500৳ withdraw";
 }
 else if(bal>=1000 && refs<12){
-txt="Need 12 referrals for 1000৳";
+txt="Need 12 referrals for 1000৳ withdraw";
 }
 
 document.getElementById("withdrawRules")
@@ -506,7 +493,7 @@ document.getElementById("withdrawRules")
 });
 }
 
-/* ACTIVATE */
+/* Activate account */
 document.getElementById("activateBtn").onclick=
 async()=>{
 
@@ -540,7 +527,7 @@ document.getElementById("payNumber").value="";
 document.getElementById("trxId").value="";
 };
 
-/* SHARE BONUS */
+/* Share screenshot submit */
 document.getElementById("uploadShareBtn").onclick=
 async()=>{
 
@@ -548,7 +535,7 @@ const file=
 document.getElementById("screenshot").files[0];
 
 if(!file){
-alert("Choose screenshot");
+alert("Choose screenshot first");
 return;
 }
 
@@ -566,7 +553,7 @@ status:"pending"
 alert("Screenshot submitted");
 };
 
-/* REFERRALS */
+/* Referral users */
 function liveReferrals(uid){
 
 onSnapshot(
@@ -579,18 +566,20 @@ document.getElementById("refList");
 box.innerHTML="";
 
 snap.forEach(d=>{
+
 let data=d.data();
 
 if(data.referredBy===uid){
 box.innerHTML+=
 "<p>"+data.email+"</p>";
 }
+
 });
 
 });
 }
 
-/* WITHDRAW */
+/* Withdraw */
 document.getElementById("withdrawBtn").onclick=
 async()=>{
 
@@ -605,12 +594,13 @@ Number(
 document.getElementById("withdrawAmount").value
 );
 
-if(!method||!number||!amount){
+if(!method || !number || !amount){
 alert("Fill all fields");
 return;
 }
 
 const user=auth.currentUser;
+
 const snap=
 await getDoc(
 doc(db,"users",user.uid)
@@ -647,7 +637,7 @@ document.getElementById("withdrawNumber").value="";
 document.getElementById("withdrawAmount").value="";
 };
 
-/* WITHDRAW HISTORY */
+/* Withdraw history */
 function liveWithdraws(uid){
 
 onSnapshot(
@@ -660,6 +650,7 @@ document.getElementById("myWithdraws");
 box.innerHTML="";
 
 snap.forEach(d=>{
+
 let data=d.data();
 
 if(data.uid===uid){
@@ -673,18 +664,21 @@ if(data.status==="rejected")
 cls="rejected";
 
 box.innerHTML+=
-"<p>"+data.method+
-" | "+data.amount+
+"<p>"+
+data.method+
+" | "+
+data.amount+
 "৳ <span class='badge "+cls+"'>"+
 data.status+
 "</span></p>";
 }
+
 });
 
 });
 }
 
-/* LEADERBOARD */
+/* Leaderboard */
 function liveLeaderboard(){
 
 onSnapshot(
@@ -711,37 +705,43 @@ box.innerHTML="";
 users.slice(0,10).forEach((u,i)=>{
 
 let medal="";
+
 if(i===0) medal="🥇 ";
 if(i===1) medal="🥈 ";
 if(i===2) medal="🥉 ";
 
 box.innerHTML+=
-"<p>"+medal+
+"<p>"+
+medal+
 u.email+
 " - "+
 (u.referrals||0)+
 " referrals</p>";
+
 });
 
 });
 }
 
-/* COPY */
+/* Copy referral link */
 document.getElementById("copyBtn").onclick=
 async()=>{
+
 await navigator.clipboard.writeText(
 document.getElementById("refLink").value
 );
-alert("Copied!");
+
+alert("Referral link copied!");
 };
 
-/* LOGOUT */
+/* Logout */
 document.getElementById("logoutBtn").onclick=
 async()=>{
+
 await signOut(auth);
+
 location.reload();
 };
 </script>
-
 </body>
 </html>
