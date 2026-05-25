@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Refer Earn Admin</title>
 
 <style>
@@ -28,6 +28,14 @@ border-radius:24px;
 background:rgba(255,255,255,.12);
 backdrop-filter:blur(10px);
 margin-bottom:20px;
+text-align:center;
+}
+.logo{
+width:110px;
+height:110px;
+border-radius:18px;
+object-fit:cover;
+margin-bottom:12px;
 }
 .hero h1{
 font-size:30px;
@@ -100,6 +108,12 @@ display:none;
 <div class="container">
 
 <div class="hero">
+
+<img
+class="logo"
+src="https://raw.githubusercontent.com/nirmalhridoy/refer-earn/main/logo.jpg"
+alt="Logo">
+
 <h1>Refer Earn Admin Panel</h1>
 
 <button id="loginBtn">
@@ -160,6 +174,7 @@ getFirestore,
 collection,
 doc,
 getDoc,
+getDocs,
 updateDoc,
 onSnapshot
 }
@@ -169,9 +184,7 @@ import {
 getAuth,
 GoogleAuthProvider,
 signInWithPopup,
-onAuthStateChanged,
-setPersistence,
-browserLocalPersistence
+onAuthStateChanged
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
@@ -191,22 +204,22 @@ const auth=getAuth(app);
 const ADMIN_EMAIL=
 "antorahmed0185@gmail.com";
 
-const BOT_TOKEN=
+const TELEGRAM_BOT_TOKEN=
 "8876000207:AAEvPrrD9zsoSO8DgMbnnPzwdTw7Iowlmf4";
 
-const CHAT_ID=
+const TELEGRAM_CHAT_ID=
 "-5240659078";
 
 async function sendTelegram(text){
 await fetch(
-`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
+`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
 {
 method:"POST",
 headers:{
 "Content-Type":"application/json"
 },
 body:JSON.stringify({
-chat_id:CHAT_ID,
+chat_id:TELEGRAM_CHAT_ID,
 text:text
 })
 }
@@ -215,18 +228,13 @@ text:text
 
 document.getElementById("loginBtn").onclick=
 async()=>{
-await setPersistence(
-auth,
-browserLocalPersistence
-);
-
 await signInWithPopup(
 auth,
 new GoogleAuthProvider()
 );
 };
 
-onAuthStateChanged(auth,(user)=>{
+onAuthStateChanged(auth,async(user)=>{
 
 if(!user) return;
 
@@ -239,9 +247,6 @@ return;
 document.getElementById("status").innerText=
 "Logged in: "+user.email;
 
-document.getElementById("loginBtn").style.display=
-"none";
-
 document.getElementById("adminPanel").style.display=
 "block";
 
@@ -251,24 +256,22 @@ loadActivation();
 loadWithdraw();
 });
 
-function loadStats(){
+async function loadStats(){
 
-onSnapshot(
-collection(db,"users"),
-(snap)=>{
+const users=
+await getDocs(collection(db,"users"));
 
 let active=0;
 
-snap.forEach(d=>{
+users.forEach(d=>{
 if(d.data().active) active++;
 });
 
 document.getElementById("totalUsers").innerText=
-snap.size;
+users.size;
 
 document.getElementById("activeUsers").innerText=
 active;
-});
   onSnapshot(
 collection(db,"activationRequests"),
 (snap)=>{
@@ -319,6 +322,7 @@ box.innerHTML+=`
 <p><b>${data.email}</b></p>
 <p>Status: ${data.status}</p>
 
+${data.status==="pending" ? `
 <button class="approve shareApprove"
 data-id="${d.id}"
 data-uid="${data.uid}">
@@ -329,6 +333,7 @@ Approve +5৳
 data-id="${d.id}">
 Reject
 </button>
+` : ""}
 </div>
 `;
 });
@@ -401,6 +406,7 @@ box.innerHTML+=`
 <p>TRX ID: ${data.trxId}</p>
 <p>Status: ${data.status}</p>
 
+${data.status==="pending" ? `
 <button class="approve actApprove"
 data-id="${d.id}"
 data-uid="${data.uid}">
@@ -411,6 +417,7 @@ Approve
 data-id="${d.id}">
 Reject
 </button>
+` : ""}
 </div>
 `;
 });
@@ -485,6 +492,7 @@ box.innerHTML+=`
 <p>${data.amount}৳</p>
 <p>Status: ${data.status}</p>
 
+${data.status==="pending" ? `
 <button class="approve withdrawApprove"
 data-id="${d.id}"
 data-uid="${data.uid}"
@@ -496,6 +504,7 @@ Approve
 data-id="${d.id}">
 Reject
 </button>
+` : ""}
 </div>
 `;
 });
@@ -572,6 +581,5 @@ alert("Rejected");
 });
 }
 </script>
-
 </body>
 </html>
