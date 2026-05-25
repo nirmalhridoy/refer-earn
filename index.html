@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Refer Earn</title>
 
 <style>
@@ -40,12 +40,11 @@ margin-bottom:18px;
 text-align:center;
 }
 .logo{
-width:130px;
-height:130px;
-border-radius:22px;
+width:90px;
+height:90px;
+border-radius:18px;
 object-fit:cover;
-margin-bottom:12px;
-box-shadow:0 8px 25px rgba(0,0,0,.25);
+margin-bottom:10px;
 }
 .hero h1{
 font-size:32px;
@@ -106,18 +105,7 @@ font-size:28px;
 font-weight:bold;
 margin-top:8px;
 }
-.progressBar{
-height:12px;
-border-radius:20px;
-background:rgba(255,255,255,.2);
-overflow:hidden;
-}
-.progressFill{
-height:100%;
-width:0%;
-background:#22c55e;
-}
-input,select{
+input,select,textarea{
 width:100%;
 padding:12px;
 border:none;
@@ -168,10 +156,7 @@ display:none;
 
 <div class="hero">
 
-<img
-class="logo"
-src="https://raw.githubusercontent.com/nirmalhridoy/refer-earn/main/logo.jpg"
-alt="Refer Earn Logo">
+<img src="logo.jpg" class="logo">
 
 <h1>Refer Earn</h1>
 <p>Earn by referrals and sharing posts</p>
@@ -192,7 +177,7 @@ Logout
 <div class="stats">
 <div class="stat">
 Balance
-<span id="balance">0</span>
+<span id="balance">0৳</span>
 </div>
 
 <div class="stat">
@@ -202,22 +187,7 @@ Referrals
 </div>
 
 <div class="card">
-<h2>Referral Progress</h2>
-
-<div class="progressBar">
-<div id="progressFill"
-class="progressFill"></div>
-</div>
-
-<p id="progressText"
-style="margin-top:10px;">
-0 / 12 referrals
-</p>
-</div>
-
-<div class="card">
 <h2>Your Referral Link</h2>
-
 <input id="refLink" readonly>
 
 <button id="copyBtn"
@@ -253,19 +223,21 @@ Submit Activation
 </button>
 
 <p id="activeStatus"
-style="margin-top:10px;"></p>
+style="margin-top:10px;">
+</p>
 </div>
 
 <div class="card">
 <h2>Facebook Share Task (+5৳)</h2>
 
 <p>
-Share first post and submit screenshot
+Share the first post on Facebook
+and submit screenshot.
 </p>
 
 <a class="fbLink"
 target="_blank"
-href="https://www.facebook.com/profile.php?id=61587170180010">
+href="https://www.facebook.com/mdarianislam.antor">
 Open Facebook Profile
 </a>
 
@@ -284,18 +256,10 @@ Submit Screenshot
 <div class="card">
 <h2>Withdraw</h2>
 
-<p id="withdrawRules"></p>
-
 <select id="paymentMethod">
-<option value="">
-Select Payment Method
-</option>
-<option value="bKash">
-bKash
-</option>
-<option value="Nagad">
-Nagad
-</option>
+<option value="">Select Payment Method</option>
+<option value="bKash">bKash</option>
+<option value="Nagad">Nagad</option>
 </select>
 
 <input id="withdrawNumber"
@@ -315,13 +279,35 @@ class="listBox"></div>
 </div>
 
 <div class="card">
+<h2>Support Center</h2>
+
+<select id="supportType">
+<option value="">Select problem</option>
+<option>Activation Problem</option>
+<option>Referral Problem</option>
+<option>Withdraw Problem</option>
+<option>Other</option>
+</select>
+
+<textarea
+id="supportMsg"
+placeholder="Describe your problem">
+</textarea>
+
+<button id="supportBtn"
+class="primary">
+Send Support Ticket
+</button>
+
+<div id="mySupportReplies"
+class="listBox"></div>
+</div>
+
+<div class="card">
 <h2>Leaderboard 🏆</h2>
 <div id="leaderboard"
 class="listBox"></div>
 </div>
-
-</div>
-
 <script type="module">
 import { initializeApp }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
@@ -334,7 +320,6 @@ setDoc,
 updateDoc,
 collection,
 addDoc,
-getDocs,
 onSnapshot
 }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -361,6 +346,7 @@ const app=initializeApp(firebaseConfig);
 const db=getFirestore(app);
 const auth=getAuth(app);
 
+/* LOGIN */
 document.getElementById("loginBtn").onclick=
 async()=>{
 await signInWithPopup(
@@ -369,12 +355,13 @@ new GoogleAuthProvider()
 );
 };
 
+/* AUTH */
 onAuthStateChanged(auth,async(user)=>{
 
 if(!user) return;
 
 document.getElementById("userInfo").innerText=
-"Logged in: "+user.email;
+"Logged in: " + user.email;
 
 document.getElementById("loginBtn").style.display=
 "none";
@@ -382,11 +369,8 @@ document.getElementById("loginBtn").style.display=
 document.getElementById("logoutBtn").style.display=
 "inline-block";
 
-const userRef=
-doc(db,"users",user.uid);
-
-const snap=
-await getDoc(userRef);
+const userRef=doc(db,"users",user.uid);
+const snap=await getDoc(userRef);
 
 const ref=
 new URLSearchParams(
@@ -404,20 +388,13 @@ active:false
 });
 
 if(ref && ref!==user.uid){
-
-const refRef=
-doc(db,"users",ref);
-
-const refSnap=
-await getDoc(refRef);
+const refRef=doc(db,"users",ref);
+const refSnap=await getDoc(refRef);
 
 if(refSnap.exists()){
-
 await updateDoc(refRef,{
-balance:
-(refSnap.data().balance||0)+10,
-referrals:
-(refSnap.data().referrals||0)+1
+balance:(refSnap.data().balance||0)+10,
+referrals:(refSnap.data().referrals||0)+1
 });
 }
 }
@@ -427,9 +404,12 @@ liveUser(user.uid);
 liveReferrals(user.uid);
 liveWithdraws(user.uid);
 liveLeaderboard();
+liveSupport(user.uid);
 
 });
-  function liveUser(uid){
+
+/* LIVE USER */
+function liveUser(uid){
 
 onSnapshot(
 doc(db,"users",uid),
@@ -439,61 +419,53 @@ if(!snap.exists()) return;
 
 const data=snap.data();
 
-let bal=data.balance||0;
-let refs=data.referrals||0;
-
 document.getElementById("balance").innerText=
-bal+"৳";
+(data.balance||0)+"৳";
 
 document.getElementById("refCount").innerText=
-refs;
+data.referrals||0;
 
 document.getElementById("refLink").value=
 window.location.origin+
 window.location.pathname+
 "?ref="+uid;
 
-document.getElementById("progressText")
-.innerText=
-refs+" / 12 referrals";
-
-let progress=
-Math.min((refs/12)*100,100);
-
-document.getElementById("progressFill")
-.style.width=
-progress+"%";
-
 if(data.active){
-document.getElementById("activeStatus")
-.innerText="✅ Account Active";
-
-document.getElementById("activationBox")
-.style.display="none";
+document.getElementById("activeStatus").innerText=
+"✅ Account Active";
+document.getElementById("activationBox").style.display=
+"none";
 }else{
-document.getElementById("activeStatus")
-.innerText="❌ Not Active";
+document.getElementById("activeStatus").innerText=
+"❌ Not Active";
 }
-
-let txt="";
-
-if(bal>=250 && refs<3){
-txt="Need 3 referrals for 250৳ withdraw";
-}
-else if(bal>=500 && refs<6){
-txt="Need 6 referrals for 500৳ withdraw";
-}
-else if(bal>=1000 && refs<12){
-txt="Need 12 referrals for 1000৳ withdraw";
-}
-
-document.getElementById("withdrawRules")
-.innerText=txt;
-
 });
 }
 
-/* Activate account */
+/* REFERRALS */
+function liveReferrals(uid){
+
+onSnapshot(
+collection(db,"users"),
+(snap)=>{
+
+let box=
+document.getElementById("refList");
+
+box.innerHTML="";
+
+snap.forEach(d=>{
+let data=d.data();
+
+if(data.referredBy===uid){
+box.innerHTML+=
+"<p>"+data.email+"</p>";
+}
+});
+});
+}
+
+/* ACTIVATE */
 document.getElementById("activateBtn").onclick=
 async()=>{
 
@@ -522,12 +494,9 @@ status:"pending"
 );
 
 alert("Activation request sent");
-
-document.getElementById("payNumber").value="";
-document.getElementById("trxId").value="";
 };
 
-/* Share screenshot submit */
+/* SHARE */
 document.getElementById("uploadShareBtn").onclick=
 async()=>{
 
@@ -535,7 +504,7 @@ const file=
 document.getElementById("screenshot").files[0];
 
 if(!file){
-alert("Choose screenshot first");
+alert("Choose screenshot");
 return;
 }
 
@@ -553,33 +522,7 @@ status:"pending"
 alert("Screenshot submitted");
 };
 
-/* Referral users */
-function liveReferrals(uid){
-
-onSnapshot(
-collection(db,"users"),
-(snap)=>{
-
-let box=
-document.getElementById("refList");
-
-box.innerHTML="";
-
-snap.forEach(d=>{
-
-let data=d.data();
-
-if(data.referredBy===uid){
-box.innerHTML+=
-"<p>"+data.email+"</p>";
-}
-
-});
-
-});
-}
-
-/* Withdraw */
+/* WITHDRAW */
 document.getElementById("withdrawBtn").onclick=
 async()=>{
 
@@ -594,29 +537,12 @@ Number(
 document.getElementById("withdrawAmount").value
 );
 
-if(!method || !number || !amount){
+if(!method||!number||!amount){
 alert("Fill all fields");
 return;
 }
 
 const user=auth.currentUser;
-
-const snap=
-await getDoc(
-doc(db,"users",user.uid)
-);
-
-const data=snap.data();
-
-if(!data.active){
-alert("Activate account first");
-return;
-}
-
-if(amount>data.balance){
-alert("Insufficient balance");
-return;
-}
 
 await addDoc(
 collection(db,"withdrawRequests"),
@@ -631,13 +557,9 @@ status:"pending"
 );
 
 alert("Withdraw submitted");
-
-document.getElementById("paymentMethod").value="";
-document.getElementById("withdrawNumber").value="";
-document.getElementById("withdrawAmount").value="";
 };
 
-/* Withdraw history */
+/* WITHDRAW HISTORY */
 function liveWithdraws(uid){
 
 onSnapshot(
@@ -650,35 +572,82 @@ document.getElementById("myWithdraws");
 box.innerHTML="";
 
 snap.forEach(d=>{
+let data=d.data();
+
+if(data.uid===uid){
+box.innerHTML+=
+"<p>"+data.method+
+" | "+data.amount+
+"৳ | "+data.status+
+"</p>";
+}
+});
+});
+}
+
+/* SUPPORT SEND */
+document.getElementById("supportBtn").onclick=
+async()=>{
+
+const type=
+document.getElementById("supportType").value;
+
+const msg=
+document.getElementById("supportMsg").value;
+
+if(!type || !msg){
+alert("Fill all fields");
+return;
+}
+
+const user=auth.currentUser;
+
+await addDoc(
+collection(db,"supportTickets"),
+{
+uid:user.uid,
+email:user.email,
+type,
+message:msg,
+reply:"",
+status:"open"
+}
+);
+
+alert("Support ticket sent");
+};
+
+/* SUPPORT REPLY */
+function liveSupport(uid){
+
+onSnapshot(
+collection(db,"supportTickets"),
+(snap)=>{
+
+let box=
+document.getElementById("mySupportReplies");
+
+box.innerHTML="";
+
+snap.forEach(d=>{
 
 let data=d.data();
 
 if(data.uid===uid){
-
-let cls="pending";
-
-if(data.status==="approved")
-cls="approved";
-
-if(data.status==="rejected")
-cls="rejected";
-
-box.innerHTML+=
-"<p>"+
-data.method+
-" | "+
-data.amount+
-"৳ <span class='badge "+cls+"'>"+
-data.status+
-"</span></p>";
+box.innerHTML+=`
+<p>
+<b>${data.type}</b><br>
+Issue: ${data.message}<br>
+Admin reply:
+${data.reply || "Waiting..."}
+</p><hr>
+`;
 }
-
 });
-
 });
 }
 
-/* Leaderboard */
+/* LEADERBOARD */
 function liveLeaderboard(){
 
 onSnapshot(
@@ -705,43 +674,36 @@ box.innerHTML="";
 users.slice(0,10).forEach((u,i)=>{
 
 let medal="";
-
 if(i===0) medal="🥇 ";
 if(i===1) medal="🥈 ";
 if(i===2) medal="🥉 ";
 
 box.innerHTML+=
-"<p>"+
-medal+
+"<p>"+medal+
 u.email+
 " - "+
 (u.referrals||0)+
 " referrals</p>";
-
 });
-
 });
 }
 
-/* Copy referral link */
+/* COPY */
 document.getElementById("copyBtn").onclick=
 async()=>{
-
 await navigator.clipboard.writeText(
 document.getElementById("refLink").value
 );
-
-alert("Referral link copied!");
+alert("Copied!");
 };
 
-/* Logout */
+/* LOGOUT */
 document.getElementById("logoutBtn").onclick=
 async()=>{
-
 await signOut(auth);
-
 location.reload();
 };
 </script>
+
 </body>
 </html>
