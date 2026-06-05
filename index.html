@@ -6,12 +6,14 @@
 <title>Refer Earn</title>
 
 <style>
+
 *{
 margin:0;
 padding:0;
 box-sizing:border-box;
 font-family:Arial,sans-serif;
 }
+
 body{
 min-height:100vh;
 padding:16px;
@@ -21,15 +23,18 @@ linear-gradient(-45deg,#4f46e5,#7c3aed,#2563eb,#9333ea);
 background-size:400% 400%;
 animation:bgMove 12s ease infinite;
 }
+
 @keyframes bgMove{
 0%{background-position:0% 50%;}
 50%{background-position:100% 50%;}
 100%{background-position:0% 50%;}
 }
+
 .container{
-max-width:900px;
+max-width:950px;
 margin:auto;
 }
+
 .hero{
 padding:24px;
 border-radius:24px;
@@ -39,20 +44,25 @@ box-shadow:0 10px 30px rgba(0,0,0,.25);
 margin-bottom:18px;
 text-align:center;
 }
+
 .logo{
-width:90px;
-height:90px;
-border-radius:18px;
+width:110px;
+height:110px;
+border-radius:20px;
 object-fit:cover;
-margin-bottom:10px;
+border:3px solid white;
+margin-bottom:12px;
 }
+
 .hero h1{
-font-size:32px;
+font-size:34px;
 margin-bottom:8px;
 }
+
 .hero p{
 opacity:.9;
 }
+
 .topBtns{
 margin-top:16px;
 display:flex;
@@ -60,6 +70,7 @@ gap:10px;
 justify-content:center;
 flex-wrap:wrap;
 }
+
 button{
 border:none;
 padding:12px 16px;
@@ -67,14 +78,17 @@ border-radius:12px;
 cursor:pointer;
 font-weight:bold;
 }
+
 .primary{
 background:white;
 color:#4338ca;
 }
+
 .danger{
 background:#dc2626;
 color:white;
 }
+
 .card{
 background:rgba(255,255,255,.15);
 backdrop-filter:blur(12px);
@@ -83,9 +97,11 @@ border-radius:20px;
 margin-bottom:18px;
 box-shadow:0 10px 25px rgba(0,0,0,.2);
 }
+
 .card h2{
 margin-bottom:14px;
 }
+
 .stats{
 display:grid;
 grid-template-columns:
@@ -93,19 +109,24 @@ repeat(auto-fit,minmax(180px,1fr));
 gap:14px;
 margin-bottom:18px;
 }
+
 .stat{
 background:rgba(255,255,255,.12);
 padding:18px;
 border-radius:18px;
 text-align:center;
 }
+
 .stat span{
 display:block;
 font-size:28px;
 font-weight:bold;
 margin-top:8px;
 }
-input,select,textarea{
+
+input,
+select,
+textarea{
 width:100%;
 padding:12px;
 border:none;
@@ -113,12 +134,14 @@ border-radius:12px;
 margin-top:10px;
 outline:none;
 }
+
 .listBox{
 background:rgba(255,255,255,.12);
 padding:12px;
 border-radius:14px;
 margin-top:10px;
 }
+
 .badge{
 display:inline-block;
 padding:4px 10px;
@@ -126,18 +149,22 @@ border-radius:20px;
 font-size:12px;
 font-weight:bold;
 }
+
 .pending{
 background:#facc15;
 color:#111;
 }
+
 .approved{
 background:#22c55e;
 color:white;
 }
+
 .rejected{
 background:#ef4444;
 color:white;
 }
+
 .fbLink{
 display:inline-block;
 margin-top:8px;
@@ -145,9 +172,18 @@ color:white;
 font-weight:bold;
 text-decoration:underline;
 }
+
 #logoutBtn{
 display:none;
 }
+
+.supportReply{
+background:rgba(255,255,255,.12);
+padding:10px;
+border-radius:12px;
+margin-top:10px;
+}
+
 </style>
 </head>
 <body>
@@ -156,25 +192,38 @@ display:none;
 
 <div class="hero">
 
-<img src="logo.jpg" class="logo">
+<img
+src="https://raw.githubusercontent.com/nirmalhridoy/refer-earn/main/logo.jpg"
+class="logo">
 
 <h1>Refer Earn</h1>
-<p>Earn by referrals and sharing posts</p>
+
+<p>
+Earn Money By Referrals & Tasks
+</p>
 
 <div class="topBtns">
-<button id="loginBtn" class="primary">
-Login with Google
+
+<button
+id="loginBtn"
+class="primary">
+Login With Google
 </button>
 
-<button id="logoutBtn" class="danger">
+<button
+id="logoutBtn"
+class="danger">
 Logout
 </button>
+
 </div>
 
 <p id="userInfo"></p>
+
 </div>
 
 <div class="stats">
+
 <div class="stat">
 Balance
 <span id="balance">0৳</span>
@@ -184,25 +233,45 @@ Balance
 Referrals
 <span id="refCount">0</span>
 </div>
+
+<div class="stat">
+Account
+<span id="accountStatus">
+Inactive
+</span>
+</div>
+
 </div>
 
 <div class="card">
-<h2>Your Referral Link</h2>
-<input id="refLink" readonly>
 
-<button id="copyBtn"
+<h2>Your Referral Link</h2>
+
+<input
+id="refLink"
+readonly>
+
+<button
+id="copyBtn"
 class="primary"
 style="margin-top:10px;">
 Copy Link
 </button>
+
 </div>
 
 <div class="card">
+
 <h2>Referral Users</h2>
-<div id="refList" class="listBox"></div>
+
+<div
+id="refList"
+class="listBox">
 </div>
 
+</div>
 <div class="card" id="activationBox">
+
 <h2>Activate Account</h2>
 
 <p>
@@ -211,23 +280,29 @@ Send <b>100৳</b> to
 via bKash/Nagad
 </p>
 
-<input id="payNumber"
+<input
+id="payNumber"
 placeholder="Your payment number">
 
-<input id="trxId"
+<input
+id="trxId"
 placeholder="Transaction ID">
 
-<button id="activateBtn"
+<button
+id="activateBtn"
 class="primary">
 Submit Activation
 </button>
 
-<p id="activeStatus"
+<p
+id="activeStatus"
 style="margin-top:10px;">
 </p>
+
 </div>
 
 <div class="card">
+
 <h2>Facebook Share Task (+5৳)</h2>
 
 <p>
@@ -235,7 +310,8 @@ Share the first post on Facebook
 and submit screenshot.
 </p>
 
-<a class="fbLink"
+<a
+class="fbLink"
 target="_blank"
 href="https://www.facebook.com/mdarianislam.antor">
 Open Facebook Profile
@@ -251,42 +327,77 @@ id="uploadShareBtn"
 class="primary">
 Submit Screenshot
 </button>
+
 </div>
 
 <div class="card">
-<h2>Withdraw</h2>
+
+<h2>Withdraw Request</h2>
 
 <select id="paymentMethod">
-<option value="">Select Payment Method</option>
-<option value="bKash">bKash</option>
-<option value="Nagad">Nagad</option>
+
+<option value="">
+Select Payment Method
+</option>
+
+<option value="bKash">
+bKash
+</option>
+
+<option value="Nagad">
+Nagad
+</option>
+
 </select>
 
-<input id="withdrawNumber"
-placeholder="Your bKash/Nagad number">
+<input
+id="withdrawNumber"
+placeholder="Your bKash/Nagad Number">
 
-<input id="withdrawAmount"
+<input
+id="withdrawAmount"
 type="number"
-placeholder="Withdraw amount">
+placeholder="Withdraw Amount">
 
-<button id="withdrawBtn"
+<button
+id="withdrawBtn"
 class="primary">
 Request Withdraw
 </button>
 
-<div id="myWithdraws"
-class="listBox"></div>
+<div
+id="myWithdraws"
+class="listBox">
+</div>
+
 </div>
 
 <div class="card">
+
 <h2>Support Center</h2>
 
 <select id="supportType">
-<option value="">Select problem</option>
-<option>Activation Problem</option>
-<option>Referral Problem</option>
-<option>Withdraw Problem</option>
-<option>Other</option>
+
+<option value="">
+Select Problem
+</option>
+
+<option>
+Activation Problem
+</option>
+
+<option>
+Referral Problem
+</option>
+
+<option>
+Withdraw Problem
+</option>
+
+<option>
+Other
+</option>
+
 </select>
 
 <textarea
@@ -294,21 +405,34 @@ id="supportMsg"
 placeholder="Describe your problem">
 </textarea>
 
-<button id="supportBtn"
+<button
+id="supportBtn"
 class="primary">
-Send Support Ticket
+Send Ticket
 </button>
 
-<div id="mySupportReplies"
-class="listBox"></div>
+<div
+id="mySupportReplies"
+class="listBox">
+</div>
+
 </div>
 
 <div class="card">
-<h2>Leaderboard 🏆</h2>
-<div id="leaderboard"
-class="listBox"></div>
+
+<h2>
+Leaderboard 🏆
+</h2>
+
+<div
+id="leaderboard"
+class="listBox">
 </div>
+
+</div>
+
 <script type="module">
+
 import { initializeApp }
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
@@ -334,43 +458,56 @@ signOut
 from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig={
+
 apiKey:"AIzaSyBnP9QJgg6d874QB-a4meFbprLMEufRzuY",
 authDomain:"refer-earn-73e38.firebaseapp.com",
 projectId:"refer-earn-73e38",
 storageBucket:"refer-earn-73e38.firebasestorage.app",
 messagingSenderId:"323369987305",
 appId:"1:323369987305:web:7c8eead19bff6454f4d478"
+
 };
 
-const app=initializeApp(firebaseConfig);
-const db=getFirestore(app);
-const auth=getAuth(app);
+const app=
+initializeApp(firebaseConfig);
 
-/* LOGIN */
+const db=
+getFirestore(app);
+
+const auth=
+getAuth(app);
+
 document.getElementById("loginBtn").onclick=
 async()=>{
+
 await signInWithPopup(
 auth,
 new GoogleAuthProvider()
 );
+
 };
 
-/* AUTH */
-onAuthStateChanged(auth,async(user)=>{
+onAuthStateChanged(
+auth,
+async(user)=>{
 
 if(!user) return;
 
-document.getElementById("userInfo").innerText=
-"Logged in: " + user.email;
+document.getElementById("userInfo")
+.innerText=
+"Logged in: "+user.email;
 
-document.getElementById("loginBtn").style.display=
-"none";
+document.getElementById("loginBtn")
+.style.display="none";
 
-document.getElementById("logoutBtn").style.display=
-"inline-block";
+document.getElementById("logoutBtn")
+.style.display="inline-block";
 
-const userRef=doc(db,"users",user.uid);
-const snap=await getDoc(userRef);
+const userRef=
+doc(db,"users",user.uid);
+
+const snap=
+await getDoc(userRef);
 
 const ref=
 new URLSearchParams(
@@ -383,21 +520,31 @@ await setDoc(userRef,{
 balance:0,
 email:user.email,
 referrals:0,
-referredBy:ref||null,
-active:false
+active:false,
+referredBy:ref||null
 });
 
 if(ref && ref!==user.uid){
-const refRef=doc(db,"users",ref);
-const refSnap=await getDoc(refRef);
+
+const refRef=
+doc(db,"users",ref);
+
+const refSnap=
+await getDoc(refRef);
 
 if(refSnap.exists()){
+
 await updateDoc(refRef,{
-balance:(refSnap.data().balance||0)+10,
-referrals:(refSnap.data().referrals||0)+1
+balance:
+(refSnap.data().balance||0)+10,
+referrals:
+(refSnap.data().referrals||0)+1
 });
+
 }
+
 }
+
 }
 
 liveUser(user.uid);
@@ -407,8 +554,7 @@ liveLeaderboard();
 liveSupport(user.uid);
 
 });
-
-/* LIVE USER */
+  /* LIVE USER */
 function liveUser(uid){
 
 onSnapshot(
@@ -419,11 +565,17 @@ if(!snap.exists()) return;
 
 const data=snap.data();
 
-document.getElementById("balance").innerText=
+document.getElementById("balance")
+.innerText=
 (data.balance||0)+"৳";
 
-document.getElementById("refCount").innerText=
+document.getElementById("refCount")
+.innerText=
 data.referrals||0;
+
+document.getElementById("accountStatus")
+.innerText=
+data.active ? "Active" : "Inactive";
 
 document.getElementById("refLink").value=
 window.location.origin+
@@ -431,15 +583,24 @@ window.location.pathname+
 "?ref="+uid;
 
 if(data.active){
-document.getElementById("activeStatus").innerText=
+
+document.getElementById("activeStatus")
+.innerText=
 "✅ Account Active";
-document.getElementById("activationBox").style.display=
-"none";
+
+document.getElementById("activationBox")
+.style.display="none";
+
 }else{
-document.getElementById("activeStatus").innerText=
-"❌ Not Active";
+
+document.getElementById("activeStatus")
+.innerText=
+"❌ Account Not Active";
+
 }
+
 });
+
 }
 
 /* REFERRALS */
@@ -455,76 +616,101 @@ document.getElementById("refList");
 box.innerHTML="";
 
 snap.forEach(d=>{
+
 let data=d.data();
 
 if(data.referredBy===uid){
+
 box.innerHTML+=
-"<p>"+data.email+"</p>";
-}
-});
-});
+`<p>${data.email}</p>`;
+
 }
 
-/* ACTIVATE */
-document.getElementById("activateBtn").onclick=
+});
+
+});
+
+}
+
+/* ACTIVATE ACCOUNT */
+document.getElementById("activateBtn")
+.onclick=
 async()=>{
 
-const num=
-document.getElementById("payNumber").value;
+const user=
+auth.currentUser;
 
-const trx=
-document.getElementById("trxId").value;
-
-if(!num || !trx){
-alert("Fill all fields");
+if(!user){
+alert("Login first");
 return;
 }
 
-const user=auth.currentUser;
+const number=
+document.getElementById("payNumber").value;
+
+const trxId=
+document.getElementById("trxId").value;
+
+if(!number || !trxId){
+alert("Fill all fields");
+return;
+}
 
 await addDoc(
 collection(db,"activationRequests"),
 {
 uid:user.uid,
 email:user.email,
-number:num,
-trxId:trx,
-status:"pending"
+number:number,
+trxId:trxId,
+status:"pending",
+createdAt:Date.now()
 }
 );
 
-alert("Activation request sent");
+alert("Activation Request Submitted");
+
 };
 
-/* SHARE */
-document.getElementById("uploadShareBtn").onclick=
+/* SHARE TASK */
+document.getElementById("uploadShareBtn")
+.onclick=
 async()=>{
 
-const file=
-document.getElementById("screenshot").files[0];
+const user=
+auth.currentUser;
 
-if(!file){
-alert("Choose screenshot");
+if(!user){
+alert("Login first");
 return;
 }
-
-const user=auth.currentUser;
 
 await addDoc(
 collection(db,"shareRequests"),
 {
 uid:user.uid,
 email:user.email,
-status:"pending"
+status:"pending",
+createdAt:Date.now()
 }
 );
 
-alert("Screenshot submitted");
+alert("Share Request Submitted");
+
 };
 
 /* WITHDRAW */
-document.getElementById("withdrawBtn").onclick=
+document.getElementById("withdrawBtn")
+.onclick=
 async()=>{
+
+const user=
+auth.currentUser;
+
+if(!user){
+alert("Login first");
+return;
+}
 
 const method=
 document.getElementById("paymentMethod").value;
@@ -537,12 +723,12 @@ Number(
 document.getElementById("withdrawAmount").value
 );
 
-if(!method||!number||!amount){
+if(!method || !number || !amount){
+
 alert("Fill all fields");
 return;
-}
 
-const user=auth.currentUser;
+}
 
 await addDoc(
 collection(db,"withdrawRequests"),
@@ -552,11 +738,13 @@ email:user.email,
 method,
 number,
 amount,
-status:"pending"
+status:"pending",
+createdAt:Date.now()
 }
 );
 
-alert("Withdraw submitted");
+alert("Withdraw Request Sent");
+
 };
 
 /* WITHDRAW HISTORY */
@@ -572,22 +760,41 @@ document.getElementById("myWithdraws");
 box.innerHTML="";
 
 snap.forEach(d=>{
+
 let data=d.data();
 
 if(data.uid===uid){
-box.innerHTML+=
-"<p>"+data.method+
-" | "+data.amount+
-"৳ | "+data.status+
-"</p>";
-}
-});
-});
+
+box.innerHTML+=`
+<p>
+${data.method}
+|
+${data.amount}৳
+|
+${data.status}
+</p>
+`;
+
 }
 
-/* SUPPORT SEND */
-document.getElementById("supportBtn").onclick=
+});
+
+});
+
+}
+
+/* SUPPORT */
+document.getElementById("supportBtn")
+.onclick=
 async()=>{
+
+const user=
+auth.currentUser;
+
+if(!user){
+alert("Login first");
+return;
+}
 
 const type=
 document.getElementById("supportType").value;
@@ -596,28 +803,31 @@ const msg=
 document.getElementById("supportMsg").value;
 
 if(!type || !msg){
+
 alert("Fill all fields");
 return;
-}
 
-const user=auth.currentUser;
+}
 
 await addDoc(
 collection(db,"supportTickets"),
 {
 uid:user.uid,
 email:user.email,
-type,
+type:type,
 message:msg,
 reply:"",
-status:"open"
+status:"open",
+createdAt:Date.now()
 }
 );
 
-alert("Support ticket sent");
+alert("Support Ticket Sent");
+
+document.getElementById("supportMsg").value="";
+
 };
 
-/* SUPPORT REPLY */
 function liveSupport(uid){
 
 onSnapshot(
@@ -634,17 +844,33 @@ snap.forEach(d=>{
 let data=d.data();
 
 if(data.uid===uid){
+
 box.innerHTML+=`
-<p>
-<b>${data.type}</b><br>
-Issue: ${data.message}<br>
-Admin reply:
-${data.reply || "Waiting..."}
-</p><hr>
+<div class="supportReply">
+
+<b>${data.type}</b>
+
+<br><br>
+
+${data.message}
+
+<br><br>
+
+<b>Admin Reply:</b>
+
+<br>
+
+${data.reply || "Waiting for reply..."}
+
+</div>
 `;
+
 }
+
 });
+
 });
+
 }
 
 /* LEADERBOARD */
@@ -671,38 +897,56 @@ document.getElementById("leaderboard");
 
 box.innerHTML="";
 
-users.slice(0,10).forEach((u,i)=>{
+users.slice(0,10)
+.forEach((u,i)=>{
 
 let medal="";
-if(i===0) medal="🥇 ";
-if(i===1) medal="🥈 ";
-if(i===2) medal="🥉 ";
 
-box.innerHTML+=
-"<p>"+medal+
-u.email+
-" - "+
-(u.referrals||0)+
-" referrals</p>";
+if(i===0) medal="🥇";
+if(i===1) medal="🥈";
+if(i===2) medal="🥉";
+
+box.innerHTML+=`
+<p>
+${medal}
+${u.email}
+-
+${u.referrals||0}
+referrals
+</p>
+`;
+
 });
+
 });
+
 }
 
-/* COPY */
-document.getElementById("copyBtn").onclick=
+/* COPY LINK */
+document.getElementById("copyBtn")
+.onclick=
 async()=>{
-await navigator.clipboard.writeText(
+
+await navigator.clipboard
+.writeText(
 document.getElementById("refLink").value
 );
-alert("Copied!");
+
+alert("Referral Link Copied");
+
 };
 
 /* LOGOUT */
-document.getElementById("logoutBtn").onclick=
+document.getElementById("logoutBtn")
+.onclick=
 async()=>{
+
 await signOut(auth);
+
 location.reload();
+
 };
+
 </script>
 
 </body>
