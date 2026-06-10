@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Refer Earn</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+min-height:100vh;
+padding:15px;
+color:white;
+background:
+linear-gradient(-45deg,#4f46e5,#7c3aed,#2563eb,#9333ea);
+background-size:400% 400%;
+animation:bgMove 12s ease infinite;
+}
+
+@keyframes bgMove{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+.container{
+max-width:1000px;
+margin:auto;
+}
+
+.hero{
+padding:25px;
+border-radius:25px;
+background:rgba(255,255,255,.12);
+backdrop-filter:blur(15px);
+box-shadow:0 10px 30px rgba(0,0,0,.25);
+text-align:center;
+margin-bottom:18px;
+}
+
+.logo{
+width:120px;
+height:120px;
+border-radius:25px;
+object-fit:cover;
+border:3px solid white;
+margin-bottom:12px;
+}
+
+.hero h1{
+font-size:34px;
+margin-bottom:8px;
+}
+
+.hero p{
+opacity:.9;
+}
+
+.topBtns{
+display:flex;
+gap:10px;
+justify-content:center;
+flex-wrap:wrap;
+margin-top:15px;
+}
+
+button{
+border:none;
+padding:12px 18px;
+border-radius:12px;
+cursor:pointer;
+font-weight:bold;
+}
+
+.primary{
+background:white;
+color:#4338ca;
+}
+
+.danger{
+background:#dc2626;
+color:white;
+}
+
+#logoutBtn{
+display:none;
+}
+
+.card{
+background:rgba(255,255,255,.15);
+backdrop-filter:blur(12px);
+padding:18px;
+border-radius:20px;
+margin-bottom:18px;
+box-shadow:0 10px 25px rgba(0,0,0,.2);
+}
+
+.card h2{
+margin-bottom:12px;
+}
+
+.stats{
+display:grid;
+grid-template-columns:
+repeat(auto-fit,minmax(180px,1fr));
+gap:14px;
+margin:18px 0;
+}
+
+.stat{
+background:rgba(255,255,255,.12);
+padding:18px;
+border-radius:18px;
+text-align:center;
+}
+
+.stat span{
+display:block;
+font-size:28px;
+font-weight:bold;
+margin-top:8px;
+}
+
+input,
+select,
+textarea{
+width:100%;
+padding:12px;
+border:none;
+outline:none;
+border-radius:12px;
+margin-top:10px;
+}
+
+.listBox{
+background:rgba(255,255,255,.12);
+padding:12px;
+border-radius:12px;
+margin-top:10px;
+}
+
+.fbBtn{
+display:inline-block;
+padding:12px 18px;
+border-radius:12px;
+background:#1877f2;
+color:#ffffff;
+font-weight:bold;
+text-decoration:none;
+margin-top:10px;
+}
+
+.taskItem{
+background:rgba(255,255,255,.10);
+padding:12px;
+border-radius:12px;
+margin-top:10px;
+}
+
+.warning{
+background:#fff3cd;
+color:#111;
+padding:15px;
+border-radius:12px;
+margin-top:15px;
+line-height:1.8;
+}
+
+.warning b{
+color:#dc2626;
+}
+
+.supportReply{
+background:rgba(255,255,255,.12);
+padding:12px;
+border-radius:12px;
+margin-top:10px;
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<div class="hero">
+
+<img
+src="https://raw.githubusercontent.com/nirmalhridoy/refer-earn/main/logo.jpg"
+class="logo">
+
+<h1>Refer Earn</h1>
+
+<p>
+Earn Money By Referrals & Facebook Tasks
+</p>
+
+<div class="topBtns">
+
+<button
+id="loginBtn"
+class="primary">
+Login With Google
+</button>
+
+<button
+id="logoutBtn"
+class="danger">
+Logout
+</button>
+
+</div>
+
+<p id="userInfo"></p>
+
+</div>
+
+<div class="stats">
+
+<div class="stat">
+Balance
+<span id="balance">0৳</span>
+</div>
+
+<div class="stat">
+Referrals
+<span id="refCount">0</span>
+</div>
+
+<div class="stat">
+Account
+<span id="accountStatus">
+Inactive
+</span>
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>Your Referral Link</h2>
+
+<input
+id="refLink"
+readonly>
+
+<button
+id="copyBtn"
+class="primary"
+style="margin-top:10px;">
+
+Copy Referral Link
+
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>Referral Users</h2>
+
+<div
+id="refList"
+class="listBox">
+
+No Referrals Yet
+
+</div>
+
+  </div>
+  <!-- ========================= -->
+<!-- INDEX.HTML PART 2 / 5 -->
+<!-- Paste After PART 1 -->
+<!-- ========================= -->
+
+<div class="card">
+
+<h2>
+🏆 Facebook Task (+5৳)
+</h2>
+
+<a
+class="fbBtn"
+target="_blank"
+href="https://www.facebook.com/share/1CvYM3s4wx/">
+
+👉 Open Facebook Profile
+
+</a>
+
+<div class="taskItem">
+
+<p>
+
+✅ নিজের Real/Fake Facebook ID দিয়ে
+Admin এর Facebook Profile Follow করুন।
+
+</p>
+
+<br>
+
+<p>
+
+✅ আমি Facebook-এ যে নতুন Post দিব,
+সেই Post এর Task Complete করুন।
+
+</p>
+
+<br>
+
+<p>
+
+✅ Post Like, Comment ও Share করুন।
+
+</p>
+
+<br>
+
+<p>
+
+✅ তারপর যে Facebook ID দিয়ে কাজ করেছেন
+সেই Facebook Profile Link Submit করুন।
+
+</p>
+
+<br>
+
+<p>
+
+✅ Admin যাচাই করে Approve করলে
+আপনার Balance এ 5৳ যোগ হবে।
+
+</p>
+
+</div>
+
+<div class="listBox">
+
+<h3>
+📌 Available Tasks
+</h3>
+
+<div id="taskList">
+
+<p>
+Loading Tasks...
+</p>
+
+</div>
+
+</div>
+
+<input
+id="facebookProfileLink"
+placeholder="👉 Paste Your Facebook Profile Link">
+
+<button
+id="submitTaskBtn"
+class="primary">
+
+Submit Profile Link
+
+</button>
+
+<div
+id="shareHistory"
+class="listBox">
+
+No Task Submitted Yet
+
+</div>
+
+<div class="warning">
+
+<b>
+⚠️ সকল Task অবশ্যই সঠিক নিয়মে সম্পন্ন করতে হবে।
+</b>
+
+<br><br>
+
+<b>
+⚠️ ভুল তথ্য, Fake Submission অথবা নিয়ম ভঙ্গ করলে
+Withdraw সংক্রান্ত যে কোনো সমস্যার জন্য
+কর্তৃপক্ষ দায়ী থাকবে না।
+</b>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>
+Withdraw Request
+</h2>
+
+<select id="paymentMethod">
+
+<option value="">
+Select Payment Method
+</option>
+
+<option value="bKash">
+bKash
+</option>
+
+<option value="Nagad">
+Nagad
+</option>
+
+</select>
+
+<input
+id="withdrawNumber"
+placeholder="Your bKash/Nagad Number">
+
+<input
+id="withdrawAmount"
+type="number"
+placeholder="Withdraw Amount">
+
+<button
+id="withdrawBtn"
+class="primary">
+
+Request Withdraw
+
+</button>
+
+<div
+id="myWithdraws"
+class="listBox">
+
+</div>
+
+</div>
+<!-- ========================= -->
+<!-- INDEX.HTML PART 3 / 5 -->
+<!-- Paste After PART 2 -->
+<!-- ========================= -->
+
+<div class="card">
+
+<h2>
+Support Center
+</h2>
+
+<select id="supportType">
+
+<option value="">
+Select Problem
+</option>
+
+<option>
+Activation Problem
+</option>
+
+<option>
+Referral Problem
+</option>
+
+<option>
+Facebook Task Problem
+</option>
+
+<option>
+Withdraw Problem
+</option>
+
+<option>
+Other
+</option>
+
+</select>
+
+<textarea
+id="supportMsg"
+placeholder="Describe your problem">
+</textarea>
+
+<button
+id="supportBtn"
+class="primary">
+
+Send Ticket
+
+</button>
+
+<div
+id="mySupportReplies"
+class="listBox">
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>
+🏆 Leaderboard
+</h2>
+
+<div
+id="leaderboard"
+class="listBox">
+
+Loading...
+
+</div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+doc,
+getDoc,
+setDoc,
+updateDoc,
+collection,
+addDoc,
+query,
+where,
+onSnapshot
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+import {
+getAuth,
+GoogleAuthProvider,
+signInWithPopup,
+onAuthStateChanged,
+signOut
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig={
+
+apiKey:"AIzaSyBnP9QJgg6d874QB-a4meFbprLMEufRzuY",
+authDomain:"refer-earn-73e38.firebaseapp.com",
+projectId:"refer-earn-73e38",
+storageBucket:"refer-earn-73e38.firebasestorage.app",
+messagingSenderId:"323369987305",
+appId:"1:323369987305:web:7c8eead19bff6454f4d478"
+
+};
+
+const app=
+initializeApp(firebaseConfig);
+
+const db=
+getFirestore(app);
+
+const auth=
+getAuth(app);
+
+document.getElementById("loginBtn")
+.onclick=async()=>{
+
+await signInWithPopup(
+auth,
+new GoogleAuthProvider()
+);
+
+};
+
+document.getElementById("logoutBtn")
+.onclick=async()=>{
+
+await signOut(auth);
+
+location.reload();
+
+};
+
+onAuthStateChanged(
+auth,
+async(user)=>{
+
+if(!user) return;
+
+document.getElementById("userInfo")
+.innerText=
+"Logged in: "+user.email;
+
+document.getElementById("loginBtn")
+.style.display="none";
+
+document.getElementById("logoutBtn")
+.style.display="inline-block";
+
+const userRef=
+doc(db,"users",user.uid);
+
+const snap=
+await getDoc(userRef);
+
+const ref=
+new URLSearchParams(
+window.location.search
+).get("ref");
+  <!-- ========================= -->
+<!-- INDEX.HTML PART 4 / 5 -->
+<!-- Paste After PART 3 -->
+<!-- ========================= -->
+
+if(!snap.exists()){
+
+await setDoc(userRef,{
+email:user.email,
+balance:0,
+referrals:0,
+active:false,
+referredBy:ref || null
+});
+
+if(ref && ref!==user.uid){
+
+const refRef=
+doc(db,"users",ref);
+
+const refSnap=
+await getDoc(refRef);
+
+if(refSnap.exists()){
+
+await updateDoc(refRef,{
+balance:
+(refSnap.data().balance||0)+10,
+referrals:
+(refSnap.data().referrals||0)+1
+});
+
+}
+
+}
+
+}
+
+liveUser(user.uid);
+liveReferrals(user.uid);
+liveTasks();
+liveTaskHistory(user.uid);
+liveWithdraws(user.uid);
+liveSupport(user.uid);
+liveLeaderboard();
+
+});
+
+function liveUser(uid){
+
+onSnapshot(
+doc(db,"users",uid),
+(snap)=>{
+
+if(!snap.exists()) return;
+
+const data=snap.data();
+
+document.getElementById("balance")
+.innerText=
+(data.balance||0)+"৳";
+
+document.getElementById("refCount")
+.innerText=
+data.referrals||0;
+
+document.getElementById("accountStatus")
+.innerText=
+data.active
+? "Active"
+: "Inactive";
+
+document.getElementById("refLink").value=
+window.location.origin+
+window.location.pathname+
+"?ref="+uid;
+
+});
+
+}
+
+function liveReferrals(uid){
+
+onSnapshot(
+collection(db,"users"),
+(snap)=>{
+
+let box=
+document.getElementById("refList");
+
+box.innerHTML="";
+
+snap.forEach(d=>{
+
+let data=d.data();
+
+if(data.referredBy===uid){
+
+box.innerHTML+=
+`<p>👤 ${data.email}</p>`;
+
+}
+
+});
+
+if(box.innerHTML===""){
+box.innerHTML=
+"No Referrals Yet";
+}
+
+});
+
+}
+
+function liveTasks(){
+
+onSnapshot(
+collection(db,"facebookTasks"),
+(snap)=>{
+
+let box=
+document.getElementById("taskList");
+
+box.innerHTML="";
+
+let i=1;
+
+snap.forEach(d=>{
+
+let task=d.data();
+
+box.innerHTML+=`
+
+<div class="taskItem">
+
+<b>
+${i}. নতুন Task Complete করুন
+</b>
+
+<br><br>
+
+<a
+href="${task.postLink}"
+target="_blank"
+class="fbBtn">
+
+Open Task
+
+</a>
+
+</div>
+
+`;
+
+i++;
+
+});
+
+if(box.innerHTML===""){
+
+box.innerHTML=
+"<p>No Active Tasks</p>";
+
+}
+
+});
+
+  }
+  <!-- ========================= -->
+<!-- INDEX.HTML PART 5 / 5 -->
+<!-- Paste After PART 4 -->
+<!-- ========================= -->
+
+function liveTaskHistory(uid){
+
+onSnapshot(
+collection(db,"taskSubmissions"),
+(snap)=>{
+
+let box=
+document.getElementById("shareHistory");
+
+box.innerHTML="";
+
+snap.forEach(d=>{
+
+let data=d.data();
+
+if(data.uid===uid){
+
+box.innerHTML+=`
+
+<div class="taskItem">
+
+Facebook Profile:
+<br>
+${data.profileLink}
+
+<br><br>
+
+Status:
+<b>${data.status}</b>
+
+</div>
+
+`;
+
+}
+
+});
+
+if(box.innerHTML===""){
+box.innerHTML=
+"No Task Submitted Yet";
+}
+
+});
+
+}
+
+document.getElementById("submitTaskBtn")
+.onclick=
+async()=>{
+
+const user=
+auth.currentUser;
+
+if(!user){
+alert("Login First");
+return;
+}
+
+const profileLink=
+document.getElementById(
+"facebookProfileLink"
+).value.trim();
+
+if(!profileLink){
+alert("Enter Facebook Profile Link");
+return;
+}
+
+await addDoc(
+collection(db,"taskSubmissions"),
+{
+uid:user.uid,
+email:user.email,
+profileLink,
+reward:5,
+status:"pending",
+createdAt:Date.now()
+}
+);
+
+alert(
+"Task Submitted Successfully"
+);
+
+document.getElementById(
+"facebookProfileLink"
+).value="";
+
+};
+
+function liveWithdraws(uid){
+
+onSnapshot(
+collection(db,"withdrawRequests"),
+(snap)=>{
+
+let box=
+document.getElementById(
+"myWithdraws"
+);
+
+box.innerHTML="";
+
+snap.forEach(d=>{
+
+let data=d.data();
+
+if(data.uid===uid){
+
+box.innerHTML+=`
+
+<div class="taskItem">
+
+${data.method}
+<br>
+
+${data.number}
+<br>
+
+${data.amount}৳
+<br>
+
+<b>${data.status}</b>
+
+</div>
+
+`;
+
+}
+
+});
+
+});
+
+}
+
+function liveSupport(uid){
+
+onSnapshot(
+collection(db,"supportTickets"),
+(snap)=>{
+
+let box=
+document.getElementById(
+"mySupportReplies"
+);
+
+box.innerHTML="";
+
+snap.forEach(d=>{
+
+let data=d.data();
+
+if(data.uid===uid){
+
+box.innerHTML+=`
+
+<div class="supportReply">
+
+<b>${data.type}</b>
+
+<br><br>
+
+${data.message}
+
+<br><br>
+
+Admin Reply:
+
+<br>
+
+${data.reply || "Waiting..."}
+
+</div>
+
+`;
+
+}
+
+});
+
+});
+
+}
+
+function liveLeaderboard(){
+
+onSnapshot(
+collection(db,"users"),
+(snap)=>{
+
+let users=[];
+
+snap.forEach(d=>{
+users.push(d.data());
+});
+
+users.sort(
+(a,b)=>
+(b.referrals||0)-
+(a.referrals||0)
+);
+
+let box=
+document.getElementById(
+"leaderboard"
+);
+
+box.innerHTML="";
+
+users.slice(0,10)
+.forEach((u,i)=>{
+
+box.innerHTML+=`
+
+<p>
+
+${i+1}.
+${u.email}
+
+-
+
+${u.referrals||0}
+Referrals
+
+</p>
+
+`;
+
+});
+
+});
+
+}
+
+</script>
+
+</body>
+</html>
