@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Refer Earn Admin</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+min-height:100vh;
+padding:15px;
+background:
+linear-gradient(-45deg,#0f172a,#1e3a8a,#312e81,#581c87);
+background-size:400% 400%;
+animation:bgMove 12s ease infinite;
+color:white;
+}
+
+@keyframes bgMove{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+.container{
+max-width:1200px;
+margin:auto;
+}
+
+.hero{
+padding:25px;
+border-radius:25px;
+background:rgba(255,255,255,.12);
+backdrop-filter:blur(15px);
+text-align:center;
+margin-bottom:20px;
+}
+
+.logo{
+width:120px;
+height:120px;
+border-radius:20px;
+border:3px solid white;
+object-fit:cover;
+margin-bottom:12px;
+}
+
+.hero h1{
+font-size:34px;
+margin-bottom:10px;
+}
+
+#loginBtn{
+padding:12px 20px;
+border:none;
+border-radius:12px;
+background:white;
+color:#1e3a8a;
+font-weight:bold;
+cursor:pointer;
+}
+
+#adminPanel{
+display:none;
+}
+
+.stats{
+display:grid;
+grid-template-columns:
+repeat(auto-fit,minmax(180px,1fr));
+gap:15px;
+margin-top:20px;
+}
+
+.stat{
+background:rgba(255,255,255,.12);
+padding:18px;
+border-radius:18px;
+text-align:center;
+}
+
+.stat b{
+display:block;
+font-size:28px;
+margin-top:8px;
+}
+
+.card{
+background:white;
+color:#111827;
+padding:18px;
+border-radius:20px;
+margin-bottom:18px;
+}
+
+.card h2{
+color:#4338ca;
+margin-bottom:12px;
+}
+
+input,
+textarea{
+width:100%;
+padding:12px;
+border:1px solid #ddd;
+border-radius:12px;
+margin-top:10px;
+}
+
+button{
+border:none;
+padding:10px 14px;
+border-radius:10px;
+cursor:pointer;
+font-weight:bold;
+}
+
+.primary{
+background:#2563eb;
+color:white;
+}
+
+.approve{
+background:#16a34a;
+color:white;
+}
+
+.reject{
+background:#dc2626;
+color:white;
+}
+
+.reply{
+background:#7c3aed;
+color:white;
+}
+
+.request{
+background:#f8fafc;
+border:1px solid #e5e7eb;
+padding:12px;
+border-radius:12px;
+margin-top:10px;
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<div class="hero">
+
+<img
+class="logo"
+src="https://raw.githubusercontent.com/nirmalhridoy/refer-earn/main/logo.jpg">
+
+<h1>
+Refer Earn Admin Panel
+</h1>
+
+<button id="loginBtn">
+Admin Login
+</button>
+
+<p id="status"></p>
+
+<div class="stats">
+
+<div class="stat">
+Total Users
+<b id="totalUsers">0</b>
+</div>
+
+<div class="stat">
+Active Users
+<b id="activeUsers">0</b>
+</div>
+
+<div class="stat">
+Pending Tasks
+<b id="pendingTasks">0</b>
+</div>
+
+<div class="stat">
+Pending Withdraw
+<b id="pendingWithdraw">0</b>
+</div>
+
+<div class="stat">
+Support Tickets
+<b id="supportCount">0</b>
+</div>
+
+</div>
+
+</div>
+
+<div id="adminPanel">
+
+<div class="card">
+
+<h2>
+➕ Add Facebook Task
+</h2>
+
+<input
+id="taskTitle"
+placeholder="Task Title">
+
+<input
+id="taskLink"
+placeholder="Facebook Post Link">
+
+<button
+id="addTaskBtn"
+class="primary">
+
+Add New Task
+
+</button>
+
+<div id="taskList"></div>
+
+</div>
+<!-- ========================= -->
+<!-- ADMIN.HTML PART 2 / 5 -->
+<!-- Paste After PART 1 -->
+<!-- ========================= -->
+
+<div class="card">
+
+<h2>
+📋 Facebook Task Management
+</h2>
+
+<p>
+এখানে Facebook Post Link Add করলে
+সেটি User Website এর
+📌 Available Tasks সেকশনে
+সাথে সাথে দেখা যাবে।
+</p>
+
+<div id="facebookTaskList">
+
+Loading Tasks...
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>
+✅ Facebook Task Submissions
+</h2>
+
+<p>
+User যে Facebook Profile Link Submit করবে
+সেগুলো এখানে দেখা যাবে।
+</p>
+
+<div id="taskSubmissionList">
+
+Loading...
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>
+💳 Activation Requests
+</h2>
+
+<div id="activationList">
+
+Loading...
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>
+💸 Withdraw Requests
+</h2>
+
+<div id="withdrawList">
+
+Loading...
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>
+🎫 Support Tickets
+</h2>
+
+<div id="supportList">
+
+Loading...
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+doc,
+addDoc,
+deleteDoc,
+getDoc,
+getDocs,
+updateDoc,
+onSnapshot
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+import {
+getAuth,
+GoogleAuthProvider,
+signInWithPopup,
+onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig={
+
+apiKey:"AIzaSyBnP9QJgg6d874QB-a4meFbprLMEufRzuY",
+authDomain:"refer-earn-73e38.firebaseapp.com",
+projectId:"refer-earn-73e38",
+storageBucket:"refer-earn-73e38.firebasestorage.app",
+messagingSenderId:"323369987305",
+appId:"1:323369987305:web:7c8eead19bff6454f4d478"
+
+};
+
+const app=initializeApp(firebaseConfig);
+const db=getFirestore(app);
+const auth=getAuth(app);
+
+const ADMIN_EMAIL=
+"antorahmed0185@gmail.com";
+
+document.getElementById("loginBtn").onclick=
+async()=>{
+
+await signInWithPopup(
+auth,
+new GoogleAuthProvider()
+);
+
+};
+
+onAuthStateChanged(
+auth,
+async(user)=>{
+
+if(!user) return;
+
+if(user.email!==ADMIN_EMAIL){
+
+document.getElementById("status")
+.innerHTML=
+"❌ Access Denied";
+
+return;
+
+}
+
+document.getElementById("status")
+.innerHTML=
+"✅ Admin Logged In : "+user.email;
+
+document.getElementById("adminPanel")
+.style.display="block";
+
+loadStats();
+loadFacebookTasks();
+loadTaskSubmissions();
+loadActivations();
+loadWithdraws();
+loadSupports();
+
+});
+  <!-- ========================= -->
+<!-- ADMIN.HTML PART 3 / 5 -->
+<!-- Paste After PART 2 -->
+<!-- ========================= -->
+
+async function loadStats(){
+
+const users=
+await getDocs(
+collection(db,"users")
+);
+
+let active=0;
+
+users.forEach(d=>{
+
+if(d.data().active){
+active++;
+}
+
+});
+
+document.getElementById("totalUsers")
+.innerText=users.size;
+
+document.getElementById("activeUsers")
+.innerText=active;
+
+onSnapshot(
+collection(db,"taskSubmissions"),
+(snap)=>{
+
+let pending=0;
+
+snap.forEach(d=>{
+
+if(d.data().status==="pending"){
+pending++;
+}
+
+});
+
+document.getElementById("pendingTasks")
+.innerText=pending;
+
+});
+
+onSnapshot(
+collection(db,"withdrawRequests"),
+(snap)=>{
+
+let pending=0;
+
+snap.forEach(d=>{
+
+if(d.data().status==="pending"){
+pending++;
+}
+
+});
+
+document.getElementById("pendingWithdraw")
+.innerText=pending;
+
+});
+
+onSnapshot(
+collection(db,"supportTickets"),
+(snap)=>{
+
+document.getElementById("supportCount")
+.innerText=snap.size;
+
+});
+
+}
+
+/* ADD FACEBOOK TASK */
+
+document.getElementById("addTaskBtn")
+.onclick=async()=>{
+
+const title=
+document.getElementById("taskTitle")
+.value.trim();
+
+const link=
+document.getElementById("taskLink")
+.value.trim();
+
+if(!title || !link){
+
+alert("Fill all fields");
+return;
+
+}
+
+await addDoc(
+collection(db,"facebookTasks"),
+{
+title:title,
+postLink:link,
+createdAt:Date.now()
+}
+);
+
+document.getElementById("taskTitle")
+.value="";
+
+document.getElementById("taskLink")
+.value="";
+
+alert("New Facebook Task Added");
+
+};
+
+function loadFacebookTasks(){
+
+onSnapshot(
+collection(db,"facebookTasks"),
+(snap)=>{
+
+let box=
+document.getElementById(
+"facebookTaskList"
+);
+
+box.innerHTML="";
+
+let count=1;
+
+snap.forEach(d=>{
+
+const data=d.data();
+
+box.innerHTML+=`
+
+<div class="request">
+
+<b>
+${count}. ${data.title}
+</b>
+
+<br><br>
+
+<a href="${data.postLink}"
+target="_blank">
+
+${data.postLink}
+
+</a>
+
+<br><br>
+
+<button
+class="reject"
+onclick="deleteTask('${d.id}')">
+
+Delete Task
+
+</button>
+
+</div>
+
+`;
+
+count++;
+
+});
+
+if(box.innerHTML===""){
+
+box.innerHTML=
+"No Facebook Tasks Found";
+
+}
+
+});
+
+}
+
+window.deleteTask=
+async(id)=>{
+
+await deleteDoc(
+doc(db,"facebookTasks",id)
+);
+
+alert("Task Deleted");
+
+};
+  <!-- ========================= -->
+<!-- ADMIN.HTML PART 4 / 5 -->
+<!-- Paste After PART 3 -->
+<!-- ========================= -->
+
+function loadTaskSubmissions(){
+
+onSnapshot(
+collection(db,"taskSubmissions"),
+(snap)=>{
+
+let box=
+document.getElementById(
+"taskSubmissionList"
+);
+
+box.innerHTML="";
+
+snap.forEach(d=>{
+
+let data=d.data();
+
+box.innerHTML+=`
+
+<div class="request">
+
+<p>
+<b>${data.email}</b>
+</p>
+
+<p>
+Facebook Profile:
+<br>
+<a href="${data.profileLink}"
+target="_blank">
+${data.profileLink}
+</a>
+</p>
+
+<p>
+Reward:
+${data.reward}৳
+</p>
+
+<p>
+Status:
+<b>${data.status}</b>
+</p>
+
+${
+data.status==="pending"
+?
+
+`
+
+<button
+class="approve"
+onclick="approveTask(
+'${d.id}',
+'${data.uid}'
+)">
+
+Approve +5৳
+
+</button>
+
+<button
+class="reject"
+onclick="rejectTask(
+'${d.id}'
+)">
+
+Reject
+
+</button>
+
+`
+
+:
+
+""
+
+}
+
+</div>
+
+`;
+
+});
+
+if(box.innerHTML===""){
+
+box.innerHTML=
+"No Task Submission Found";
+
+}
+
+});
+
+}
+
+window.approveTask=
+async(id,uid)=>{
+
+const userRef=
+doc(db,"users",uid);
+
+const snap=
+await getDoc(userRef);
+
+const balance=
+snap.data().balance || 0;
+
+await updateDoc(
+userRef,
+{
+balance:balance+5
+}
+);
+
+await updateDoc(
+doc(db,"taskSubmissions",id),
+{
+status:"approved"
+}
+);
+
+alert(
+"Task Approved & 5৳ Added"
+);
+
+};
+
+window.rejectTask=
+async(id)=>{
+
+await updateDoc(
+doc(db,"taskSubmissions",id),
+{
+status:"rejected"
+}
+);
+
+alert(
+"Task Rejected"
+);
+
+};
+
+/* ACTIVATION REQUESTS */
+
+function loadActivations(){
+
+onSnapshot(
+collection(db,"activationRequests"),
+(snap)=>{
+
+let box=
+document.getElementById(
+"activationList"
+);
+
+box.innerHTML="";
+
+snap.forEach(d=>{
+
+let data=d.data();
+
+box.innerHTML+=`
+
+<div class="request">
+
+<p>
+<b>${data.email}</b>
+</p>
+
+<p>
+Number:
+${data.number}
+</p>
+
+<p>
+TRX ID:
+${data.trxId}
+</p>
+
+<p>
+Status:
+<b>${data.status}</b>
+</p>
+
+${
+data.status==="pending"
+?
+
+`
+
+<button
+class="approve"
+onclick="approveActivation(
+'${d.id}',
+'${data.uid}'
+)">
+
+Approve
+
+</button>
+
+<button
+class="reject"
+onclick="rejectActivation(
+'${d.id}'
+)">
+
+Reject
+
+</button>
+
+`
+
+:
+
+""
+
+}
+
+</div>
+
+`;
+
+});
+
+});
+
+}
+
+window.approveActivation=
+async(id,uid)=>{
+
+await updateDoc(
+doc(db,"users",uid),
+{
+active:true
+}
+);
+
+await updateDoc(
+doc(db,"activationRequests",id),
+{
+status:"approved"
+}
+);
+
+alert(
+"Activation Approved"
+);
+
+};
+
+window.rejectActivation=
+async(id)=>{
+
+await updateDoc(
+doc(db,"activationRequests",id),
+{
+status:"rejected"
+}
+);
+
+alert(
+"Activation Rejected"
+);
+
+};
+  function loadWithdraws(){
+
+onSnapshot(
+collection(db,"withdrawRequests"),
+(snap)=>{
+
+let box=
+document.getElementById(
+"withdrawList"
+);
+
+box.innerHTML="";
+
+snap.forEach(d=>{
+
+let data=d.data();
+
+box.innerHTML+=`
+
+<div class="request">
+
+<p>
+<b>${data.email}</b>
+</p>
+
+<p>
+Method:
+${data.method}
+</p>
+
+<p>
+Number:
+${data.number}
+</p>
+
+<p>
+Amount:
+${data.amount}৳
+</p>
+
+<p>
+Status:
+<b>${data.status}</b>
+</p>
+
+${
+data.status==="pending"
+?
+
+`
+
+<button
+class="approve"
+onclick="approveWithdraw(
+'${d.id}',
+'${data.uid}',
+${data.amount}
+)">
+
+Approve
+
+</button>
+
+<button
+class="reject"
+onclick="rejectWithdraw(
+'${d.id}'
+)">
+
+Reject
+
+</button>
+
+`
+
+:
+
+""
+
+}
+
+</div>
+
+`;
+
+});
+
+});
+
+}
+
+window.approveWithdraw=
+async(id,uid,amount)=>{
+
+const userRef=
+doc(db,"users",uid);
+
+const snap=
+await getDoc(userRef);
+
+let balance=
+snap.data().balance || 0;
+
+if(balance<amount){
+
+alert(
+"Insufficient Balance"
+);
+
+return;
+
+}
+
+await updateDoc(
+userRef,
+{
+balance:balance-amount
+}
+);
+
+await updateDoc(
+doc(db,"withdrawRequests",id),
+{
+status:"approved"
+}
+);
+
+alert(
+"Withdraw Approved"
+);
+
+};
+
+window.rejectWithdraw=
+async(id)=>{
+
+await updateDoc(
+doc(db,"withdrawRequests",id),
+{
+status:"rejected"
+}
+);
+
+alert(
+"Withdraw Rejected"
+);
+
+};
+
+/* SUPPORT TICKETS */
+
+function loadSupports(){
+
+onSnapshot(
+collection(db,"supportTickets"),
+(snap)=>{
+
+let box=
+document.getElementById(
+"supportList"
+);
+
+box.innerHTML="";
+
+snap.forEach(d=>{
+
+let data=d.data();
+
+box.innerHTML+=`
+
+<div class="request">
+
+<p>
+<b>${data.email}</b>
+</p>
+
+<p>
+Type:
+${data.type}
+</p>
+
+<p>
+${data.message}
+</p>
+
+<textarea
+id="reply_${d.id}"
+placeholder="Write Reply..."
+>${data.reply || ""}</textarea>
+
+<button
+class="reply"
+onclick="sendReply(
+'${d.id}'
+)">
+
+Send Reply
+
+</button>
+
+</div>
+
+`;
+
+});
+
+});
+
+}
+
+window.sendReply=
+async(id)=>{
+
+const reply=
+document.getElementById(
+"reply_"+id
+).value;
+
+await updateDoc(
+doc(db,"supportTickets",id),
+{
+reply:reply,
+status:"answered"
+}
+);
+
+alert(
+"Reply Sent Successfully"
+);
+
+};
+
+</script>
+
+</body>
+</html>
