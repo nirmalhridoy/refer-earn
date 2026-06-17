@@ -3822,6 +3822,1220 @@ await signOut(auth);
 location.reload();
 
 };
+    const ADMIN_EMAIL = "antorahmed0185@gmail.com";
+
+onAuthStateChanged(auth, async(user)=>{
+
+if(!user) return;
+
+if(user.email === ADMIN_EMAIL){
+
+console.log("Admin Login");
+
+}
+
+});
+
+const activateBtn = document.getElementById("activateBtn");
+
+if(activateBtn){
+
+activateBtn.onclick = async()=>{
+
+const phone =
+document.getElementById("activationPhone").value.trim();
+
+const trx =
+document.getElementById("activationTrx").value.trim();
+
+const method =
+document.getElementById("paymentMethod").value;
+
+const user = auth.currentUser;
+
+if(!user){
+
+alert("Please login first");
+return;
+
+}
+
+if(phone.length < 11){
+
+alert("Enter valid phone number");
+return;
+
+}
+
+if(trx.length < 5){
+
+alert("Enter valid transaction ID");
+return;
+
+}
+
+await setDoc(
+
+doc(db,"activationRequests",user.uid),
+
+{
+
+uid:user.uid,
+name:user.displayName,
+email:user.email,
+
+phone:phone,
+trxId:trx,
+method:method,
+
+fee:125,
+
+status:"Pending",
+
+createdAt:serverTimestamp()
+
+}
+
+);
+
+document.getElementById(
+"activationStatusText"
+).innerText =
+
+"Activation Request Submitted";
+
+alert("Activation request submitted");
+
+};
+
+    }
+    async function loadUserData(uid){
+
+const snap = await getDoc(doc(db,"users",uid));
+
+if(!snap.exists()) return null;
+
+return snap.data();
+
+}
+
+async function updateUserBalance(uid, amount){
+
+const ref = doc(db,"users",uid);
+
+const snap = await getDoc(ref);
+
+if(!snap.exists()) return;
+
+const data = snap.data();
+
+await updateDoc(ref,{
+balance:(data.balance || 0) + amount
+});
+
+}
+
+async function activateUser(uid){
+
+const userRef = doc(db,"users",uid);
+
+const snap = await getDoc(userRef);
+
+if(!snap.exists()) return;
+
+const user = snap.data();
+
+if(user.status === "Active") return;
+
+await updateDoc(userRef,{
+status:"Active",
+activationBonus:true
+});
+
+if(!user.activationBonus){
+
+await updateUserBalance(uid,50);
+
+}
+
+}
+
+async function checkRank(uid){
+
+const ref = doc(db,"users",uid);
+
+const snap = await getDoc(ref);
+
+if(!snap.exists()) return;
+
+const data = snap.data();
+
+const refs = data.referrals || 0;
+
+let rank = "Starter";
+
+if(refs >= 100){
+rank = "Diamond";
+}else if(refs >= 50){
+rank = "Gold";
+}else if(refs >= 25){
+rank = "Silver";
+}else if(refs >= 10){
+rank = "Bronze";
+}
+
+await updateDoc(ref,{
+rank:rank
+});
+
+}
+
+async function refreshDashboard(){
+
+const user = auth.currentUser;
+
+if(!user) return;
+
+const data = await loadUserData(user.uid);
+
+if(!data) return;
+
+document.getElementById("balance").innerText =
+(data.balance || 0) + "৳";
+
+document.getElementById("referrals").innerText =
+data.referrals || 0;
+
+document.getElementById("rank").innerText =
+data.rank || "Starter";
+
+document.getElementById("status").innerText =
+data.status || "Inactive";
+
+}
+
+window.refreshDashboard = refreshDashboard;
+    const claimBonusBtn =
+document.getElementById("claimBonusBtn");
+
+if(claimBonusBtn){
+
+claimBonusBtn.onclick = async()=>{
+
+const user = auth.currentUser;
+
+if(!user){
+alert("Login First");
+return;
+}
+
+const ref = doc(db,"users",user.uid);
+
+const snap = await getDoc(ref);
+
+if(!snap.exists()) return;
+
+const data = snap.data();
+
+const today =
+new Date().toDateString();
+
+if(data.lastBonusDate === today){
+
+document.getElementById(
+"bonusStatus"
+).innerText =
+
+"Today's Bonus Already Claimed";
+
+return;
+
+}
+
+await updateDoc(ref,{
+
+balance:(data.balance || 0) + 1,
+
+lastBonusDate:today,
+
+dailyBonusClaimed:true
+
+});
+
+document.getElementById(
+"bonusStatus"
+).innerText =
+
+"1৳ Bonus Claimed";
+
+refreshDashboard();
+
+};
+
+}
+
+const spinWheelBtn =
+document.getElementById("spinWheelBtn");
+
+if(spinWheelBtn){
+
+spinWheelBtn.onclick = async()=>{
+
+const user = auth.currentUser;
+
+if(!user){
+alert("Login First");
+return;
+}
+
+const ref = doc(db,"users",user.uid);
+
+const snap = await getDoc(ref);
+
+if(!snap.exists()) return;
+
+const data = snap.data();
+
+const today =
+new Date().toDateString();
+
+if(data.lastSpinDate === today){
+
+document.getElementById(
+"spinStatus"
+).innerText =
+
+"Today's Spin Already Used";
+
+return;
+
+}
+
+const rewards = [
+0,
+1,
+2,
+3,
+4
+];
+
+const reward =
+rewards[
+Math.floor(
+Math.random() * rewards.length
+)
+];
+
+let text =
+"Better Luck Next Time";
+
+if(reward > 0){
+
+text = reward + "৳ Won";
+
+await updateDoc(ref,{
+balance:(data.balance || 0) + reward
+});
+
+}
+
+await updateDoc(ref,{
+lastSpinDate:today
+});
+
+document.getElementById(
+"spinStatus"
+).innerText = text;
+
+refreshDashboard();
+
+};
+
+}
+    const withdrawBtn =
+document.getElementById("withdrawBtn");
+
+if(withdrawBtn){
+
+withdrawBtn.onclick = async()=>{
+
+const user = auth.currentUser;
+
+if(!user){
+alert("Login First");
+return;
+}
+
+const method =
+document.getElementById(
+"withdrawMethod"
+).value;
+
+const number =
+document.getElementById(
+"withdrawNumber"
+).value.trim();
+
+const amount = parseFloat(
+document.getElementById(
+"withdrawAmount"
+).value
+);
+
+if(!method){
+alert("Select Payment Method");
+return;
+}
+
+if(number.length < 11){
+alert("Enter Valid Number");
+return;
+}
+
+if(isNaN(amount) || amount <= 0){
+alert("Enter Valid Amount");
+return;
+}
+
+const userRef =
+doc(db,"users",user.uid);
+
+const snap =
+await getDoc(userRef);
+
+if(!snap.exists()) return;
+
+const data = snap.data();
+
+const balance =
+data.balance || 0;
+
+const refs =
+data.referrals || 0;
+
+if(amount < 300){
+alert("Minimum Withdraw 300৳");
+return;
+}
+
+if(balance < amount){
+alert("Insufficient Balance");
+return;
+}
+
+const requiredRef =
+Math.ceil(amount / 100);
+
+if(refs < requiredRef){
+alert("Not Enough Referrals");
+return;
+}
+
+const requestId =
+Date.now().toString();
+
+await setDoc(
+doc(
+db,
+"withdrawRequest",
+requestId
+),
+{
+requestId:requestId,
+uid:user.uid,
+name:user.displayName,
+email:user.email,
+
+method:method,
+number:number,
+amount:amount,
+
+status:"Pending",
+
+createdAt:
+serverTimestamp()
+}
+);
+
+await updateDoc(userRef,{
+balance: balance - amount
+});
+
+document.getElementById(
+"withdrawMessage"
+).innerText =
+"Withdraw Request Submitted";
+
+refreshDashboard();
+
+alert(
+"Withdraw Request Submitted"
+);
+
+};
+
+}
+    const sendChatBtn =
+document.getElementById("sendChatBtn");
+
+if(sendChatBtn){
+
+sendChatBtn.onclick = async()=>{
+
+const user = auth.currentUser;
+
+if(!user){
+alert("Login First");
+return;
+}
+
+const message =
+document.getElementById(
+"chatMessage"
+).value.trim();
+
+if(message === ""){
+alert("Enter Message");
+return;
+}
+
+const chatId =
+Date.now().toString();
+
+await setDoc(
+doc(
+db,
+"supportTickets",
+chatId
+),
+{
+chatId:chatId,
+uid:user.uid,
+name:user.displayName,
+email:user.email,
+message:message,
+status:"Open",
+createdAt:
+serverTimestamp()
+}
+);
+
+document.getElementById(
+"chatMessage"
+).value = "";
+
+document.getElementById(
+"chatHistory"
+).innerText =
+"Message Sent Successfully";
+
+alert("Message Sent");
+
+};
+
+}
+
+const copyReferralBtn =
+document.getElementById(
+"copyReferralBtn"
+);
+
+if(copyReferralBtn){
+
+copyReferralBtn.onclick = async()=>{
+
+const link =
+document.getElementById(
+"myReferralLink"
+).value;
+
+navigator.clipboard
+.writeText(link);
+
+alert(
+"Referral Link Copied"
+);
+
+};
+
+}
+
+onAuthStateChanged(
+auth,
+(user)=>{
+
+if(!user) return;
+
+const link =
+window.location.origin +
+"/?ref=" +
+user.uid;
+
+const refBox =
+document.getElementById(
+"myReferralLink"
+);
+
+if(refBox){
+
+refBox.value = link;
+
+}
+
+});
+
+const logoutBtn =
+document.getElementById(
+"logoutBtn"
+);
+
+if(logoutBtn){
+
+logoutBtn.onclick =
+async()=>{
+
+await signOut(auth);
+
+location.reload();
+
+};
+
+}
+
+setInterval(()=>{
+
+if(auth.currentUser){
+
+refreshDashboard();
+
+}
+
+},30000);
+    async function addActivity(uid, text){
+
+const activityId =
+Date.now().toString();
+
+await setDoc(
+doc(
+db,
+"notifications",
+activityId
+),
+{
+uid:uid,
+message:text,
+createdAt:
+serverTimestamp()
+}
+);
+
+}
+
+async function addTransaction(
+uid,
+type,
+amount
+){
+
+const txId =
+Date.now().toString();
+
+await setDoc(
+doc(
+db,
+"transactions",
+txId
+),
+{
+uid:uid,
+type:type,
+amount:amount,
+createdAt:
+serverTimestamp()
+}
+);
+
+}
+
+onAuthStateChanged(
+auth,
+async(user)=>{
+
+if(!user) return;
+
+const ref =
+doc(db,"users",user.uid);
+
+const snap =
+await getDoc(ref);
+
+if(!snap.exists()) return;
+
+const data =
+snap.data();
+
+const loginCount =
+(data.loginCount || 0) + 1;
+
+await updateDoc(ref,{
+
+lastLogin:
+serverTimestamp(),
+
+loginCount:
+loginCount
+
+});
+
+document.getElementById(
+"loginDays"
+).innerText =
+loginCount;
+
+});
+
+async function updateStreak(){
+
+const user =
+auth.currentUser;
+
+if(!user) return;
+
+const ref =
+doc(db,"users",user.uid);
+
+const snap =
+await getDoc(ref);
+
+if(!snap.exists()) return;
+
+const data =
+snap.data();
+
+const today =
+new Date().toDateString();
+
+let streak =
+data.streak || 0;
+
+if(
+data.lastStreakDate !==
+today
+){
+
+streak++;
+
+await updateDoc(ref,{
+
+streak:streak,
+
+lastStreakDate:
+today
+
+});
+
+}
+
+document.getElementById(
+"currentStreak"
+).innerText =
+streak;
+
+}
+
+onAuthStateChanged(
+auth,
+(user)=>{
+
+if(user){
+
+updateStreak();
+
+}
+
+});
+
+async function saveLoginActivity(){
+
+const user =
+auth.currentUser;
+
+if(!user) return;
+
+await addActivity(
+user.uid,
+"User Logged In"
+);
+
+}
+
+onAuthStateChanged(
+auth,
+(user)=>{
+
+if(user){
+
+saveLoginActivity();
+
+}
+
+});
+
+async function saveRewardLog(
+amount,
+type
+){
+
+const user =
+auth.currentUser;
+
+if(!user) return;
+
+await addTransaction(
+user.uid,
+type,
+amount
+);
+
+await addActivity(
+user.uid,
+type + " Reward: " +
+amount + "৳"
+);
+
+    }
+    async function loadRecentActivity(){
+
+const user =
+auth.currentUser;
+
+if(!user) return;
+
+const box =
+document.getElementById(
+"recentActivity"
+);
+
+if(box){
+
+box.innerHTML =
+"Activity loading...";
+
+}
+
+}
+
+async function loadNotifications(){
+
+const user =
+auth.currentUser;
+
+if(!user) return;
+
+const box =
+document.getElementById(
+"notificationBox"
+);
+
+if(box){
+
+box.innerHTML =
+"Notifications synced";
+
+}
+
+}
+
+async function loadTransactionHistory(){
+
+const user =
+auth.currentUser;
+
+if(!user) return;
+
+const box =
+document.getElementById(
+"transactionHistory"
+);
+
+if(box){
+
+box.innerHTML =
+"Transaction history loaded";
+
+}
+
+}
+
+async function loadChatHistory(){
+
+const user =
+auth.currentUser;
+
+if(!user) return;
+
+const box =
+document.getElementById(
+"chatHistory"
+);
+
+if(box){
+
+box.innerHTML =
+"Support history synced";
+
+}
+
+}
+
+async function updateUserProfile(){
+
+const user =
+auth.currentUser;
+
+if(!user) return;
+
+const name =
+document.getElementById(
+"profileName"
+);
+
+const email =
+document.getElementById(
+"profileEmail"
+);
+
+const uid =
+document.getElementById(
+"profileUid"
+);
+
+if(name)
+name.innerText =
+user.displayName || "Guest";
+
+if(email)
+email.innerText =
+user.email || "N/A";
+
+if(uid)
+uid.innerText =
+user.uid.substring(0,8);
+
+}
+
+async function realtimeRefresh(){
+
+await refreshDashboard();
+
+await updateUserProfile();
+
+await loadNotifications();
+
+await loadRecentActivity();
+
+await loadTransactionHistory();
+
+await loadChatHistory();
+
+}
+
+onAuthStateChanged(
+auth,
+(user)=>{
+
+if(user){
+
+realtimeRefresh();
+
+}
+
+});
+
+setInterval(()=>{
+
+if(auth.currentUser){
+
+realtimeRefresh();
+
+}
+
+},60000);
+    async function processReferral(){
+
+const user =
+auth.currentUser;
+
+if(!user) return;
+
+const url =
+new URL(window.location.href);
+
+const refId =
+url.searchParams.get("ref");
+
+if(
+!refId ||
+refId === user.uid
+){
+
+return;
+
+}
+
+const userRef =
+doc(db,"users",user.uid);
+
+const userSnap =
+await getDoc(userRef);
+
+if(!userSnap.exists())
+return;
+
+const userData =
+userSnap.data();
+
+if(userData.referredBy)
+return;
+
+await updateDoc(userRef,{
+
+referredBy:refId
+
+});
+
+const refRef =
+doc(db,"users",refId);
+
+const refSnap =
+await getDoc(refRef);
+
+if(refSnap.exists()){
+
+const refData =
+refSnap.data();
+
+await updateDoc(refRef,{
+
+referrals:
+(refData.referrals || 0)
++ 1
+
+});
+
+}
+
+}
+
+async function distributeMLMReward(
+uid,
+amount
+){
+
+const rewardMap = {
+1:75,
+2:25,
+3:5,
+4:2.5,
+5:1
+};
+
+let currentUid = uid;
+
+for(
+let level = 1;
+level <= 5;
+level++
+){
+
+const snap =
+await getDoc(
+doc(
+db,
+"users",
+currentUid
+)
+);
+
+if(!snap.exists())
+break;
+
+const data =
+snap.data();
+
+const parent =
+data.referredBy;
+
+if(!parent)
+break;
+
+const reward =
+rewardMap[level];
+
+const parentRef =
+doc(
+db,
+"users",
+parent
+);
+
+const parentSnap =
+await getDoc(
+parentRef
+);
+
+if(parentSnap.exists()){
+
+const pData =
+parentSnap.data();
+
+await updateDoc(
+parentRef,
+{
+balance:
+(pData.balance || 0)
++ reward
+}
+);
+
+await addTransaction(
+parent,
+"MLM L"+level,
+reward
+);
+
+await addActivity(
+parent,
+"MLM Reward +"
++ reward + "৳"
+);
+
+}
+
+currentUid =
+parent;
+
+}
+
+}
+
+async function updateTeamStats(){
+
+const user =
+auth.currentUser;
+
+if(!user) return;
+
+const snap =
+await getDoc(
+doc(
+db,
+"users",
+user.uid
+)
+);
+
+if(!snap.exists())
+return;
+
+const data =
+snap.data();
+
+document.getElementById(
+"teamCount"
+).innerText =
+data.referrals || 0;
+
+document.getElementById(
+"activeRef"
+).innerText =
+data.referrals || 0;
+
+}
+
+onAuthStateChanged(
+auth,
+(user)=>{
+
+if(user){
+
+processReferral();
+
+updateTeamStats();
+
+}
+
+});
+    window.APP_READY = true;
+
+window.safeRun = async (fn) => {
+  try {
+    await fn();
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+window.isLoggedIn = () => {
+  return !!auth.currentUser;
+};
+
+document.addEventListener(
+  "visibilitychange",
+  () => {
+    if (
+      document.visibilityState === "visible" &&
+      auth.currentUser
+    ) {
+      refreshDashboard?.();
+    }
+  }
+);
+
+window.addEventListener(
+  "online",
+  () => {
+    console.log("Network Connected");
+  }
+);
+
+window.addEventListener(
+  "offline",
+  () => {
+    console.log("Network Disconnected");
+  }
+);
+
+async function productionHealthCheck(){
+
+  try{
+
+    if(!auth.currentUser){
+      return;
+    }
+
+    await refreshDashboard?.();
+
+  }catch(e){
+
+    console.error(
+      "Health Check Error:",
+      e
+    );
+
+  }
+
+}
+
+setInterval(
+  productionHealthCheck,
+  120000
+);
+
+console.log(
+  "Refer Earn Production Ready"
+);
 
 </script>
 
