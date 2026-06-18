@@ -4798,6 +4798,374 @@ refreshNotifications,
 }
 
 });
+  window.approveTask =
+async(id,uid)=>{
+
+const userRef =
+doc(
+db,
+"users",
+uid
+);
+
+const userSnap =
+await getDoc(
+userRef
+);
+
+if(
+!userSnap.exists()
+) return;
+
+const userData =
+userSnap.data();
+
+await updateDoc(
+userRef,
+{
+balance:
+(userData.balance || 0)
++ 5
+}
+);
+
+await updateDoc(
+doc(
+db,
+"taskSubmissions",
+id
+),
+{
+status:
+"approved"
+}
+);
+
+alert(
+"Task Approved + 5৳ Added"
+);
+
+};
+
+window.rejectTask =
+async(id)=>{
+
+await updateDoc(
+doc(
+db,
+"taskSubmissions",
+id
+),
+{
+status:
+"rejected"
+}
+);
+
+alert(
+"Task Rejected"
+);
+
+};
+
+async function loadTaskAnalytics(){
+
+const snap =
+await getDocs(
+collection(
+db,
+"taskSubmissions"
+)
+);
+
+let approved = 0;
+let pending = 0;
+let rejected = 0;
+
+snap.forEach(docu=>{
+
+const d =
+docu.data();
+
+if(
+d.status ===
+"approved"
+){
+approved++;
+}
+
+if(
+d.status ===
+"pending"
+){
+pending++;
+}
+
+if(
+d.status ===
+"rejected"
+){
+rejected++;
+}
+
+});
+
+console.log(
+"Approved:",
+approved
+);
+
+console.log(
+"Pending:",
+pending
+);
+
+console.log(
+"Rejected:",
+rejected
+);
+
+}
+
+onAuthStateChanged(
+auth,
+(user)=>{
+
+if(
+user &&
+user.email ===
+ADMIN_EMAIL
+){
+
+loadTaskAnalytics();
+
+setInterval(
+loadTaskAnalytics,
+60000
+);
+
+}
+
+});
+  async function loadRevenueStats(){
+
+const usersSnap =
+await getDocs(
+collection(
+db,
+"users"
+)
+);
+
+const withdrawSnap =
+await getDocs(
+collection(
+db,
+"withdrawRequest"
+)
+);
+
+let totalUsers = 0;
+let totalBalance = 0;
+let totalWithdraw = 0;
+
+usersSnap.forEach(docu=>{
+
+const d =
+docu.data();
+
+totalUsers++;
+
+totalBalance +=
+d.balance || 0;
+
+});
+
+withdrawSnap.forEach(docu=>{
+
+const d =
+docu.data();
+
+if(
+d.status ===
+"approved"
+){
+
+totalWithdraw +=
+d.amount || 0;
+
+}
+
+});
+
+console.log(
+"Total Users:",
+totalUsers
+);
+
+console.log(
+"Platform Balance:",
+totalBalance
+);
+
+console.log(
+"Total Withdraw:",
+totalWithdraw
+);
+
+}
+
+async function loadAdminAnalytics(){
+
+const usersSnap =
+await getDocs(
+collection(
+db,
+"users"
+)
+);
+
+let activeUsers = 0;
+
+usersSnap.forEach(docu=>{
+
+const d =
+docu.data();
+
+if(
+d.active === true
+){
+
+activeUsers++;
+
+}
+
+});
+
+console.log(
+"Active Users:",
+activeUsers
+);
+
+}
+
+async function refreshAdminAnalytics(){
+
+await loadRevenueStats();
+
+await loadAdminAnalytics();
+
+}
+
+onAuthStateChanged(
+auth,
+(user)=>{
+
+if(
+user &&
+user.email ===
+ADMIN_EMAIL
+){
+
+refreshAdminAnalytics();
+
+setInterval(
+refreshAdminAnalytics,
+60000
+);
+
+}
+
+});
+  window.addEventListener(
+"error",
+(e)=>{
+
+console.error(
+"System Error:",
+e.error
+);
+
+});
+
+window.addEventListener(
+"unhandledrejection",
+(e)=>{
+
+console.error(
+"Promise Error:",
+e.reason
+);
+
+});
+
+async function adminHealthCheck(){
+
+try{
+
+if(
+auth.currentUser &&
+auth.currentUser.email ===
+ADMIN_EMAIL
+){
+
+console.log(
+"Admin Panel Healthy"
+);
+
+}
+
+}catch(e){
+
+console.log(e);
+
+}
+
+}
+
+document.addEventListener(
+"visibilitychange",
+()=>{
+
+if(
+document.visibilityState ===
+"visible"
+){
+
+adminHealthCheck();
+
+}
+
+});
+
+window.addEventListener(
+"online",
+()=>{
+
+console.log(
+"Internet Connected"
+);
+
+});
+
+window.addEventListener(
+"offline",
+()=>{
+
+console.log(
+"Internet Disconnected"
+);
+
+});
+
+setInterval(
+adminHealthCheck,
+120000
+);
+
+console.log(
+"Refer Earn Admin Production Ready"
+);
 
 </script>
 
