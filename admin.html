@@ -4499,6 +4499,190 @@ alert(
 );
 
 };
+  async function loadDashboardStats(){
+
+const users =
+await getDocs(
+collection(
+db,
+"users"
+)
+);
+
+document.getElementById(
+"totalUsers"
+).innerText =
+users.size;
+
+}
+
+async function loadPendingCounts(){
+
+const taskSnap =
+await getDocs(
+collection(
+db,
+"taskSubmissions"
+)
+);
+
+let pendingTasks = 0;
+
+taskSnap.forEach(docu=>{
+
+const d =
+docu.data();
+
+if(
+d.status ===
+"pending"
+){
+pendingTasks++;
+}
+
+});
+
+document.getElementById(
+"pendingTasks"
+).innerText =
+pendingTasks;
+
+const activationSnap =
+await getDocs(
+collection(
+db,
+"activationRequests"
+)
+);
+
+let pendingActivation = 0;
+
+activationSnap.forEach(docu=>{
+
+const d =
+docu.data();
+
+if(
+d.status ===
+"pending"
+){
+pendingActivation++;
+}
+
+});
+
+document.getElementById(
+"pendingActivation"
+).innerText =
+pendingActivation;
+
+const withdrawSnap =
+await getDocs(
+collection(
+db,
+"withdrawRequest"
+)
+);
+
+let pendingWithdraw = 0;
+
+withdrawSnap.forEach(docu=>{
+
+const d =
+docu.data();
+
+if(
+d.status ===
+"pending"
+){
+pendingWithdraw++;
+}
+
+});
+
+document.getElementById(
+"pendingWithdraw"
+).innerText =
+pendingWithdraw;
+
+const supportSnap =
+await getDocs(
+collection(
+db,
+"supportTickets"
+)
+);
+
+document.getElementById(
+"supportCount"
+).innerText =
+supportSnap.size;
+
+}
+
+async function adminRealtime(){
+
+await loadDashboardStats();
+
+await loadPendingCounts();
+
+if(
+typeof loadFacebookTasks
+=== "function"
+){
+loadFacebookTasks();
+}
+
+if(
+typeof loadTaskSubmissions
+=== "function"
+){
+loadTaskSubmissions();
+}
+
+if(
+typeof loadActivations
+=== "function"
+){
+loadActivations();
+}
+
+if(
+typeof loadWithdraws
+=== "function"
+){
+loadWithdraws();
+}
+
+if(
+typeof loadSupports
+=== "function"
+){
+loadSupports();
+}
+
+}
+
+onAuthStateChanged(
+auth,
+(user)=>{
+
+if(
+user &&
+user.email ===
+ADMIN_EMAIL
+){
+
+adminRealtime();
+
+setInterval(
+adminRealtime,
+30000
+);
+
+}
+
+});
 
 </script>
 
