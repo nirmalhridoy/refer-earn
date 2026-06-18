@@ -4304,7 +4304,9 @@ doc,
 getDoc,
 updateDoc,
 collection,
-getDocs
+getDocs,
+  addDoc
+
 } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
   
 import {
@@ -4678,6 +4680,119 @@ adminRealtime();
 setInterval(
 adminRealtime,
 30000
+);
+
+}
+
+});
+  window.sendAnnouncement =
+async()=>{
+
+const message =
+prompt(
+"Enter Announcement"
+);
+
+if(
+!message
+) return;
+
+await addDoc(
+collection(
+db,
+"notifications"
+),
+{
+message:message,
+type:"announcement",
+createdAt:
+Date.now()
+}
+);
+
+alert(
+"Announcement Sent"
+);
+
+};
+
+window.sendUserNotification =
+async(uid)=>{
+
+const message =
+prompt(
+"Enter Notification"
+);
+
+if(
+!message
+) return;
+
+await addDoc(
+collection(
+db,
+"notifications"
+),
+{
+uid:uid,
+message:message,
+type:"user",
+createdAt:
+Date.now()
+}
+);
+
+alert(
+"Notification Sent"
+);
+
+};
+
+async function loadNotificationsCount(){
+
+const snap =
+await getDocs(
+collection(
+db,
+"notifications"
+)
+);
+
+const box =
+document.getElementById(
+"notificationCount"
+);
+
+if(box){
+
+box.innerText =
+snap.size;
+
+}
+
+}
+
+async function refreshNotifications(){
+
+await loadNotificationsCount();
+
+}
+
+onAuthStateChanged(
+auth,
+(user)=>{
+
+if(
+user &&
+user.email ===
+ADMIN_EMAIL
+){
+
+refreshNotifications();
+
+setInterval(
+refreshNotifications,
+60000
 );
 
 }
