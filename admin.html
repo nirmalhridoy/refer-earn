@@ -4370,6 +4370,11 @@ document.getElementById(
 ).style.display =
 "none";
 
+document.getElementById(
+"adminInfo"
+).innerHTML =
+"Not Logged In";
+
 return;
 
 }
@@ -4380,8 +4385,14 @@ ADMIN_EMAIL
 ){
 
 alert(
-"Access Denied"
+"Access Denied : " +
+user.email
 );
+
+document.getElementById(
+"adminPanel"
+).style.display =
+"none";
 
 return;
 
