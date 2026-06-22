@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Refer Earn Admin Panel</title>
+
+<style>
+body{
+margin:0;
+font-family:Arial;
+background:#0f0f0f;
+color:#ffffff;
+}
+
+.container{
+padding:20px;
+}
+
+.box{
+background:#1c1c1c;
+padding:15px;
+margin-bottom:15px;
+border-radius:10px;
+}
+
+h2,h3{
+margin:0 0 10px 0;
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<div class="box">
+<h2>Admin Panel</h2>
+<p>Refer Earn System Control Dashboard</p>
+</div>
+
+<div class="box">
+<h3>Status</h3>
+<div id="status">Loading system...</div>
+</div>
+<div class="box">
+<h3>Quick Stats</h3>
+
+<div id="statsUsers">Total Users: Loading...</div>
+<div id="statsBalance">Total Balance: Loading...</div>
+<div id="statsWithdraw">Total Withdraw: Loading...</div>
+
+</div>
+
+<div class="box">
+<h3>Admin Actions</h3>
+
+<button onclick="loadUsers()">Load Users</button>
+<button onclick="loadWithdrawals()">Load Withdraw Requests</button>
+<button onclick="loadReferrals()">Load Referral Data</button>
+
+</div>
+
+<div class="box">
+<h3>System Log</h3>
+<div id="systemLog">Waiting...</div>
+</div>
+<script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+const firebaseConfig = {
+apiKey: "YOUR_API_KEY",
+authDomain: "refer-earn-73e38.firebaseapp.com",
+projectId: "refer-earn-73e38",
+storageBucket: "refer-earn-73e38.appspot.com",
+messagingSenderId: "323369987305",
+appId: "YOUR_APP_ID"
+};
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+window.auth = auth;
+window.db = db;
+
+onAuthStateChanged(auth, (user) => {
+if(user){
+document.getElementById("status").innerText = "Admin Connected";
+}else{
+document.getElementById("status").innerText = "Not Logged In";
+}
+});
+<script type="module">
+
+import {
+collection,
+getDocs
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+window.loadUsers = async function(){
+
+const snap = await getDocs(collection(window.db,"users"));
+
+let total = 0;
+let html = "";
+
+snap.forEach((docSnap) => {
+
+const u = docSnap.data();
+total++;
+
+html += `
+<div class="box">
+<b>Email:</b> ${u.email || ""}
+<br>
+<b>Balance:</b> ${u.balance || 0}
+<br>
+<b>Status:</b> ${u.status || "active"}
+</div>
+`;
+
+});
+
+document.getElementById("statsUsers").innerText = "Total Users: " + total;
+document.getElementById("systemLog").innerText = "Users loaded successfully";
+
+const listBox = document.createElement("div");
+listBox.className = "box";
+listBox.innerHTML = "<h3>Users List</h3>" + html;
+
+document.querySelector(".container").appendChild(listBox);
+
+};
+
+</script>
+<script type="module">
+
+import {
+collection,
+getDocs,
+updateDoc,
+doc
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+window.addBalance = async function(email, amount){
+
+const snap = await getDocs(collection(window.db,"users"));
+
+snap.forEach(async (d) => {
+
+const data = d.data();
+
+if(data.email === email){
+
+await updateDoc(doc(window.db,"users",d.id), {
+balance: (data.balance || 0) + Number(amount)
+});
+
+document.getElementById("systemLog").innerText = "Balance added";
+
+}
+
+});
+
+};
+
+window.subBalance = async function(email, amount){
+
+const snap = await getDocs(collection(window.db,"users"));
+
+snap.forEach(async (d) => {
+
+const data = d.data();
+
+if(data.email === email){
+
+await updateDoc(doc(window.db,"users",d.id), {
+balance: (data.balance || 0) - Number(amount)
+});
+
+document.getElementById("systemLog").innerText = "Balance subtracted";
+
+}
+
+});
+
+};
+
+</script>
+<script type="module">
+
+import {
+collection,
+getDocs,
+updateDoc,
+doc
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+window.blockUser = async function(userId){
+
+await updateDoc(doc(window.db,"users",userId), {
+status: "blocked"
+});
+
+document.getElementById("systemLog").innerText = "User blocked";
+
+};
+
+window.unblockUser = async function(userId){
+
+await updateDoc(doc(window.db,"users",userId), {
+status: "active"
+});
+
+document.getElementById("systemLog").innerText = "User unblocked";
+
+};
+
+window.deleteUser = async function(userId){
+
+await updateDoc(doc(window.db,"users",userId), {
+status: "deleted"
+});
+
+document.getElementById("systemLog").innerText = "User marked deleted";
+
+};
+
+</script>
+<script type="module">
+
+import {
+collection,
+getDocs
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+window.loadWithdrawals = async function(){
+
+const snap = await getDocs(collection(window.db,"withdrawals"));
+
+let total = 0;
+let html = "";
+
+snap.forEach((d) => {
+
+const w = d.data();
+total++;
+
+html += `
+<div class="box">
+<b>Email:</b> ${w.email || ""}
+<br>
+<b>Amount:</b> ${w.amount || 0}
+<br>
+<b>Method:</b> ${w.method || ""}
+<br>
+<b>Status:</b> ${w.status || "pending"}
+</div>
+`;
+
+});
+
+document.getElementById("statsWithdraw").innerText = "Total Withdraw: " + total;
+document.getElementById("systemLog").innerText = "Withdraw data loaded";
+
+const listBox = document.createElement("div");
+listBox.className = "box";
+listBox.innerHTML = "<h3>Withdraw Requests</h3>" + html;
+
+document.querySelector(".container").appendChild(listBox);
+
+};
+
+</script>
+<script type="module">
+
+import {
+collection,
+getDocs,
+updateDoc,
+doc,
+serverTimestamp
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+window.approveWithdraw = async function(id){
+
+await updateDoc(doc(window.db,"withdrawals",id),{
+status:"approved",
+updatedAt:serverTimestamp()
+});
+
+document.getElementById("systemLog").innerText = "Withdraw approved";
+
+};
+
+window.rejectWithdraw = async function(id){
+
+await updateDoc(doc(window.db,"withdrawals",id),{
+status:"rejected",
+updatedAt:serverTimestamp()
+});
+
+document.getElementById("systemLog").innerText = "Withdraw rejected";
+
+};
+
+</script>
+<script type="module">
+
+import {
+collection,
+getDocs,
+doc,
+updateDoc
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+window.loadReferrals = async function(){
+
+const snap = await getDocs(collection(window.db,"referrals"));
+
+let total = 0;
+let html = "";
+
+snap.forEach((d) => {
+
+const r = d.data();
+total++;
+
+html += `
+<div class="box">
+<b>User:</b> ${r.user || ""}
+<br>
+<b>Ref Code:</b> ${r.code || ""}
+<br>
+<b>Earned:</b> ${r.earned || 0}
+</div>
+`;
+
+});
+
+document.getElementById("systemLog").innerText = "Referral data loaded";
+
+const listBox = document.createElement("div");
+listBox.className = "box";
+listBox.innerHTML = "<h3>Referral Data</h3>" + html;
+
+document.querySelector(".container").appendChild(listBox);
+
+};
+
+</script>
+<script type="module">
+
+import {
+collection,
+getDocs
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+window.loadDashboardStats = async function(){
+
+const usersSnap = await getDocs(collection(window.db,"users"));
+const withdrawSnap = await getDocs(collection(window.db,"withdrawals"));
+
+let totalUsers = 0;
+let totalBalance = 0;
+let totalWithdraw = 0;
+
+usersSnap.forEach((d) => {
+const u = d.data();
+totalUsers++;
+totalBalance += Number(u.balance || 0);
+});
+
+withdrawSnap.forEach((d) => {
+totalWithdraw++;
+});
+
+document.getElementById("statsUsers").innerText = "Total Users: " + totalUsers;
+document.getElementById("statsBalance").innerText = "Total Balance: " + totalBalance;
+document.getElementById("statsWithdraw").innerText = "Total Withdraw: " + totalWithdraw;
+
+document.getElementById("systemLog").innerText = "Dashboard stats updated";
+
+};
+
+</script>
+<script type="module">
+
+window.refreshAllData = async function(){
+
+if(window.loadDashboardStats) window.loadDashboardStats();
+if(window.loadUsers) window.loadUsers();
+if(window.loadWithdrawals) window.loadWithdrawals();
+if(window.loadReferrals) window.loadReferrals();
+
+document.getElementById("systemLog").innerText = "All data refreshed";
+
+};
+
+window.autoRefresh = function(){
+
+setInterval(() => {
+
+if(window.loadDashboardStats){
+window.loadDashboardStats();
+}
+
+}, 30000);
+
+};
+
+window.autoRefresh();
+
+</script>
+<script type="module">
+
+import {
+collection,
+getDocs
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+window.searchUser = async function(email){
+
+const snap = await getDocs(collection(window.db,"users"));
+
+let found = null;
+
+snap.forEach((d) => {
+const u = d.data();
+
+if(u.email === email){
+found = u;
+}
+});
+
+if(found){
+document.getElementById("systemLog").innerText = "User found: " + found.email;
+} else {
+document.getElementById("systemLog").innerText = "User not found";
+}
+
+};
+
+</script>
+<script type="module">
+
+import {
+collection,
+getDocs,
+updateDoc,
+doc
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+window.updateUserStatus = async function(userId, status){
+
+await updateDoc(doc(window.db,"users",userId),{
+status: status
+});
+
+document.getElementById("systemLog").innerText = "User status updated to " + status;
+
+};
+
+window.makeAdmin = async function(userId){
+
+await updateDoc(doc(window.db,"users",userId),{
+role: "admin"
+});
+
+document.getElementById("systemLog").innerText = "User promoted to admin";
+
+};
+
+window.removeAdmin = async function(userId){
+
+await updateDoc(doc(window.db,"users",userId),{
+role: "user"
+});
+
+document.getElementById("systemLog").innerText = "Admin removed";
+
+};
+
+</script>
+<script type="module">
+
+import {
+collection,
+getDocs,
+deleteDoc,
+doc
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+window.deleteWithdraw = async function(id){
+
+await deleteDoc(doc(window.db,"withdrawals",id));
+
+document.getElementById("systemLog").innerText = "Withdraw deleted";
+
+};
+
+window.deleteReferral = async function(id){
+
+await deleteDoc(doc(window.db,"referrals",id));
+
+document.getElementById("systemLog").innerText = "Referral deleted";
+
+};
+
+</script>
+<script type="module">
+
+window.exportUsersCSV = async function(){
+
+const snap = await getDocs(collection(window.db,"users"));
+
+let csv = "Email,Balance,Status,Role\n";
+
+snap.forEach((d) => {
+const u = d.data();
+csv += `${u.email || ""},${u.balance || 0},${u.status || ""},${u.role || ""}\n`;
+});
+
+const blob = new Blob([csv], { type: "text/csv" });
+const url = URL.createObjectURL(blob);
+
+const a = document.createElement("a");
+a.href = url;
+a.download = "users.csv";
+a.click();
+
+document.getElementById("systemLog").innerText = "Users exported";
+
+};
+
+window.exportWithdrawCSV = async function(){
+
+const snap = await getDocs(collection(window.db,"withdrawals"));
+
+let csv = "Email,Amount,Method,Status\n";
+
+snap.forEach((d) => {
+const w = d.data();
+csv += `${w.email || ""},${w.amount || 0},${w.method || ""},${w.status || ""}\n`;
+});
+
+const blob = new Blob([csv], { type: "text/csv" });
+const url = URL.createObjectURL(blob);
+
+const a = document.createElement("a");
+a.href = url;
+a.download = "withdrawals.csv";
+a.click();
+
+document.getElementById("systemLog").innerText = "Withdraw data exported";
+
+};
+
+</script>
+<script type="module">
+
+import {
+collection,
+getDocs,
+setDoc,
+doc
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+window.createAnnouncement = async function(text){
+
+const id = Date.now().toString();
+
+await setDoc(doc(window.db,"announcements",id),{
+text: text,
+time: new Date().toISOString()
+});
+
+document.getElementById("systemLog").innerText = "Announcement created";
+
+};
+
+window.loadAnnouncements = async function(){
+
+const snap = await getDocs(collection(window.db,"announcements"));
+
+let html = "";
+
+snap.forEach((d) => {
+
+const a = d.data();
+
+html += `
+<div class="box">
+${a.text || ""}
+<br>
+<small>${a.time || ""}</small>
+</div>
+`;
+
+});
+
+const box = document.createElement("div");
+box.className = "box";
+box.innerHTML = "<h3>Announcements</h3>" + html;
+
+document.querySelector(".container").appendChild(box);
+
+};
+
+</script>
+<script type="module">
+
+import {
+collection,
+getDocs,
+deleteDoc,
+doc
+} from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+window.clearAllUsers = async function(){
+
+const snap = await getDocs(collection(window.db,"users"));
+
+snap.forEach(async (d) => {
+await deleteDoc(doc(window.db,"users",d.id));
+});
+
+document.getElementById("systemLog").innerText = "All users deleted";
+
+};
+
+window.clearAllWithdrawals = async function(){
+
+const snap = await getDocs(collection(window.db,"withdrawals"));
+
+snap.forEach(async (d) => {
+await deleteDoc(doc(window.db,"withdrawals",d.id));
+});
+
+document.getElementById("systemLog").innerText = "All withdrawals deleted";
+
+};
+
+window.clearAllReferrals = async function(){
+
+const snap = await getDocs(collection(window.db,"referrals"));
+
+snap.forEach(async (d) => {
+await deleteDoc(doc(window.db,"referrals",d.id));
+});
+
+document.getElementById("systemLog").innerText = "All referrals deleted";
+
+};
+
+</script>
+<script type="module">
+
+window.backupDatabase = async function(){
+
+const users = await getDocs(collection(window.db,"users"));
+const withdrawals = await getDocs(collection(window.db,"withdrawals"));
+
+const backup = {
+users: [],
+withdrawals: []
+};
+
+users.forEach((d)=>{
+backup.users.push(d.data());
+});
+
+withdrawals.forEach((d)=>{
+backup.withdrawals.push(d.data());
+});
+
+const blob = new Blob([JSON.stringify(backup)], {type:"application/json"});
+const url = URL.createObjectURL(blob);
+
+const a = document.createElement("a");
+a.href = url;
+a.download = "backup.json";
+a.click();
+
+document.getElementById("systemLog").innerText = "Backup created";
+
+};
+
+window.restoreNotice = function(){
+
+document.getElementById("systemLog").innerText =
+"Restore feature requires manual JSON import setup";
+
+};
+
+</script>
+<script type="module">
+
+window.initAdminDashboard = function(){
+
+if(window.loadDashboardStats) window.loadDashboardStats();
+if(window.loadUsers) window.loadUsers();
+if(window.loadWithdrawals) window.loadWithdrawals();
+if(window.loadReferrals) window.loadReferrals();
+
+document.getElementById("systemLog").innerText = "Admin dashboard initialized";
+
+};
+
+window.addEventListener("load", () => {
+setTimeout(() => {
+if(window.firebaseReady){
+window.initAdminDashboard();
+}
+}, 1500);
+});
+
+</script>
+</body>
+</html>
+
+<script>
+console.log("Refer Earn Admin Panel Loaded Successfully");
+</script>
