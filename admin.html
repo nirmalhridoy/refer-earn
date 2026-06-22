@@ -1,0 +1,1181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Refer Earn Admin Panel</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+background:#000;
+color:#fff;
+padding:15px;
+min-height:100vh;
+}
+
+.container{
+max-width:1200px;
+margin:auto;
+}
+
+.hero{
+background:#111;
+border:1px solid #222;
+padding:25px;
+border-radius:20px;
+text-align:center;
+margin-bottom:20px;
+}
+
+.logo{
+width:120px;
+height:120px;
+border-radius:20px;
+border:3px solid #fff;
+object-fit:cover;
+margin-bottom:10px;
+}
+
+.hero h1{
+color:#FFD700;
+font-size:32px;
+margin-bottom:10px;
+}
+
+#loginBtn{
+background:#22c55e;
+color:white;
+border:none;
+padding:12px 20px;
+border-radius:12px;
+font-weight:bold;
+cursor:pointer;
+}
+
+#adminPanel{
+display:none;
+}
+
+.stats{
+display:grid;
+grid-template-columns:
+repeat(auto-fit,minmax(180px,1fr));
+gap:15px;
+margin-bottom:20px;
+}
+
+.stat{
+background:#111;
+border:1px solid #222;
+padding:18px;
+border-radius:15px;
+text-align:center;
+}
+
+.stat b{
+display:block;
+font-size:28px;
+margin-top:8px;
+color:#22c55e;
+}
+
+.card{
+background:#111;
+border:1px solid #222;
+padding:18px;
+border-radius:18px;
+margin-bottom:18px;
+}
+
+.card h2{
+color:#FFD700;
+margin-bottom:12px;
+}
+
+input,
+textarea{
+width:100%;
+padding:12px;
+border:none;
+border-radius:12px;
+background:#1a1a1a;
+color:white;
+margin-top:10px;
+}
+
+button{
+border:none;
+padding:10px 14px;
+border-radius:10px;
+cursor:pointer;
+font-weight:bold;
+margin-top:5px;
+}
+
+.primary{
+background:#2563eb;
+color:white;
+}
+
+.approve{
+background:#16a34a;
+color:white;
+}
+
+.reject{
+background:#dc2626;
+color:white;
+}
+
+.reply{
+background:#7c3aed;
+color:white;
+}
+
+.request{
+background:#1a1a1a;
+padding:12px;
+border-radius:12px;
+margin-top:10px;
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<div class="hero">
+
+<img
+class="logo"
+src="https://raw.githubusercontent.com/nirmalhridoy/refer-earn/main/logo.jpg">
+
+<h1>
+Refer Earn Admin Panel
+</h1>
+
+<button id="loginBtn">
+Admin Login
+</button>
+
+<p id="status"></p>
+
+</div>
+
+<div class="stats">
+
+<div class="stat">
+Total Users
+<b id="totalUsers">0</b>
+</div>
+
+<div class="stat">
+Pending Tasks
+<b id="pendingTasks">0</b>
+</div>
+
+<div class="stat">
+Pending Activation
+<b id="pendingActivation">0</b>
+</div>
+
+<div class="stat">
+Pending Withdraw
+<b id="pendingWithdraw">0</b>
+</div>
+
+<div class="stat">
+Support Tickets
+<b id="supportCount">0</b>
+</div>
+
+</div>
+
+<div id="adminPanel">
+  <div class="card">
+
+<h2>
+➕ Add Facebook Task
+</h2>
+
+<input
+id="taskTitle"
+placeholder="Task Title">
+
+<input
+id="taskLink"
+placeholder="Facebook Post Link">
+
+<button
+id="addTaskBtn"
+class="primary">
+
+Add New Task
+
+</button>
+
+<div
+id="facebookTaskList">
+
+Loading Tasks...
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>
+✅ Facebook Task Submissions
+</h2>
+
+<p>
+User Submit করা Facebook Profile Link এখানে দেখা যাবে।
+</p>
+
+<div
+id="taskSubmissionList">
+
+Loading...
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>
+🔓 Activation Requests
+</h2>
+
+<p>
+Approve করলে User Active হবে এবং
+Automatic 50৳ Bonus পাবে।
+</p>
+
+<div
+id="activationList">
+
+Loading...
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>
+💸 Withdraw Requests
+</h2>
+
+<div
+id="withdrawList">
+
+Loading...
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>
+🎫 Support Tickets
+</h2>
+
+<div
+id="supportList">
+
+Loading...
+
+</div>
+
+</div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import {
+getFirestore,
+collection,
+doc,
+addDoc,
+deleteDoc,
+getDoc,
+getDocs,
+updateDoc,
+onSnapshot
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+import {
+getAuth,
+GoogleAuthProvider,
+signInWithPopup,
+onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+const firebaseConfig={
+
+apiKey:"AIzaSyBnP9QJgg6d874QB-a4meFbprLMEufRzuY",
+authDomain:"refer-earn-73e38.firebaseapp.com",
+projectId:"refer-earn-73e38",
+storageBucket:"refer-earn-73e38.firebasestorage.app",
+messagingSenderId:"323369987305",
+appId:"1:323369987305:web:7c8eead19bff6454f4d478"
+
+};
+
+const app=
+initializeApp(firebaseConfig);
+
+const db=
+getFirestore(app);
+
+const auth=
+getAuth(app);
+
+const ADMIN_EMAIL=
+"antorahmed0185@gmail.com";
+
+document.getElementById(
+"loginBtn"
+).onclick=
+async()=>{
+
+await signInWithPopup(
+auth,
+new GoogleAuthProvider()
+);
+
+};
+
+onAuthStateChanged(
+auth,
+async(user)=>{
+
+if(!user) return;
+
+if(user.email!==ADMIN_EMAIL){
+
+document.getElementById(
+"status"
+).innerHTML=
+"❌ Access Denied";
+
+return;
+
+}
+
+document.getElementById(
+"status"
+).innerHTML=
+"✅ Logged In : " +
+user.email;
+
+document.getElementById(
+"adminPanel"
+).style.display=
+"block";
+
+loadStats();
+loadFacebookTasks();
+loadTaskSubmissions();
+loadActivations();
+loadWithdraws();
+loadSupports();
+
+});
+  async function loadStats(){
+
+const users=
+await getDocs(
+collection(db,"users")
+);
+
+document.getElementById(
+"totalUsers"
+).innerText=
+users.size;
+
+onSnapshot(
+collection(db,"taskSubmissions"),
+(snap)=>{
+
+let count=0;
+
+snap.forEach(d=>{
+
+if(
+d.data().status==="pending"
+){
+count++;
+}
+
+});
+
+document.getElementById(
+"pendingTasks"
+).innerText=
+count;
+
+});
+
+onSnapshot(
+collection(db,"activationRequests"),
+(snap)=>{
+
+let count=0;
+
+snap.forEach(d=>{
+
+if(
+d.data().status==="pending"
+){
+count++;
+}
+
+});
+
+document.getElementById(
+"pendingActivation"
+).innerText=
+count;
+
+});
+
+onSnapshot(
+collection(db,"withdrawRequests"),
+(snap)=>{
+
+let count=0;
+
+snap.forEach(d=>{
+
+if(
+d.data().status==="pending"
+){
+count++;
+}
+
+});
+
+document.getElementById(
+"pendingWithdraw"
+).innerText=
+count;
+
+});
+
+onSnapshot(
+collection(db,"supportTickets"),
+(snap)=>{
+
+document.getElementById(
+"supportCount"
+).innerText=
+snap.size;
+
+});
+
+}
+
+/* ADD FACEBOOK TASK */
+
+document.getElementById(
+"addTaskBtn"
+).onclick=
+async()=>{
+
+const title=
+document.getElementById(
+"taskTitle"
+).value.trim();
+
+const link=
+document.getElementById(
+"taskLink"
+).value.trim();
+
+if(!title || !link){
+
+alert(
+"Fill All Fields"
+);
+
+return;
+
+}
+
+await addDoc(
+collection(
+db,
+"facebookTasks"
+),
+{
+title:title,
+postLink:link,
+createdAt:Date.now()
+}
+);
+
+document.getElementById(
+"taskTitle"
+).value="";
+
+document.getElementById(
+"taskLink"
+).value="";
+
+alert(
+"Facebook Task Added"
+);
+
+};
+
+function loadFacebookTasks(){
+
+onSnapshot(
+collection(db,"facebookTasks"),
+(snap)=>{
+
+let box=
+document.getElementById(
+"facebookTaskList"
+);
+
+box.innerHTML="";
+
+let i=1;
+
+snap.forEach(d=>{
+
+const data=d.data();
+
+box.innerHTML+=`
+
+<div class="request">
+
+<b>
+${i}. ${data.title}
+</b>
+
+<br><br>
+
+${data.postLink}
+
+<br><br>
+
+<button
+class="reject"
+onclick="deleteTask('${d.id}')">
+
+Delete Task
+
+</button>
+
+</div>
+
+`;
+
+i++;
+
+});
+
+if(box.innerHTML===""){
+
+box.innerHTML=
+"No Active Tasks";
+
+}
+
+});
+
+}
+
+window.deleteTask=
+async(id)=>{
+
+await deleteDoc(
+doc(
+db,
+"facebookTasks",
+id
+)
+);
+
+alert(
+"Task Deleted"
+);
+
+};
+  function loadTaskSubmissions(){
+
+onSnapshot(
+collection(db,"taskSubmissions"),
+(snap)=>{
+
+let box=
+document.getElementById(
+"taskSubmissionList"
+);
+
+box.innerHTML="";
+
+snap.forEach(d=>{
+
+const data=d.data();
+
+box.innerHTML+=`
+
+<div class="request">
+
+<b>${data.email}</b>
+
+<br><br>
+
+Facebook Profile:
+
+<br>
+
+<a href="${data.profileLink}"
+target="_blank">
+
+${data.profileLink}
+
+</a>
+
+<br><br>
+
+Reward:
+${data.reward || 5}৳
+
+<br><br>
+
+Status:
+<b>${data.status}</b>
+
+<br><br>
+
+${
+data.status==="pending"
+?
+
+`
+
+<button
+class="approve"
+onclick="approveTask(
+'${d.id}',
+'${data.uid}'
+)">
+
+Approve +5৳
+
+</button>
+
+<button
+class="reject"
+onclick="rejectTask(
+'${d.id}'
+)">
+
+Reject
+
+</button>
+
+`
+
+:
+
+""
+
+}
+
+</div>
+
+`;
+
+});
+
+if(box.innerHTML===""){
+
+box.innerHTML=
+"No Submission Found";
+
+}
+
+});
+
+}
+
+window.approveTask=
+async(id,uid)=>{
+
+const userRef=
+doc(db,"users",uid);
+
+const userSnap=
+await getDoc(userRef);
+
+const balance=
+userSnap.data().balance || 0;
+
+await updateDoc(
+userRef,
+{
+balance:balance+5
+}
+);
+
+await updateDoc(
+doc(db,"taskSubmissions",id),
+{
+status:"approved"
+}
+);
+
+alert(
+"Task Approved + 5৳ Added"
+);
+
+};
+
+window.rejectTask=
+async(id)=>{
+
+await updateDoc(
+doc(db,"taskSubmissions",id),
+{
+status:"rejected"
+}
+);
+
+alert(
+"Task Rejected"
+);
+
+};
+
+/* ACTIVATION REQUESTS */
+
+function loadActivations(){
+
+onSnapshot(
+collection(db,"activationRequests"),
+(snap)=>{
+
+let box=
+document.getElementById(
+"activationList"
+);
+
+box.innerHTML="";
+
+snap.forEach(d=>{
+
+const data=d.data();
+
+box.innerHTML+=`
+
+<div class="request">
+
+<b>${data.email}</b>
+
+<br><br>
+
+Number:
+${data.number}
+
+<br>
+
+TRX ID:
+${data.trxId}
+
+<br><br>
+
+Status:
+<b>${data.status}</b>
+
+<br><br>
+
+${
+data.status==="pending"
+?
+
+`
+
+<button
+class="approve"
+onclick="approveActivation(
+'${d.id}',
+'${data.uid}'
+)">
+
+Approve +50৳ Bonus
+
+</button>
+
+<button
+class="reject"
+onclick="rejectActivation(
+'${d.id}'
+)">
+
+Reject
+
+</button>
+
+`
+
+:
+
+""
+
+}
+
+</div>
+
+`;
+
+});
+
+if(box.innerHTML===""){
+
+box.innerHTML=
+"No Activation Request";
+
+}
+
+});
+
+}
+
+window.approveActivation=
+async(id,uid)=>{
+
+const userRef=
+doc(db,"users",uid);
+
+const userSnap=
+await getDoc(userRef);
+
+const balance=
+userSnap.data().balance || 0;
+
+await updateDoc(
+userRef,
+{
+active:true,
+balance:balance+50
+}
+);
+
+await updateDoc(
+doc(db,"activationRequests",id),
+{
+status:"approved"
+}
+);
+
+alert(
+"Account Activated + 50৳ Bonus Added"
+);
+
+};
+
+window.rejectActivation=
+async(id)=>{
+
+await updateDoc(
+doc(db,"activationRequests",id),
+{
+status:"rejected"
+}
+);
+
+alert(
+"Activation Rejected"
+);
+
+};
+  /* WITHDRAW REQUESTS */
+
+function loadWithdraws(){
+
+onSnapshot(
+collection(db,"withdrawRequests"),
+(snap)=>{
+
+let box=
+document.getElementById(
+"withdrawList"
+);
+
+box.innerHTML="";
+
+snap.forEach(d=>{
+
+const data=d.data();
+
+box.innerHTML+=`
+
+<div class="request">
+
+<b>${data.email}</b>
+
+<br><br>
+
+Method:
+${data.method}
+
+<br>
+
+Number:
+${data.number}
+
+<br>
+
+Amount:
+${data.amount}৳
+
+<br><br>
+
+Status:
+<b>${data.status}</b>
+
+<br><br>
+
+${
+data.status==="pending"
+?
+
+`
+
+<button
+class="approve"
+onclick="approveWithdraw(
+'${d.id}',
+'${data.uid}',
+${data.amount}
+)">
+
+Approve
+
+</button>
+
+<button
+class="reject"
+onclick="rejectWithdraw(
+'${d.id}'
+)">
+
+Reject
+
+</button>
+
+`
+
+:
+
+""
+
+}
+
+</div>
+
+`;
+
+});
+
+if(box.innerHTML===""){
+
+box.innerHTML=
+"No Withdraw Request";
+
+}
+
+});
+
+}
+
+window.approveWithdraw=
+async(id,uid,amount)=>{
+
+const userRef=
+doc(db,"users",uid);
+
+const userSnap=
+await getDoc(userRef);
+
+const balance=
+userSnap.data().balance || 0;
+
+if(balance<amount){
+
+alert(
+"User Balance Not Enough"
+);
+
+return;
+
+}
+
+await updateDoc(
+userRef,
+{
+balance:balance-amount
+}
+);
+
+await updateDoc(
+doc(db,"withdrawRequests",id),
+{
+status:"approved"
+}
+);
+
+alert(
+"Withdraw Approved"
+);
+
+};
+
+window.rejectWithdraw=
+async(id)=>{
+
+await updateDoc(
+doc(db,"withdrawRequests",id),
+{
+status:"rejected"
+}
+);
+
+alert(
+"Withdraw Rejected"
+);
+
+};
+
+/* SUPPORT TICKETS */
+
+function loadSupports(){
+
+onSnapshot(
+collection(db,"supportTickets"),
+(snap)=>{
+
+let box=
+document.getElementById(
+"supportList"
+);
+
+box.innerHTML="";
+
+snap.forEach(d=>{
+
+const data=d.data();
+
+box.innerHTML+=`
+
+<div class="request">
+
+<b>${data.email}</b>
+
+<br><br>
+
+Problem Type:
+${data.type}
+
+<br><br>
+
+Message:
+
+<br>
+
+${data.message}
+
+<br><br>
+
+<textarea
+id="reply_${d.id}"
+placeholder="Write Reply..."
+>${data.reply || ""}</textarea>
+
+<button
+class="reply"
+onclick="sendReply(
+'${d.id}'
+)">
+
+Send Reply
+
+</button>
+
+</div>
+
+`;
+
+});
+
+if(box.innerHTML===""){
+
+box.innerHTML=
+"No Support Ticket";
+
+}
+
+});
+
+}
+
+window.sendReply=
+async(id)=>{
+
+const reply=
+document.getElementById(
+"reply_"+id
+).value.trim();
+
+if(!reply){
+
+alert(
+"Write Reply First"
+);
+
+return;
+
+}
+
+await updateDoc(
+doc(db,"supportTickets",id),
+{
+reply:reply,
+status:"answered"
+}
+);
+
+alert(
+"Reply Sent Successfully"
+);
+
+};
+
+</script>
+
+</body>
+  </html>
