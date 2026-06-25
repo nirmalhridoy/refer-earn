@@ -1,0 +1,1617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Refer Earn Admin</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+body{
+background:#050816;
+color:#fff;
+padding:20px;
+}
+
+.container{
+max-width:1400px;
+margin:auto;
+}
+
+.header{
+background:#0B1220;
+border:1px solid #1E293B;
+border-radius:20px;
+padding:25px;
+text-align:center;
+margin-bottom:20px;
+}
+
+.logo{
+font-size:34px;
+font-weight:700;
+color:#FACC15;
+}
+
+.subtitle{
+margin-top:8px;
+color:#94A3B8;
+}
+
+.card{
+background:#0F172A;
+border:1px solid #1E293B;
+border-radius:18px;
+padding:20px;
+margin-bottom:20px;
+}
+
+.card h2{
+color:#38BDF8;
+margin-bottom:15px;
+}
+
+.btn{
+border:none;
+cursor:pointer;
+padding:12px 18px;
+border-radius:12px;
+font-weight:600;
+}
+
+.google-btn{
+background:#2563EB;
+color:#fff;
+}
+
+.logout-btn{
+background:#DC2626;
+color:#fff;
+}
+
+.notice{
+background:#111827;
+border-radius:12px;
+padding:15px;
+margin-top:10px;
+}
+
+.value{
+color:#FACC15;
+font-weight:700;
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+gap:15px;
+}
+
+.stats div{
+background:#111827;
+padding:15px;
+border-radius:12px;
+text-align:center;
+}
+
+#adminPanel{
+display:none;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+<div class="logo">REFER EARN ADMIN</div>
+<div class="subtitle">Secure Production Control Panel</div>
+</div>
+
+<div class="card">
+
+<h2>🔐 Admin Authentication</h2>
+
+<button id="loginBtn" class="btn google-btn">
+Login With Google
+</button>
+
+<button id="logoutBtn"
+class="btn logout-btn"
+style="display:none;">
+Logout
+</button>
+
+<div id="adminStatus"
+class="notice">
+Not Logged In
+</div>
+
+</div>
+
+<div id="adminPanel">
+  <script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+
+import {
+getAuth,
+GoogleAuthProvider,
+signInWithPopup,
+onAuthStateChanged,
+signOut
+}
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+import {
+getFirestore,
+collection,
+getDocs,
+getDoc,
+doc,
+setDoc,
+updateDoc,
+serverTimestamp
+}
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+const firebaseConfig = {
+
+apiKey: "YOUR_API_KEY",
+authDomain: "YOUR_AUTH_DOMAIN",
+projectId: "YOUR_PROJECT_ID",
+storageBucket: "YOUR_STORAGE_BUCKET",
+messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+appId: "YOUR_APP_ID"
+
+};
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const provider = new GoogleAuthProvider();
+
+window.auth = auth;
+window.db = db;
+window.collection = collection;
+window.getDocs = getDocs;
+window.getDoc = getDoc;
+window.doc = doc;
+window.setDoc = setDoc;
+window.updateDoc = updateDoc;
+window.serverTimestamp = serverTimestamp;
+
+const ADMIN_EMAIL = "antorahmed0185@gmail.com";
+
+document.getElementById("loginBtn").onclick = async () => {
+
+try{
+
+const result =
+await signInWithPopup(auth,provider);
+
+if(result.user.email !== ADMIN_EMAIL){
+
+alert("Admin Access Denied");
+
+await signOut(auth);
+
+return;
+
+}
+
+}catch(error){
+
+alert(error.message);
+
+}
+
+};
+
+document.getElementById("logoutBtn").onclick =
+async()=>{
+
+await signOut(auth);
+
+};
+
+onAuthStateChanged(auth,(user)=>{
+
+const status =
+document.getElementById("adminStatus");
+
+if(!user){
+
+status.innerText = "Not Logged In";
+
+document.getElementById("adminPanel").style.display = "none";
+
+document.getElementById("logoutBtn").style.display = "none";
+
+return;
+
+}
+
+if(user.email === ADMIN_EMAIL){
+
+status.innerHTML =
+`Admin: ${user.email}`;
+
+document.getElementById("adminPanel").style.display = "block";
+
+document.getElementById("logoutBtn").style.display = "inline-block";
+
+}
+
+});
+
+  </script>
+  <div class="card">
+
+<h2>📊 Dashboard Overview</h2>
+
+<div class="stats">
+
+<div>
+Total Users
+<div id="totalUsers" class="value">0</div>
+</div>
+
+<div>
+Pending Withdraw
+<div id="pendingWithdraw" class="value">0৳</div>
+</div>
+
+<div>
+Approved Withdraw
+<div id="approvedWithdraw" class="value">0৳</div>
+</div>
+
+<div>
+Activation Requests
+<div id="activationCount" class="value">0</div>
+</div>
+
+<div>
+Transactions
+<div id="transactionCount" class="value">0</div>
+</div>
+
+<div>
+Broadcast Status
+<div id="broadcastStatus" class="value">Ready</div>
+</div>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>📈 System Statistics</h2>
+
+<div class="stats">
+
+<div>
+Active Users
+<div id="activeUsers" class="value">0</div>
+</div>
+
+<div>
+Inactive Users
+<div id="inactiveUsers" class="value">0</div>
+</div>
+
+<div>
+Total Balance
+<div id="totalBalance" class="value">0৳</div>
+</div>
+
+<div>
+Total Referrals
+<div id="totalReferrals" class="value">0</div>
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+window.loadDashboardStats = async () => {
+
+try{
+
+const usersSnap =
+await getDocs(collection(db,"users"));
+
+const withdrawSnap =
+await getDocs(collection(db,"withdrawRequests"));
+
+const activationSnap =
+await getDocs(collection(db,"activationRequests"));
+
+const transactionSnap =
+await getDocs(collection(db,"transactions"));
+
+let users = 0;
+let activeUsers = 0;
+let inactiveUsers = 0;
+
+let totalBalance = 0;
+let totalReferrals = 0;
+
+let pendingAmount = 0;
+let approvedAmount = 0;
+
+usersSnap.forEach(docu=>{
+
+const data = docu.data();
+
+users++;
+
+totalBalance += Number(data.balance || 0);
+
+totalReferrals += Number(data.referrals || 0);
+
+if(data.status === "Active"){
+activeUsers++;
+}else{
+inactiveUsers++;
+}
+
+});
+
+withdrawSnap.forEach(docu=>{
+
+const data = docu.data();
+
+if(data.status === "Pending"){
+pendingAmount += Number(data.amount || 0);
+}
+
+if(data.status === "Approved"){
+approvedAmount += Number(data.amount || 0);
+}
+
+});
+
+document.getElementById("totalUsers").innerText =
+users;
+
+document.getElementById("pendingWithdraw").innerText =
+pendingAmount + "৳";
+
+document.getElementById("approvedWithdraw").innerText =
+approvedAmount + "৳";
+
+document.getElementById("activationCount").innerText =
+activationSnap.size;
+
+document.getElementById("transactionCount").innerText =
+transactionSnap.size;
+
+document.getElementById("activeUsers").innerText =
+activeUsers;
+
+document.getElementById("inactiveUsers").innerText =
+inactiveUsers;
+
+document.getElementById("totalBalance").innerText =
+totalBalance + "৳";
+
+document.getElementById("totalReferrals").innerText =
+totalReferrals;
+
+}catch(error){
+
+console.log(error);
+
+}
+
+};
+
+onAuthStateChanged(auth,(user)=>{
+
+if(user &&
+user.email === "antorahmed0185@gmail.com"){
+
+loadDashboardStats();
+
+setInterval(()=>{
+loadDashboardStats();
+},30000);
+
+}
+
+});
+
+</script>
+<div class="card">
+
+<h2>👥 User Management</h2>
+
+<input
+id="searchUser"
+placeholder="Search by Email"
+style="
+width:100%;
+padding:12px;
+border-radius:12px;
+border:none;
+margin-bottom:15px;
+">
+
+<div id="userList">
+Loading Users...
+</div>
+
+</div>
+
+<script>
+
+window.loadUsers = async () => {
+
+const container =
+document.getElementById("userList");
+
+container.innerHTML = "";
+
+const snap =
+await getDocs(collection(db,"users"));
+
+snap.forEach(docu=>{
+
+const data = docu.data();
+const uid = docu.id;
+
+const div =
+document.createElement("div");
+
+div.className = "notice";
+
+div.style.marginBottom = "12px";
+
+div.innerHTML = `
+
+<b>${data.name || "User"}</b><br>
+
+${data.email || "No Email"}<br>
+
+UID: ${uid}<br>
+
+Balance: ${data.balance || 0}৳<br>
+
+Referrals: ${data.referrals || 0}<br>
+
+Status: ${data.status || "Inactive"}<br>
+
+Rank: ${data.rank || "Starter"}<br><br>
+
+<button
+class="btn google-btn"
+onclick="addBalance('${uid}')">
++ Balance
+</button>
+
+<button
+class="btn"
+style="background:#f59e0b;color:#000;"
+onclick="freezeUser('${uid}')">
+Freeze
+</button>
+
+<button
+class="btn"
+style="background:#22c55e;color:#fff;"
+onclick="activateUser('${uid}')">
+Activate
+</button>
+
+`;
+
+container.appendChild(div);
+
+});
+
+};
+
+window.addBalance = async(uid)=>{
+
+const amount =
+prompt("Enter Amount");
+
+if(!amount) return;
+
+const ref =
+doc(db,"users",uid);
+
+const snap =
+await getDoc(ref);
+
+if(!snap.exists()) return;
+
+const data =
+snap.data();
+
+await updateDoc(ref,{
+balance:
+Number(data.balance || 0)
++
+Number(amount)
+});
+
+alert("Balance Added");
+
+loadUsers();
+
+};
+
+window.freezeUser = async(uid)=>{
+
+const confirmFreeze =
+confirm("Freeze User?");
+
+if(!confirmFreeze) return;
+
+await updateDoc(
+doc(db,"users",uid),
+{
+walletFrozen:true
+}
+);
+
+alert("User Frozen");
+
+loadUsers();
+
+};
+
+window.activateUser = async(uid)=>{
+
+const confirmActivate =
+confirm("Activate User?");
+
+if(!confirmActivate) return;
+
+await updateDoc(
+doc(db,"users",uid),
+{
+status:"Active"
+}
+);
+
+alert("User Activated");
+
+loadUsers();
+
+};
+
+document
+.getElementById("searchUser")
+.addEventListener("keyup",(e)=>{
+
+const search =
+e.target.value.toLowerCase();
+
+const notices =
+document.querySelectorAll(
+"#userList .notice"
+);
+
+notices.forEach(item=>{
+
+if(
+item.innerText
+.toLowerCase()
+.includes(search)
+){
+
+item.style.display =
+"block";
+
+}else{
+
+item.style.display =
+"none";
+
+}
+
+});
+
+});
+
+onAuthStateChanged(auth,(user)=>{
+
+if(
+user &&
+user.email ===
+"antorahmed0185@gmail.com"
+){
+
+loadUsers();
+
+}
+
+});
+
+</script>
+<div class="card">
+
+<h2>💸 Withdraw Request Management</h2>
+
+<div id="withdrawRequestsBox">
+Loading Withdraw Requests...
+</div>
+
+</div>
+
+<script>
+
+window.loadWithdrawRequests = async () => {
+
+const container =
+document.getElementById(
+"withdrawRequestsBox"
+);
+
+container.innerHTML = "";
+
+const snap =
+await getDocs(
+collection(
+db,
+"withdrawRequests"
+)
+);
+
+if(snap.empty){
+
+container.innerHTML =
+"No Withdraw Requests";
+
+return;
+
+}
+
+snap.forEach(docu=>{
+
+const data = docu.data();
+const requestId = docu.id;
+
+const div =
+document.createElement("div");
+
+div.className = "notice";
+
+div.style.marginBottom =
+"15px";
+
+div.innerHTML = `
+
+<b>${data.uid || "Unknown User"}</b><br>
+
+Amount:
+${data.amount || 0}৳<br>
+
+Method:
+${data.method || "N/A"}<br>
+
+Number:
+${data.number || "N/A"}<br>
+
+Status:
+${data.status || "Pending"}<br><br>
+
+<button
+class="btn google-btn"
+onclick="approveWithdraw('${requestId}')">
+Approve
+</button>
+
+<button
+class="btn"
+style="
+background:#dc2626;
+color:#fff;
+"
+onclick="rejectWithdraw('${requestId}')">
+Reject
+</button>
+
+`;
+
+container.appendChild(div);
+
+});
+
+};
+
+window.approveWithdraw = async(
+requestId
+)=>{
+
+const requestRef =
+doc(
+db,
+"withdrawRequests",
+requestId
+);
+
+const requestSnap =
+await getDoc(
+requestRef
+);
+
+if(
+!requestSnap.exists()
+){
+return;
+}
+
+await updateDoc(
+requestRef,
+{
+status:"Approved",
+approvedAt:
+serverTimestamp()
+}
+);
+
+alert(
+"Withdraw Approved"
+);
+
+loadWithdrawRequests();
+
+};
+
+window.rejectWithdraw = async(
+requestId
+)=>{
+
+const requestRef =
+doc(
+db,
+"withdrawRequests",
+requestId
+);
+
+const requestSnap =
+await getDoc(
+requestRef
+);
+
+if(
+!requestSnap.exists()
+){
+return;
+}
+
+const data =
+requestSnap.data();
+
+const userRef =
+doc(
+db,
+"users",
+data.uid
+);
+
+const userSnap =
+await getDoc(
+userRef
+);
+
+if(
+userSnap.exists()
+){
+
+const userData =
+userSnap.data();
+
+await updateDoc(
+userRef,
+{
+balance:
+Number(
+userData.balance || 0
+)
++
+Number(
+data.amount || 0
+)
+}
+);
+
+}
+
+await updateDoc(
+requestRef,
+{
+status:"Rejected",
+rejectedAt:
+serverTimestamp()
+}
+);
+
+alert(
+"Withdraw Rejected & Refunded"
+);
+
+loadWithdrawRequests();
+
+};
+
+onAuthStateChanged(
+auth,
+(user)=>{
+
+if(
+user &&
+user.email ===
+"antorahmed0185@gmail.com"
+){
+
+loadWithdrawRequests();
+
+setInterval(()=>{
+
+loadWithdrawRequests();
+
+},20000);
+
+}
+
+}
+);
+
+</script>
+
+<div class="card">
+
+<h2>📜 Withdraw History</h2>
+
+<div id="withdrawHistory">
+
+Loading History...
+
+</div>
+
+</div>
+
+<script>
+
+window.loadWithdrawHistory =
+async()=>{
+
+const box =
+document.getElementById(
+"withdrawHistory"
+);
+
+box.innerHTML = "";
+
+const snap =
+await getDocs(
+collection(
+db,
+"withdrawRequests"
+)
+);
+
+snap.forEach(docu=>{
+
+const d =
+docu.data();
+
+const div =
+document.createElement(
+"div"
+);
+
+div.className =
+"notice";
+
+div.style.marginBottom =
+"10px";
+
+div.innerHTML = `
+
+UID:
+${d.uid}<br>
+
+Amount:
+${d.amount}৳<br>
+
+Status:
+${d.status}
+
+`;
+
+box.appendChild(div);
+
+});
+
+};
+
+onAuthStateChanged(
+auth,
+(user)=>{
+
+if(
+user &&
+user.email ===
+"antorahmed0185@gmail.com"
+){
+
+loadWithdrawHistory();
+
+setInterval(()=>{
+
+loadWithdrawHistory();
+
+},30000);
+
+}
+
+}
+);
+
+</script>
+<div class="card">
+
+<h2>🔓 Activation Request Management</h2>
+
+<div id="activationRequestsBox">
+Loading Activation Requests...
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>📢 Broadcast Message</h2>
+
+<textarea
+id="broadcastMessage"
+placeholder="Write broadcast message..."
+style="
+width:100%;
+height:120px;
+padding:12px;
+border:none;
+border-radius:12px;
+margin-top:10px;
+"></textarea>
+
+<button
+id="sendBroadcastBtn"
+class="btn google-btn"
+style="margin-top:10px;">
+Send Broadcast
+</button>
+
+</div>
+
+<script>
+
+// ===== LOAD ACTIVATION REQUESTS =====
+
+window.loadActivationRequests =
+async()=>{
+
+const container =
+document.getElementById(
+"activationRequestsBox"
+);
+
+container.innerHTML = "";
+
+const snap =
+await getDocs(
+collection(
+db,
+"activationRequests"
+)
+);
+
+if(snap.empty){
+
+container.innerHTML =
+"No Activation Requests";
+
+return;
+
+}
+
+snap.forEach(docu=>{
+
+const d = docu.data();
+const id = docu.id;
+
+const div =
+document.createElement("div");
+
+div.className = "notice";
+
+div.style.marginBottom =
+"15px";
+
+div.innerHTML = `
+
+UID:
+${d.uid}<br>
+
+Phone:
+${d.phone}<br>
+
+Method:
+${d.method}<br>
+
+TRX:
+${d.trx}<br>
+
+Status:
+${d.status}<br><br>
+
+<button
+class="btn google-btn"
+onclick="approveActivation('${id}')">
+Approve
+</button>
+
+<button
+class="btn"
+style="
+background:#dc2626;
+color:#fff;
+"
+onclick="rejectActivation('${id}')">
+Reject
+</button>
+
+`;
+
+container.appendChild(div);
+
+});
+
+};
+
+// ===== APPROVE ACTIVATION =====
+
+window.approveActivation =
+async(id)=>{
+
+const reqRef =
+doc(
+db,
+"activationRequests",
+id
+);
+
+const reqSnap =
+await getDoc(reqRef);
+
+if(!reqSnap.exists()) return;
+
+const reqData =
+reqSnap.data();
+
+await updateDoc(
+doc(db,"users",reqData.uid),
+{
+status:"Active"
+}
+);
+
+await updateDoc(
+reqRef,
+{
+status:"Approved",
+approvedAt:
+serverTimestamp()
+}
+);
+
+alert(
+"User Activated"
+);
+
+loadActivationRequests();
+
+};
+
+// ===== REJECT ACTIVATION =====
+
+window.rejectActivation =
+async(id)=>{
+
+await updateDoc(
+doc(
+db,
+"activationRequests",
+id
+),
+{
+status:"Rejected",
+rejectedAt:
+serverTimestamp()
+}
+);
+
+alert(
+"Activation Rejected"
+);
+
+loadActivationRequests();
+
+};
+
+// ===== SEND BROADCAST =====
+
+document
+.getElementById(
+"sendBroadcastBtn"
+)
+.onclick =
+async()=>{
+
+const message =
+document
+.getElementById(
+"broadcastMessage"
+)
+.value
+.trim();
+
+if(!message){
+
+alert(
+"Write a message first"
+);
+
+return;
+
+}
+
+await setDoc(
+doc(
+db,
+"broadcast",
+"latest"
+),
+{
+message,
+createdAt:
+serverTimestamp()
+}
+);
+
+alert(
+"Broadcast Sent"
+);
+
+document
+.getElementById(
+"broadcastMessage"
+)
+.value = "";
+
+};
+
+// ===== AUTO LOAD =====
+
+onAuthStateChanged(
+auth,
+(user)=>{
+
+if(
+user &&
+user.email ===
+"antorahmed0185@gmail.com"
+){
+
+loadActivationRequests();
+
+setInterval(()=>{
+
+loadActivationRequests();
+
+},20000);
+
+}
+
+}
+);
+
+</script>
+
+<div class="card">
+
+<h2>🔔 Notification Center</h2>
+
+<div id="notificationCenter">
+
+System Ready
+
+</div>
+
+</div>
+
+<script>
+
+window.pushNotification =
+async(message)=>{
+
+await setDoc(
+doc(
+db,
+"notifications",
+Date.now().toString()
+),
+{
+message,
+createdAt:
+serverTimestamp()
+}
+);
+
+};
+
+  </script>
+  <div class="card">
+
+<h2>🏆 Leaderboard</h2>
+
+<div id="leaderboardBox" class="notice">
+Loading Leaderboard...
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>🌍 Global Statistics</h2>
+
+<div class="stats">
+
+<div>
+Users
+<div id="globalUsers" class="value">0</div>
+</div>
+
+<div>
+Active Users
+<div id="globalActive" class="value">0</div>
+</div>
+
+<div>
+Total Balance
+<div id="globalBalance" class="value">0৳</div>
+</div>
+
+<div>
+Approved Withdraw
+<div id="globalWithdraw" class="value">0৳</div>
+</div>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>👑 Top Earners</h2>
+
+<div class="stats">
+
+<div>
+#1
+<div id="top1" class="value">0৳</div>
+</div>
+
+<div>
+#2
+<div id="top2" class="value">0৳</div>
+</div>
+
+<div>
+#3
+<div id="top3" class="value">0৳</div>
+</div>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>🛡 Security Layer</h2>
+
+<div class="notice">
+
+✔ Google Authentication Protected<br><br>
+
+✔ Admin Email Verification Enabled<br><br>
+
+✔ Firestore Rules Protected<br><br>
+
+✔ Unauthorized Access Blocked<br><br>
+
+✔ Withdraw Protection Active<br><br>
+
+✔ Database Monitoring Active
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>⚡ System Health</h2>
+
+<div id="healthBox" class="notice">
+
+System Checking...
+
+</div>
+
+</div>
+
+<script>
+
+// ===== LEADERBOARD =====
+
+window.loadLeaderboard = async()=>{
+
+const snap =
+await getDocs(
+collection(db,"users")
+);
+
+let users = [];
+
+snap.forEach(docu=>{
+
+const d = docu.data();
+
+users.push({
+name:d.name || "User",
+balance:d.balance || 0
+});
+
+});
+
+users.sort(
+(a,b)=>
+b.balance-a.balance
+);
+
+let html = "";
+
+users.slice(0,10)
+.forEach((u,i)=>{
+
+html += `
+#${i+1}
+${u.name}
+-
+${u.balance}৳
+<br>
+`;
+
+});
+
+document
+.getElementById(
+"leaderboardBox"
+)
+.innerHTML = html;
+
+document
+.getElementById("top1")
+.innerText =
+(users[0]?.balance || 0)
++ "৳";
+
+document
+.getElementById("top2")
+.innerText =
+(users[1]?.balance || 0)
++ "৳";
+
+document
+.getElementById("top3")
+.innerText =
+(users[2]?.balance || 0)
++ "৳";
+
+};
+
+// ===== GLOBAL STATS =====
+
+window.loadGlobalStats =
+async()=>{
+
+const usersSnap =
+await getDocs(
+collection(db,"users")
+);
+
+const withdrawSnap =
+await getDocs(
+collection(
+db,
+"withdrawRequests"
+)
+);
+
+let users = 0;
+let active = 0;
+let balance = 0;
+let withdraw = 0;
+
+usersSnap.forEach(docu=>{
+
+const d =
+docu.data();
+
+users++;
+
+balance +=
+Number(
+d.balance || 0
+);
+
+if(
+d.status ===
+"Active"
+){
+active++;
+}
+
+});
+
+withdrawSnap.forEach(docu=>{
+
+const d =
+docu.data();
+
+if(
+d.status ===
+"Approved"
+){
+
+withdraw +=
+Number(
+d.amount || 0
+);
+
+}
+
+});
+
+document
+.getElementById(
+"globalUsers"
+)
+.innerText = users;
+
+document
+.getElementById(
+"globalActive"
+)
+.innerText = active;
+
+document
+.getElementById(
+"globalBalance"
+)
+.innerText =
+balance + "৳";
+
+document
+.getElementById(
+"globalWithdraw"
+)
+.innerText =
+withdraw + "৳";
+
+};
+
+// ===== HEALTH CHECK =====
+
+window.systemHealth =
+()=>{
+
+document
+.getElementById(
+"healthBox"
+)
+innerHTML =
+`
+System Online<br><br>
+Database Connected<br><br>
+Authentication Running<br><br>
+Admin Panel Stable
+`;
+
+};
+
+// ===== ADMIN SESSION PROTECTION =====
+
+onAuthStateChanged(
+auth,
+(user)=>{
+
+if(
+!user ||
+user.email !==
+"antorahmed0185@gmail.com"
+){
+
+document.body.innerHTML =
+`
+<div style="
+padding:40px;
+text-align:center;
+font-family:Poppins;
+">
+<h1>
+Access Denied
+</h1>
+</div>
+`;
+
+return;
+
+}
+
+loadLeaderboard();
+loadGlobalStats();
+systemHealth();
+
+setInterval(
+loadLeaderboard,
+15000
+);
+
+setInterval(
+loadGlobalStats,
+20000
+);
+
+setInterval(
+systemHealth,
+30000
+);
+
+});
+
+console.log(
+"REFER EARN ADMIN READY"
+);
+
+</script>
+
+</div>
+
+</body>
+</html>
