@@ -1,0 +1,2549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Refer Earn</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+}
+
+:root{
+--bg:#070b14;
+--card:#0f172a;
+--border:#1e293b;
+--gold:#facc15;
+--blue:#38bdf8;
+--green:#22c55e;
+--red:#ef4444;
+--text:#f8fafc;
+--muted:#94a3b8;
+}
+
+body{
+background:var(--bg);
+color:var(--text);
+min-height:100vh;
+}
+
+.container{
+width:100%;
+max-width:1200px;
+margin:auto;
+padding:15px;
+}
+
+.header{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:20px;
+padding:25px;
+text-align:center;
+margin-bottom:15px;
+}
+
+.logo{
+font-size:32px;
+font-weight:700;
+color:var(--gold);
+}
+
+.subtitle{
+color:var(--muted);
+margin-top:8px;
+}
+
+.btn{
+border:none;
+border-radius:12px;
+padding:12px 18px;
+cursor:pointer;
+font-weight:600;
+transition:.2s;
+}
+
+.btn:hover{
+transform:translateY(-2px);
+}
+
+.google-btn{
+background:#4285F4;
+color:#fff;
+}
+
+.logout-btn{
+background:var(--red);
+color:#fff;
+}
+
+.card{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:18px;
+padding:18px;
+margin-bottom:15px;
+}
+
+.card h2{
+font-size:18px;
+margin-bottom:15px;
+color:var(--blue);
+}
+
+.stats{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+gap:12px;
+}
+
+.stat-box{
+background:#111827;
+padding:14px;
+border-radius:14px;
+border:1px solid #1f2937;
+}
+
+.label{
+font-size:13px;
+color:var(--muted);
+}
+
+.value{
+margin-top:5px;
+font-size:20px;
+font-weight:700;
+color:var(--gold);
+}
+
+input,
+select,
+textarea{
+width:100%;
+padding:12px;
+border:none;
+outline:none;
+border-radius:12px;
+background:#111827;
+color:#fff;
+margin-top:10px;
+}
+
+.notice{
+background:#111827;
+padding:12px;
+border-radius:12px;
+border:1px solid #1f2937;
+color:#cbd5e1;
+line-height:1.7;
+}
+
+.hidden{
+display:none;
+}
+
+@media(max-width:768px){
+
+.logo{
+font-size:26px;
+}
+
+.stats{
+grid-template-columns:1fr;
+}
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="header">
+
+<div class="logo">
+REFER EARN
+</div>
+
+<div class="subtitle">
+Refer • Earn • Grow
+</div>
+
+<button id="loginBtn" class="btn google-btn" style="margin-top:15px;">
+Login With Google
+</button>
+
+<button id="logoutBtn" class="btn logout-btn hidden" style="margin-top:15px;">
+Logout
+</button>
+
+<div id="userInfo" style="margin-top:15px;color:#94a3b8;">
+Not Logged In
+</div>
+
+</div>
+
+<div id="userSection" class="hidden">
+
+<div class="card">
+
+<h2>📊 Dashboard</h2>
+
+<div class="stats">
+
+<div class="stat-box">
+<div class="label">Balance</div>
+<div class="value" id="balance">0৳</div>
+</div>
+
+<div class="stat-box">
+<div class="label">Referrals</div>
+<div class="value" id="referrals">0</div>
+</div>
+
+<div class="stat-box">
+<div class="label">Rank</div>
+<div class="value" id="rank">Starter</div>
+</div>
+
+<div class="stat-box">
+<div class="label">Status</div>
+<div class="value" id="status">Inactive</div>
+</div>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>👤 Profile</h2>
+
+<div class="stats">
+
+<div class="stat-box">
+<div class="label">Name</div>
+<div class="value" id="userName">Guest</div>
+</div>
+
+<div class="stat-box">
+<div class="label">Email</div>
+<div class="value" id="userEmail">N/A</div>
+</div>
+
+<div class="stat-box">
+<div class="label">UID</div>
+<div class="value" id="userUid">N/A</div>
+</div>
+
+<div class="stat-box">
+<div class="label">Active Referrals</div>
+<div class="value" id="activeRef">0</div>
+</div>
+
+</div>
+
+  </div>
+  <div class="card">
+
+<h2>📢 Notice Board</h2>
+
+<div id="noticeBox" class="notice">
+Welcome to Refer Earn.<br>
+Complete activation to unlock all earning features.
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>🎁 Daily Bonus</h2>
+
+<button id="bonusBtn" class="btn" style="background:#22c55e;color:#fff;">
+Claim Daily Bonus
+</button>
+
+<div id="bonusStatus" class="notice" style="margin-top:10px;">
+Not Claimed Today
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>🎡 Lucky Spin</h2>
+
+<button id="spinBtn" class="btn" style="background:#facc15;color:#000;">
+SPIN NOW
+</button>
+
+<div id="spinStatus" class="notice" style="margin-top:10px;">
+Not Used Today
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>🔗 Referral Link</h2>
+
+<input id="refLink" readonly>
+
+<button id="copyRefBtn"
+class="btn"
+style="background:#6366f1;color:#fff;margin-top:10px;">
+Copy Referral Link
+</button>
+
+</div>
+
+<div class="card">
+
+<h2>🏆 Rank & Team</h2>
+
+<div class="stats">
+
+<div class="stat-box">
+<div class="label">Current Rank</div>
+<div class="value" id="rankBox">Starter</div>
+</div>
+
+<div class="stat-box">
+<div class="label">Team Size</div>
+<div class="value" id="teamBox">0</div>
+</div>
+
+<div class="stat-box">
+<div class="label">Wallet</div>
+<div class="value" id="walletBox">0৳</div>
+</div>
+
+<div class="stat-box">
+<div class="label">Active Team</div>
+<div class="value" id="activeBox">0</div>
+</div>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>🔔 Notifications</h2>
+
+<div id="notificationBox" class="notice">
+No Notifications
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>📜 Activity Log</h2>
+
+<div id="activityBox" class="notice">
+No Activity Yet
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>💳 Recent Transactions</h2>
+
+<div id="transactionBox" class="notice">
+No Transactions Found
+</div>
+
+</div>
+
+</div>
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+
+import {
+getAuth,
+GoogleAuthProvider,
+signInWithPopup,
+onAuthStateChanged,
+signOut
+}
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-auth.js";
+
+import {
+getFirestore,
+doc,
+getDoc,
+setDoc,
+updateDoc,
+collection,
+getDocs,
+query,
+where,
+orderBy,
+limit,
+serverTimestamp
+}
+from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+const firebaseConfig = {
+
+apiKey: "AIzaSyBnP9QJgg6d874QB-a4meFbprLMEufRzuY",
+authDomain: "refer-earn-73e38.firebaseapp.com",
+projectId: "refer-earn-73e38",
+storageBucket: "refer-earn-73e38.appspot.com",
+messagingSenderId: "323369987305",
+appId: "1:323369987305:web:7c8eead19bff6454f4d478"
+
+};
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+
+const db = getFirestore(app);
+
+const provider = new GoogleAuthProvider();
+
+window.auth = auth;
+window.db = db;
+
+window.doc = doc;
+window.getDoc = getDoc;
+window.setDoc = setDoc;
+window.updateDoc = updateDoc;
+window.collection = collection;
+window.getDocs = getDocs;
+window.serverTimestamp = serverTimestamp;
+
+const loginBtn = document.getElementById("loginBtn");
+const logoutBtn = document.getElementById("logoutBtn");
+const userInfo = document.getElementById("userInfo");
+
+loginBtn.onclick = async () => {
+
+try{
+
+await signInWithPopup(auth,provider);
+
+}catch(error){
+
+console.log(error);
+
+}
+
+};
+
+logoutBtn.onclick = async () => {
+
+await signOut(auth);
+
+};
+
+window.createUserDocument = async(user)=>{
+
+const userRef = doc(db,"users",user.uid);
+
+const snap = await getDoc(userRef);
+
+if(snap.exists()) return;
+
+await setDoc(userRef,{
+
+uid:user.uid,
+name:user.displayName || "",
+email:user.email || "",
+
+balance:0,
+referrals:0,
+
+rank:"Starter",
+status:"Inactive",
+
+walletFrozen:false,
+
+pendingWithdraw:0,
+
+createdAt:serverTimestamp()
+
+});
+
+};
+
+window.loadUserData = async(uid)=>{
+
+const userRef = doc(db,"users",uid);
+
+const snap = await getDoc(userRef);
+
+if(!snap.exists()) return null;
+
+return snap.data();
+
+};
+
+window.renderUser = (data)=>{
+
+if(!data) return;
+
+document.getElementById("userSection")
+.classList.remove("hidden");
+
+document.getElementById("balance")
+.innerText = (data.balance || 0) + "৳";
+
+document.getElementById("referrals")
+.innerText = data.referrals || 0;
+
+document.getElementById("rank")
+.innerText = data.rank || "Starter";
+
+document.getElementById("status")
+.innerText = data.status || "Inactive";
+
+document.getElementById("userName")
+.innerText = data.name || "User";
+
+document.getElementById("userEmail")
+.innerText = data.email || "";
+
+document.getElementById("userUid")
+.innerText = data.uid || "";
+
+document.getElementById("activeRef")
+.innerText = data.referrals || 0;
+
+document.getElementById("walletBox")
+.innerText = (data.balance || 0) + "৳";
+
+document.getElementById("teamBox")
+.innerText = data.referrals || 0;
+
+document.getElementById("activeBox")
+.innerText = data.referrals || 0;
+
+document.getElementById("rankBox")
+.innerText = data.rank || "Starter";
+
+};
+
+onAuthStateChanged(auth, async(user)=>{
+
+if(!user){
+
+userInfo.innerText = "Not Logged In";
+
+logoutBtn.classList.add("hidden");
+
+document.getElementById("userSection")
+.classList.add("hidden");
+
+return;
+
+}
+
+logoutBtn.classList.remove("hidden");
+
+userInfo.innerHTML =
+`<b>${user.displayName}</b><br>${user.email}`;
+
+await createUserDocument(user);
+
+const data = await loadUserData(user.uid);
+
+renderUser(data);
+
+document.getElementById("refLink").value =
+window.location.origin + "?ref=" + user.uid;
+
+});
+
+</script>
+<script>
+
+// =========================
+// UTILITIES
+// =========================
+
+window.todayKey = () => {
+return new Date().toDateString();
+};
+
+window.refreshDashboard = async () => {
+
+const user = auth.currentUser;
+
+if(!user) return;
+
+const snap = await getDoc(
+doc(db,"users",user.uid)
+);
+
+if(!snap.exists()) return;
+
+const data = snap.data();
+
+renderUser(data);
+
+};
+
+// =========================
+// COPY REFERRAL LINK
+// =========================
+
+document
+.getElementById("copyRefBtn")
+.onclick = async () => {
+
+const refLink =
+document.getElementById("refLink").value;
+
+try{
+
+await navigator.clipboard.writeText(refLink);
+
+document.getElementById("notificationBox")
+.innerText = "Referral link copied successfully.";
+
+}catch{
+
+document.getElementById("notificationBox")
+.innerText = "Copy failed.";
+
+}
+
+};
+
+// =========================
+// DAILY BONUS
+// =========================
+
+window.claimDailyBonus = async () => {
+
+const user = auth.currentUser;
+
+if(!user) return;
+
+const userRef =
+doc(db,"users",user.uid);
+
+const snap =
+await getDoc(userRef);
+
+if(!snap.exists()) return;
+
+const data = snap.data();
+
+if(data.lastBonus === todayKey()){
+
+document.getElementById("bonusStatus")
+.innerText = "Already claimed today.";
+
+return;
+
+}
+
+const currentBalance =
+Number(data.balance || 0);
+
+await updateDoc(userRef,{
+
+balance: currentBalance + 1,
+
+lastBonus: todayKey()
+
+});
+
+await setDoc(
+doc(db,"transactions",Date.now().toString()),
+{
+uid:user.uid,
+type:"Daily Bonus",
+amount:1,
+createdAt:serverTimestamp()
+}
+);
+
+document.getElementById("bonusStatus")
+.innerText = "1৳ added successfully.";
+
+document.getElementById("activityBox")
+.innerText = "Daily bonus claimed.";
+
+await refreshDashboard();
+
+};
+
+// =========================
+// BONUS BUTTON
+// =========================
+
+document
+.getElementById("bonusBtn")
+.onclick = claimDailyBonus;
+
+// =========================
+// LUCKY SPIN
+// =========================
+
+window.spinReward = async () => {
+
+const user = auth.currentUser;
+
+if(!user) return;
+
+const userRef =
+doc(db,"users",user.uid);
+
+const snap =
+await getDoc(userRef);
+
+if(!snap.exists()) return;
+
+const data = snap.data();
+
+if(data.lastSpin === todayKey()){
+
+document.getElementById("spinStatus")
+.innerText = "Spin already used today.";
+
+return;
+
+}
+
+const rewards = [
+0,
+1,
+2,
+3,
+5,
+10
+];
+
+const reward =
+rewards[
+Math.floor(
+Math.random() * rewards.length
+)
+];
+
+await updateDoc(userRef,{
+
+balance:
+(Number(data.balance || 0) + reward),
+
+lastSpin:todayKey()
+
+});
+
+await setDoc(
+doc(db,"transactions",Date.now().toString()),
+{
+uid:user.uid,
+type:"Lucky Spin",
+amount:reward,
+createdAt:serverTimestamp()
+}
+);
+
+if(reward > 0){
+
+document.getElementById("spinStatus")
+.innerText =
+reward + "৳ won";
+
+}else{
+
+document.getElementById("spinStatus")
+.innerText =
+"Better luck tomorrow";
+
+}
+
+document.getElementById("activityBox")
+.innerText =
+"Spin completed.";
+
+await refreshDashboard();
+
+};
+
+// =========================
+// SPIN BUTTON
+// =========================
+
+document
+.getElementById("spinBtn")
+.onclick = spinReward;
+
+// =========================
+// REFERRAL SYSTEM
+// =========================
+
+window.processReferral = async () => {
+
+const user = auth.currentUser;
+
+if(!user) return;
+
+const url =
+new URL(window.location.href);
+
+const refId =
+url.searchParams.get("ref");
+
+if(!refId) return;
+
+if(refId === user.uid) return;
+
+const userRef =
+doc(db,"users",user.uid);
+
+const userSnap =
+await getDoc(userRef);
+
+if(!userSnap.exists()) return;
+
+const userData =
+userSnap.data();
+
+if(userData.referredBy) return;
+
+await updateDoc(userRef,{
+
+referredBy: refId
+
+});
+
+const parentRef =
+doc(db,"users",refId);
+
+const parentSnap =
+await getDoc(parentRef);
+
+if(parentSnap.exists()){
+
+const parentData =
+parentSnap.data();
+
+await updateDoc(parentRef,{
+
+referrals:
+Number(parentData.referrals || 0) + 1
+
+});
+
+}
+
+};
+
+// =========================
+// AUTO REFERRAL CHECK
+// =========================
+
+onAuthStateChanged(auth,
+async(user)=>{
+
+if(!user) return;
+
+await processReferral();
+
+});
+
+// =========================
+// RANK SYSTEM
+// =========================
+
+window.updateRank = async(uid)=>{
+
+const ref =
+doc(db,"users",uid);
+
+const snap =
+await getDoc(ref);
+
+if(!snap.exists()) return;
+
+const data =
+snap.data();
+
+const refs =
+Number(data.referrals || 0);
+
+let rank =
+"Starter";
+
+if(refs >= 10){
+
+rank = "Bronze";
+
+}
+
+if(refs >= 25){
+
+rank = "Silver";
+
+}
+
+if(refs >= 50){
+
+rank = "Gold";
+
+}
+
+if(refs >= 100){
+
+rank = "Diamond";
+
+}
+
+await updateDoc(ref,{
+rank
+});
+
+};
+
+// =========================
+// AUTO REFRESH
+// =========================
+
+setInterval(async()=>{
+
+const user =
+auth.currentUser;
+
+if(!user) return;
+
+await updateRank(user.uid);
+
+await refreshDashboard();
+
+},30000);
+
+</script>
+<div class="card">
+
+<h2>🔓 Account Activation</h2>
+
+<input id="actPhone" placeholder="Phone Number">
+
+<input id="actTrx" placeholder="Transaction ID">
+
+<select id="actMethod">
+<option value="bKash">bKash</option>
+<option value="Nagad">Nagad</option>
+</select>
+
+<button id="activateBtn"
+class="btn"
+style="background:#3b82f6;color:#fff;margin-top:10px;">
+Submit Activation
+</button>
+
+<div id="activationStatus"
+class="notice"
+style="margin-top:10px;">
+Account Not Activated
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>💸 Withdraw Request</h2>
+
+<input id="withdrawNumber"
+placeholder="bKash / Nagad Number">
+
+<input id="withdrawAmount"
+type="number"
+placeholder="Withdraw Amount">
+
+<select id="withdrawMethod">
+<option value="bKash">bKash</option>
+<option value="Nagad">Nagad</option>
+</select>
+
+<button id="withdrawBtn"
+class="btn"
+style="background:#ef4444;color:#fff;margin-top:10px;">
+Request Withdraw
+</button>
+
+<div id="withdrawStatus"
+class="notice"
+style="margin-top:10px;">
+No Withdraw Request
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>💰 Wallet Security</h2>
+
+<div class="stats">
+
+<div class="stat-box">
+<div class="label">Wallet Status</div>
+<div class="value" id="walletStatus">
+Active
+</div>
+</div>
+
+<div class="stat-box">
+<div class="label">Frozen</div>
+<div class="value" id="walletFrozen">
+NO
+</div>
+</div>
+
+<div class="stat-box">
+<div class="label">Pending Withdraw</div>
+<div class="value" id="pendingWithdraw">
+0৳
+</div>
+</div>
+
+<div class="stat-box">
+<div class="label">Security</div>
+<div class="value">
+Protected
+</div>
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+// ==========================
+// TRANSACTION LOGGER
+// ==========================
+
+window.addTransaction = async(
+type,
+amount
+)=>{
+
+const user =
+auth.currentUser;
+
+if(!user) return;
+
+await setDoc(
+doc(
+db,
+"transactions",
+Date.now().toString()
+),
+{
+uid:user.uid,
+email:user.email,
+type,
+amount,
+createdAt:serverTimestamp()
+}
+);
+
+};
+
+// ==========================
+// ACTIVITY LOGGER
+// ==========================
+
+window.addActivity = async(
+message
+)=>{
+
+document.getElementById(
+"activityBox"
+).innerText = message;
+
+};
+
+// ==========================
+// NOTIFICATION ENGINE
+// ==========================
+
+window.showNotification = (
+message
+)=>{
+
+document.getElementById(
+"notificationBox"
+).innerText = message;
+
+};
+
+// ==========================
+// ACCOUNT ACTIVATION
+// ==========================
+
+window.submitActivation =
+async()=>{
+
+const user =
+auth.currentUser;
+
+if(!user) return;
+
+const phone =
+document.getElementById(
+"actPhone"
+).value.trim();
+
+const trx =
+document.getElementById(
+"actTrx"
+).value.trim();
+
+const method =
+document.getElementById(
+"actMethod"
+).value;
+
+if(phone.length < 11){
+
+showNotification(
+"Invalid phone number."
+);
+
+return;
+
+}
+
+if(trx.length < 4){
+
+showNotification(
+"Invalid transaction ID."
+);
+
+return;
+
+}
+
+await setDoc(
+doc(
+db,
+"activationRequests",
+user.uid
+),
+{
+uid:user.uid,
+email:user.email,
+name:user.displayName,
+
+phone,
+trx,
+method,
+
+status:"Pending",
+
+createdAt:
+serverTimestamp()
+}
+);
+
+document.getElementById(
+"activationStatus"
+).innerText =
+"Activation Request Submitted";
+
+showNotification(
+"Activation request sent."
+);
+
+addActivity(
+"Activation submitted."
+);
+
+};
+
+document
+.getElementById(
+"activateBtn"
+)
+.onclick =
+submitActivation;
+
+// ==========================
+// WITHDRAW SYSTEM
+// ==========================
+
+const MIN_WITHDRAW =
+300;
+
+window.requestWithdraw =
+async()=>{
+
+const user =
+auth.currentUser;
+
+if(!user) return;
+
+const number =
+document.getElementById(
+"withdrawNumber"
+).value.trim();
+
+const method =
+document.getElementById(
+"withdrawMethod"
+).value;
+
+const amount =
+Number(
+document.getElementById(
+"withdrawAmount"
+).value
+);
+
+if(number.length < 11){
+
+showNotification(
+"Invalid payment number."
+);
+
+return;
+
+}
+
+if(amount < MIN_WITHDRAW){
+
+document.getElementById(
+"withdrawStatus"
+).innerText =
+"Minimum withdraw 300৳";
+
+return;
+
+}
+
+const userRef =
+doc(
+db,
+"users",
+user.uid
+);
+
+const snap =
+await getDoc(
+userRef
+);
+
+if(!snap.exists()) return;
+
+const data =
+snap.data();
+
+const balance =
+Number(
+data.balance || 0
+);
+
+if(balance < amount){
+
+document.getElementById(
+"withdrawStatus"
+).innerText =
+"Insufficient balance";
+
+return;
+
+}
+
+await updateDoc(
+userRef,
+{
+balance:
+balance - amount,
+
+pendingWithdraw:
+Number(
+data.pendingWithdraw || 0
+)
++
+amount
+}
+);
+
+await setDoc(
+doc(
+db,
+"withdrawRequests",
+Date.now().toString()
+),
+{
+uid:user.uid,
+email:user.email,
+name:user.displayName,
+
+number,
+method,
+amount,
+
+status:"Pending",
+
+createdAt:
+serverTimestamp()
+}
+);
+
+await addTransaction(
+"Withdraw Request",
+amount
+);
+
+document.getElementById(
+"withdrawStatus"
+).innerText =
+"Withdraw Request Submitted";
+
+showNotification(
+"Withdraw request submitted."
+);
+
+addActivity(
+"Withdraw requested."
+);
+
+refreshDashboard();
+
+};
+
+document
+.getElementById(
+"withdrawBtn"
+)
+.onclick =
+requestWithdraw;
+
+// ==========================
+// WALLET SECURITY UI
+// ==========================
+
+window.updateWalletSecurity =
+async()=>{
+
+const user =
+auth.currentUser;
+
+if(!user) return;
+
+const snap =
+await getDoc(
+doc(
+db,
+"users",
+user.uid
+)
+);
+
+if(!snap.exists()) return;
+
+const data =
+snap.data();
+
+document.getElementById(
+"walletStatus"
+).innerText =
+data.status ||
+"Active";
+
+document.getElementById(
+"walletFrozen"
+).innerText =
+data.walletFrozen
+?
+"YES"
+:
+"NO";
+
+document.getElementById(
+"pendingWithdraw"
+).innerText =
+(
+data.pendingWithdraw || 0
+)
++
+"৳";
+
+};
+
+// ==========================
+// AUTO REFRESH
+// ==========================
+
+setInterval(()=>{
+
+if(auth.currentUser){
+
+updateWalletSecurity();
+
+}
+
+},15000);
+
+  </script>
+  <div class="card">
+
+<h2>💎 MLM Distribution Engine</h2>
+
+<div id="mlmStatus" class="notice">
+MLM System Ready
+</div>
+
+<div class="stats">
+
+<div class="stat-box">
+<div class="label">Level 1</div>
+<div class="value">75৳</div>
+</div>
+
+<div class="stat-box">
+<div class="label">Level 2</div>
+<div class="value">25৳</div>
+</div>
+
+<div class="stat-box">
+<div class="label">Level 3</div>
+<div class="value">5৳</div>
+</div>
+
+<div class="stat-box">
+<div class="label">Level 4</div>
+<div class="value">2.5৳</div>
+</div>
+
+<div class="stat-box">
+<div class="label">Level 5</div>
+<div class="value">1৳</div>
+</div>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>🏆 Leaderboard</h2>
+
+<div id="leaderboardBox" class="notice">
+Loading leaderboard...
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>🥇 Top Earners</h2>
+
+<div class="stats">
+
+<div class="stat-box">
+<div class="label">#1</div>
+<div class="value" id="top1">0৳</div>
+</div>
+
+<div class="stat-box">
+<div class="label">#2</div>
+<div class="value" id="top2">0৳</div>
+</div>
+
+<div class="stat-box">
+<div class="label">#3</div>
+<div class="value" id="top3">0৳</div>
+</div>
+
+<div class="stat-box">
+<div class="label">Your Rank</div>
+<div class="value" id="myRank">#0</div>
+</div>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h2>🌍 Global Statistics</h2>
+
+<div class="stats">
+
+<div class="stat-box">
+<div class="label">Total Users</div>
+<div class="value" id="globalUsers">0</div>
+</div>
+
+<div class="stat-box">
+<div class="label">Total Paid</div>
+<div class="value" id="globalPaid">0৳</div>
+</div>
+
+<div class="stat-box">
+<div class="label">Active Users</div>
+<div class="value" id="globalActive">0</div>
+</div>
+
+<div class="stat-box">
+<div class="label">Growth</div>
+<div class="value" id="globalGrowth">0%</div>
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+// =======================
+// MLM REWARD MAP
+// =======================
+
+const MLM_REWARD = {
+1:75,
+2:25,
+3:5,
+4:2.5,
+5:1
+};
+
+// =======================
+// MLM DISTRIBUTION
+// =======================
+
+window.distributeMLMReward =
+async(startUid)=>{
+
+let currentUid =
+startUid;
+
+for(
+let level=1;
+level<=5;
+level++
+){
+
+const userSnap =
+await getDoc(
+doc(
+db,
+"users",
+currentUid
+)
+);
+
+if(
+!userSnap.exists()
+) break;
+
+const userData =
+userSnap.data();
+
+const parentId =
+userData.referredBy;
+
+if(!parentId)
+break;
+
+const parentRef =
+doc(
+db,
+"users",
+parentId
+);
+
+const parentSnap =
+await getDoc(
+parentRef
+);
+
+if(
+parentSnap.exists()
+){
+
+const parentData =
+parentSnap.data();
+
+await updateDoc(
+parentRef,
+{
+balance:
+Number(
+parentData.balance || 0
+)
++
+MLM_REWARD[level]
+}
+);
+
+await setDoc(
+doc(
+db,
+"transactions",
+Date.now().toString()
+),
+{
+uid:parentId,
+type:
+"MLM Level " +
+level,
+amount:
+MLM_REWARD[level],
+createdAt:
+serverTimestamp()
+}
+);
+
+}
+
+currentUid =
+parentId;
+
+}
+
+};
+
+// =======================
+// LEADERBOARD
+// =======================
+
+window.loadLeaderboard =
+async()=>{
+
+const snap =
+await getDocs(
+collection(
+db,
+"users"
+)
+);
+
+let users = [];
+
+snap.forEach(
+docu=>{
+
+const d =
+docu.data();
+
+users.push({
+uid:d.uid,
+name:
+d.name ||
+"User",
+balance:
+Number(
+d.balance || 0
+)
+});
+
+}
+);
+
+users.sort(
+(a,b)=>
+b.balance -
+a.balance
+);
+
+let html =
+"";
+
+users
+.slice(0,10)
+.forEach(
+(u,index)=>{
+
+html +=
+`
+#${index+1}
+${u.name}
+-
+${u.balance}৳
+<br>
+`;
+
+}
+);
+
+document
+.getElementById(
+"leaderboardBox"
+)
+.innerHTML =
+html ||
+"No ranking data";
+
+document
+.getElementById(
+"top1"
+)
+.innerText =
+(
+users[0]
+?.balance
+||
+0
+)
++
+"৳";
+
+document
+.getElementById(
+"top2"
+)
+.innerText =
+(
+users[1]
+?.balance
+||
+0
+)
++
+"৳";
+
+document
+.getElementById(
+"top3"
+)
+.innerText =
+(
+users[2]
+?.balance
+||
+0
+)
++
+"৳";
+
+const currentUser =
+auth.currentUser;
+
+if(currentUser){
+
+const rank =
+users.findIndex(
+u=>
+u.uid ===
+currentUser.uid
+);
+
+document
+.getElementById(
+"myRank"
+)
+.innerText =
+"#" +
+(
+rank >= 0
+?
+rank + 1
+:
+0
+);
+
+}
+
+};
+
+// =======================
+// GLOBAL STATS
+// =======================
+
+window.loadGlobalStats =
+async()=>{
+
+const usersSnap =
+await getDocs(
+collection(
+db,
+"users"
+)
+);
+
+const withdrawSnap =
+await getDocs(
+collection(
+db,
+"withdrawRequests"
+)
+);
+
+let totalUsers =
+0;
+
+let totalPaid =
+0;
+
+let activeUsers =
+0;
+
+usersSnap.forEach(
+docu=>{
+
+totalUsers++;
+
+const d =
+docu.data();
+
+if(
+Number(
+d.balance || 0
+) > 0
+){
+activeUsers++;
+}
+
+}
+);
+
+withdrawSnap.forEach(
+docu=>{
+
+const d =
+docu.data();
+
+if(
+d.status ===
+"Approved"
+){
+
+totalPaid +=
+Number(
+d.amount || 0
+);
+
+}
+
+}
+);
+
+document
+.getElementById(
+"globalUsers"
+)
+.innerText =
+totalUsers;
+
+document
+.getElementById(
+"globalPaid"
+)
+.innerText =
+totalPaid +
+"৳";
+
+document
+.getElementById(
+"globalActive"
+)
+.innerText =
+activeUsers;
+
+document
+.getElementById(
+"globalGrowth"
+)
+.innerText =
+Math.floor(
+(
+activeUsers /
+(totalUsers || 1)
+)
+*100
+)
++
+"%";
+
+};
+
+// =======================
+// BROADCAST LOADER
+// =======================
+
+window.loadBroadcast =
+async()=>{
+
+const snap =
+await getDoc(
+doc(
+db,
+"broadcast",
+"latest"
+)
+);
+
+if(
+snap.exists()
+){
+
+const data =
+snap.data();
+
+document
+.getElementById(
+"noticeBox"
+)
+.innerHTML =
+data.message ||
+"No notice";
+
+}
+
+};
+
+// =======================
+// AUTO REFRESH
+// =======================
+
+setInterval(
+loadLeaderboard,
+10000
+);
+
+setInterval(
+loadGlobalStats,
+15000
+);
+
+setInterval(
+loadBroadcast,
+8000
+);
+
+loadLeaderboard();
+loadGlobalStats();
+loadBroadcast();
+
+</script>
+  <section class="card">
+    <h2>🏆 Leaderboard</h2>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Name</th>
+                <th>Referrals</th>
+            </tr>
+        </thead>
+        <tbody id="leaderboardBody">
+            <tr>
+                <td colspan="3">Loading...</td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+<section class="card">
+    <h2>📢 Notice Board</h2>
+
+    <div id="noticeBoard" class="notice-box">
+        No notice available
+    </div>
+</section>
+
+<section class="card">
+    <h2>🎯 Rank System</h2>
+
+    <div class="rank-grid">
+        <div class="rank-item">
+            <span>Starter</span>
+            <strong>0 Ref</strong>
+        </div>
+
+        <div class="rank-item">
+            <span>Bronze</span>
+            <strong>10 Ref</strong>
+        </div>
+
+        <div class="rank-item">
+            <span>Silver</span>
+            <strong>25 Ref</strong>
+        </div>
+
+        <div class="rank-item">
+            <span>Gold</span>
+            <strong>50 Ref</strong>
+        </div>
+
+        <div class="rank-item">
+            <span>Diamond</span>
+            <strong>100 Ref</strong>
+        </div>
+    </div>
+</section>
+
+<section class="card">
+    <h2>💰 MLM Reward Plan</h2>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Level</th>
+                <th>Reward</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr>
+                <td>Level 1</td>
+                <td>75৳</td>
+            </tr>
+
+            <tr>
+                <td>Level 2</td>
+                <td>25৳</td>
+            </tr>
+
+            <tr>
+                <td>Level 3</td>
+                <td>5৳</td>
+            </tr>
+
+            <tr>
+                <td>Level 4</td>
+                <td>2.5৳</td>
+            </tr>
+
+            <tr>
+                <td>Level 5</td>
+                <td>1৳</td>
+            </tr>
+        </tbody>
+    </table>
+</section>
+
+<script>
+
+async function loadLeaderboard(){
+
+    const tbody = document.getElementById("leaderboardBody");
+
+    tbody.innerHTML = "";
+
+    try{
+
+        const snap = await getDocs(
+            query(
+                collection(db,"users")
+            )
+        );
+
+        const users = [];
+
+        snap.forEach(docSnap=>{
+
+            const data = docSnap.data();
+
+            users.push({
+                name:data.name || "User",
+                referrals:data.referrals || 0
+            });
+
+        });
+
+        users.sort((a,b)=>b.referrals-a.referrals);
+
+        if(users.length===0){
+
+            tbody.innerHTML=`
+            <tr>
+                <td colspan="3">No Data</td>
+            </tr>
+            `;
+            return;
+        }
+
+        users.slice(0,20).forEach((user,index)=>{
+
+            tbody.innerHTML += `
+            <tr>
+                <td>#${index+1}</td>
+                <td>${user.name}</td>
+                <td>${user.referrals}</td>
+            </tr>
+            `;
+
+        });
+
+    }catch(error){
+
+        tbody.innerHTML=`
+        <tr>
+            <td colspan="3">Failed</td>
+        </tr>
+        `;
+
+    }
+
+}
+
+async function loadNotice(){
+
+    try{
+
+        const noticeRef = doc(db,"settings","notice");
+
+        const noticeSnap = await getDoc(noticeRef);
+
+        if(noticeSnap.exists()){
+
+            document.getElementById("noticeBoard").innerText =
+            noticeSnap.data().message || "No Notice";
+
+        }
+
+    }catch(error){
+
+        document.getElementById("noticeBoard").innerText =
+        "No Notice";
+
+    }
+
+}
+
+loadLeaderboard();
+loadNotice();
+
+setInterval(loadLeaderboard,30000);
+setInterval(loadNotice,30000);
+
+</script>
+  <section class="card">
+    <h2>📜 Transaction History</h2>
+
+    <div id="transactionList">
+
+        <div class="empty-box">
+            No Transactions Found
+        </div>
+
+    </div>
+</section>
+
+<section class="card">
+    <h2>🔔 Notification Center</h2>
+
+    <div id="notificationList">
+
+        <div class="empty-box">
+            No Notifications
+        </div>
+
+    </div>
+</section>
+
+<section class="card">
+    <h2>🌍 Global Statistics</h2>
+
+    <div class="stats-grid">
+
+        <div class="stat-box">
+            <span>Total Users</span>
+            <h3 id="globalUsers">0</h3>
+        </div>
+
+        <div class="stat-box">
+            <span>Total Withdraw</span>
+            <h3 id="globalWithdraw">0৳</h3>
+        </div>
+
+        <div class="stat-box">
+            <span>Total Referrals</span>
+            <h3 id="globalRefs">0</h3>
+        </div>
+
+        <div class="stat-box">
+            <span>Active Members</span>
+            <h3 id="globalActive">0</h3>
+        </div>
+
+    </div>
+</section>
+
+<section class="card">
+    <h2>⚙️ Account Settings</h2>
+
+    <div class="form-group">
+        <label>Display Name</label>
+        <input type="text" id="displayNameInput">
+    </div>
+
+    <button id="saveProfileBtn" class="primary-btn">
+        Save Profile
+    </button>
+
+    <div id="profileSaveStatus" class="status-text"></div>
+</section>
+
+<script>
+
+async function loadTransactions(){
+
+    const container =
+    document.getElementById("transactionList");
+
+    try{
+
+        const user = auth.currentUser;
+
+        if(!user) return;
+
+        const snap = await getDocs(
+            query(
+                collection(db,"transactions")
+            )
+        );
+
+        let html = "";
+
+        snap.forEach(docSnap=>{
+
+            const data = docSnap.data();
+
+            if(data.uid !== user.uid) return;
+
+            html += `
+            <div class="history-item">
+                <b>${data.type || "Transaction"}</b>
+                <br>
+                Amount: ${data.amount || 0}৳
+            </div>
+            `;
+
+        });
+
+        container.innerHTML =
+        html || `<div class="empty-box">No Transactions</div>`;
+
+    }catch(error){
+
+        container.innerHTML =
+        `<div class="empty-box">Failed To Load</div>`;
+
+    }
+
+}
+
+async function loadNotifications(){
+
+    const container =
+    document.getElementById("notificationList");
+
+    try{
+
+        const user = auth.currentUser;
+
+        if(!user) return;
+
+        const snap = await getDocs(
+            query(
+                collection(db,"notifications")
+            )
+        );
+
+        let html = "";
+
+        snap.forEach(docSnap=>{
+
+            const data = docSnap.data();
+
+            if(data.uid && data.uid !== user.uid) return;
+
+            html += `
+            <div class="history-item">
+                ${data.message || "Notification"}
+            </div>
+            `;
+
+        });
+
+        container.innerHTML =
+        html || `<div class="empty-box">No Notifications</div>`;
+
+    }catch(error){
+
+        container.innerHTML =
+        `<div class="empty-box">Failed To Load</div>`;
+
+    }
+
+}
+
+async function loadGlobalStats(){
+
+    try{
+
+        const usersSnap =
+        await getDocs(collection(db,"users"));
+
+        const withdrawSnap =
+        await getDocs(collection(db,"withdrawRequests"));
+
+        let users = 0;
+        let active = 0;
+        let refs = 0;
+        let withdraw = 0;
+
+        usersSnap.forEach(docSnap=>{
+
+            users++;
+
+            const data = docSnap.data();
+
+            refs += data.referrals || 0;
+
+            if((data.balance || 0) > 0){
+                active++;
+            }
+
+        });
+
+        withdrawSnap.forEach(docSnap=>{
+
+            const data = docSnap.data();
+
+            if(data.status === "Approved"){
+                withdraw += data.amount || 0;
+            }
+
+        });
+
+        document.getElementById("globalUsers").innerText =
+        users;
+
+        document.getElementById("globalWithdraw").innerText =
+        withdraw + "৳";
+
+        document.getElementById("globalRefs").innerText =
+        refs;
+
+        document.getElementById("globalActive").innerText =
+        active;
+
+    }catch(error){
+
+        console.log(error);
+
+    }
+
+}
+
+document
+.getElementById("saveProfileBtn")
+.addEventListener("click",async()=>{
+
+    try{
+
+        const user = auth.currentUser;
+
+        if(!user) return;
+
+        const name =
+        document.getElementById("displayNameInput")
+        .value
+        .trim();
+
+        if(name.length < 2){
+
+            document.getElementById(
+            "profileSaveStatus"
+            ).innerText = "Invalid Name";
+
+            return;
+        }
+
+        await updateDoc(
+            doc(db,"users",user.uid),
+            {
+                name:name
+            }
+        );
+
+        document.getElementById(
+        "profileSaveStatus"
+        ).innerText = "Profile Updated";
+
+        refreshDashboard();
+
+    }catch(error){
+
+        document.getElementById(
+        "profileSaveStatus"
+        ).innerText = "Update Failed";
+
+    }
+
+});
+
+onAuthStateChanged(auth,(user)=>{
+
+    if(user){
+
+        loadTransactions();
+        loadNotifications();
+        loadGlobalStats();
+
+    }
+
+});
+
+setInterval(loadTransactions,30000);
+setInterval(loadNotifications,30000);
+setInterval(loadGlobalStats,60000);
+
+</script>
+  <section class="card">
+    <h2>📞 Support Center</h2>
+
+    <div class="notice-box">
+        Need help? Contact support anytime.
+    </div>
+
+    <div class="stats-grid">
+
+        <div class="stat-box">
+            <span>Email</span>
+            <h3>support@referearn.com</h3>
+        </div>
+
+        <div class="stat-box">
+            <span>Response Time</span>
+            <h3>24 Hours</h3>
+        </div>
+
+    </div>
+</section>
+
+<section class="card">
+    <h2>📄 Terms & Rules</h2>
+
+    <ul class="rules-list">
+        <li>Multiple fake accounts are prohibited.</li>
+        <li>Referral abuse may result in account suspension.</li>
+        <li>Withdrawals are reviewed before approval.</li>
+        <li>System rewards may change at any time.</li>
+        <li>Users must provide valid payment information.</li>
+    </ul>
+</section>
+
+<section class="card">
+    <h2>🚀 System Status</h2>
+
+    <div class="stats-grid">
+
+        <div class="stat-box">
+            <span>Authentication</span>
+            <h3 id="authStatus">Online</h3>
+        </div>
+
+        <div class="stat-box">
+            <span>Database</span>
+            <h3 id="dbStatus">Connected</h3>
+        </div>
+
+        <div class="stat-box">
+            <span>Version</span>
+            <h3>v1.0</h3>
+        </div>
+
+        <div class="stat-box">
+            <span>Status</span>
+            <h3>LIVE</h3>
+        </div>
+
+    </div>
+</section>
+
+<footer class="footer">
+
+    <div class="footer-logo">
+        REFER EARN
+    </div>
+
+    <div class="footer-text">
+        Refer • Earn • Grow
+    </div>
+
+    <div class="footer-copy">
+        © 2026 Refer Earn. All Rights Reserved.
+    </div>
+
+</footer>
+
+<script>
+
+function systemHealthCheck(){
+
+    try{
+
+        if(auth.currentUser){
+
+            document.getElementById(
+            "authStatus"
+            ).innerText = "Online";
+
+        }else{
+
+            document.getElementById(
+            "authStatus"
+            ).innerText = "Offline";
+
+        }
+
+        document.getElementById(
+        "dbStatus"
+        ).innerText = "Connected";
+
+    }catch(error){
+
+        document.getElementById(
+        "dbStatus"
+        ).innerText = "Error";
+
+    }
+
+}
+
+setInterval(systemHealthCheck,10000);
+
+systemHealthCheck();
+
+window.addEventListener("online",()=>{
+
+    document.getElementById(
+    "dbStatus"
+    ).innerText = "Connected";
+
+});
+
+window.addEventListener("offline",()=>{
+
+    document.getElementById(
+    "dbStatus"
+    ).innerText = "Offline";
+
+});
+
+</script>
+
+</body>
+</html>
+  
