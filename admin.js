@@ -10,6 +10,7 @@ import {
 } from "./firebase.js";
 
 const $ = (id) => document.getElementById(id);
+const ACTIVATION_BONUS = 50;
 
 const adminAuthSection = $("adminAuthSection");
 const accessDeniedSection = $("accessDeniedSection");
@@ -777,13 +778,27 @@ async function processActivation(activationId, decision) {
       });
 
       if (decision === "approved") {
-        transaction.update(doc(db, USERS, a.uid), { isActive: true });
+        transaction.update(doc(db, USERS, a.uid), {
+          isActive: true,
+          walletBalance: increment(ACTIVATION_BONUS),
+          totalIncome: increment(ACTIVATION_BONUS)
+        });
+
+        const activationBonusTxnRef = doc(collection(db, TRANSACTIONS));
+        transaction.set(activationBonusTxnRef, {
+          uid: a.uid,
+          type: "activation_bonus",
+          amount: ACTIVATION_BONUS,
+          description: "Account Activation Bonus",
+          status: "completed",
+          createdAt: serverTimestamp()
+        });
 
         const activatedNotifRef = doc(collection(db, NOTIFICATIONS));
         transaction.set(activatedNotifRef, {
           uid: a.uid,
           title: "Account Activated",
-          message: "Your account has been successfully activated. You can now request withdrawals.",
+          message: `Your account has been successfully activated. ৳${ACTIVATION_BONUS} Activation Bonus has been added to your wallet. You can now request withdrawals.`,
           type: "success",
           isRead: false,
           createdAt: serverTimestamp()
