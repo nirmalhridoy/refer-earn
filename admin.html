@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Refer Earn — Admin Panel</title>
+  <meta name="description" content="Refer Earn - Admin Control Panel">
+  <meta name="theme-color" content="#2563EB">
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="header">
+    <div class="container">
+      <div class="logo-area">
+        <img src="assets/logo.png" alt="Refer Earn Admin" class="logo">
+        <div>
+          <h2>Refer Earn</h2>
+          <p>Admin Control Panel</p>
+        </div>
+      </div>
+      <nav class="nav">
+        <a href="#dashboard">Dashboard</a>
+        <a href="#users">Users</a>
+        <a href="#withdraws">Withdraws</a>
+        <a href="#activations">Activations</a>
+        <a href="#facebookTaskAdmin">FB Tasks</a>
+        <a href="#youtubeTaskAdmin">YT Tasks</a>
+        <a href="#taskSubmissionsAdmin">Submissions</a>
+        <a href="#broadcast">Broadcast</a>
+        <a href="index.html">User Site</a>
+      </nav>
+    </div>
+  </header>
+
+  <section id="adminAuthSection" class="hero">
+    <div class="container">
+      <h1>Refer Earn <span>Admin Panel</span></h1>
+      <p>Sign in with your authorized admin Google account to manage users, withdrawals, activations, tasks and broadcasts.</p>
+      <div class="hero-buttons">
+        <button type="button" id="adminLoginBtn" class="btn btn-primary">Login With Google</button>
+        <button type="button" id="adminLogoutBtn" class="btn btn-danger" hidden>Logout</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="accessDeniedSection" class="hero hidden">
+    <div class="container">
+      <div class="access-denied">
+        <h1>⛔ Access Denied</h1>
+        <p>The Google account you logged in with is not authorized to access the Refer Earn Admin Panel.</p>
+        <button type="button" id="accessDeniedLogoutBtn" class="btn btn-danger">Logout</button>
+      </div>
+    </div>
+  </section>
+
+  <main id="adminApp" hidden>
+
+    <section id="dashboard" class="dashboard">
+      <div class="container">
+        <h2 class="section-title">Dashboard</h2>
+        <div class="dashboard-grid">
+          <div class="card">
+            <h3>Total Users</h3>
+            <h1 id="statTotalUsers">0</h1>
+          </div>
+          <div class="card">
+            <h3>Active Users</h3>
+            <h2 id="statActiveUsers">0</h2>
+          </div>
+          <div class="card">
+            <h3>Inactive Users</h3>
+            <h2 id="statInactiveUsers">0</h2>
+          </div>
+          <div class="card">
+            <h3>Frozen Users</h3>
+            <h2 id="statFrozenUsers">0</h2>
+          </div>
+          <div class="card">
+            <h3>Pending Withdraws</h3>
+            <h2 id="statPendingWithdraws">0</h2>
+          </div>
+          <div class="card">
+            <h3>Pending Activations</h3>
+            <h2 id="statPendingActivations">0</h2>
+          </div>
+          <div class="card">
+            <h3>Pending Task Submissions</h3>
+            <h2 id="statPendingSubmissions">0</h2>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="statistics">
+      <div class="container">
+        <h2 class="section-title">Statistics</h2>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <h3>Today's New Users</h3>
+            <h2 id="statTodayUsers">0</h2>
+          </div>
+          <div class="stat-card">
+            <h3>Today's Withdraw Requests</h3>
+            <h2 id="statTodayWithdraws">0</h2>
+          </div>
+          <div class="stat-card">
+            <h3>Today's Activation Requests</h3>
+            <h2 id="statTodayActivations">0</h2>
+          </div>
+          <div class="stat-card">
+            <h3>Total Approved Payout</h3>
+            <h2 id="statTotalPayout">0 ৳</h2>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="users" class="referral-section">
+      <div class="container">
+        <h2 class="section-title">User Management</h2>
+
+        <div class="card">
+          <div class="search-row">
+            <div class="form-group">
+              <label for="userSearchInput">Search Users</label>
+              <input type="text" id="userSearchInput" placeholder="Search by name or email">
+            </div>
+            <div class="form-group">
+              <label for="userStatusFilter">Filter By Status</label>
+              <select id="userStatusFilter">
+                <option value="all">All Users</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+                <option value="frozen">Frozen</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Email</th>
+                <th>Status</th>
+                <th>Wallet</th>
+                <th>Referrals</th>
+                <th>Joined</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="userListBody">
+              <tr><td colspan="7">Loading users...</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="text-center mt-20">
+          <button type="button" id="loadMoreUsersBtn" class="btn btn-secondary">Load More Users</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="withdraws" class="history-section">
+      <div class="container">
+        <h2 class="section-title">Withdraw Requests</h2>
+
+        <div class="card">
+          <div class="form-group">
+            <label for="withdrawStatusFilter">Filter By Status</label>
+            <select id="withdrawStatusFilter">
+              <option value="pending">Pending</option>
+              <option value="approved">Approved</option>
+              <option value="rejected">Rejected</option>
+              <option value="all">All</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>User</th>
+                <th>Amount</th>
+                <th>Active Ref</th>
+                <th>Method</th>
+                <th>Account No.</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="withdrawListBody">
+              <tr><td colspan="8">Loading withdraw requests...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="activations" class="history-section">
+      <div class="container">
+        <h2 class="section-title">Activation Requests</h2>
+
+        <div class="card">
+          <div class="form-group">
+            <label for="activationStatusFilter">Filter By Status</label>
+            <select id="activationStatusFilter">
+              <option value="pending">Pending</option>
+              <option value="approved">Approved</option>
+              <option value="rejected">Rejected</option>
+              <option value="all">All</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>User</th>
+                <th>Method</th>
+                <th>Sender No.</th>
+                <th>Transaction ID</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="activationListBody">
+              <tr><td colspan="7">Loading activation requests...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="facebookTaskAdmin" class="task-admin-section">
+      <div class="container">
+        <h2 class="section-title">📘 Facebook Task Management</h2>
+
+        <div class="card">
+          <div class="form-group">
+            <label>Task Name</label>
+            <input type="text" id="fbTaskName" placeholder="e.g. Follow our Facebook Page">
+          </div>
+          <div class="form-group">
+            <label>Task Link</label>
+            <input type="text" id="fbTaskLink" placeholder="https://facebook.com/...">
+          </div>
+          <div class="form-group">
+            <label>Task Type</label>
+            <select id="fbTaskType">
+              <option value="Page Visit">Page Visit</option>
+              <option value="Page Follow">Page Follow</option>
+              <option value="Page Like">Page Like</option>
+              <option value="Post Like">Post Like</option>
+              <option value="Post Comment">Post Comment</option>
+              <option value="Post Share">Post Share</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Instruction</label>
+            <textarea id="fbTaskInstruction" placeholder="Task instruction for the user"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Reward (৳)</label>
+            <input type="number" id="fbTaskReward" value="5">
+          </div>
+          <div class="form-group">
+            <label class="switch-label"><input type="checkbox" id="fbTaskRequired"> Required for Withdraw</label>
+          </div>
+          <input type="hidden" id="fbTaskId">
+          <div class="table-actions">
+            <button type="button" id="fbTaskSaveBtn" class="btn btn-primary">Save Task</button>
+            <button type="button" id="fbTaskCancelEditBtn" class="btn btn-secondary hidden">Cancel Edit</button>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Reward</th>
+                <th>Required</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="fbTaskListBody">
+              <tr><td colspan="6">Loading Facebook tasks...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="youtubeTaskAdmin" class="task-admin-section">
+      <div class="container">
+        <h2 class="section-title">▶️ YouTube Task Management</h2>
+
+        <div class="card">
+          <div class="form-group">
+            <label>Task Name</label>
+            <input type="text" id="ytTaskName" placeholder="e.g. Subscribe our YouTube Channel">
+          </div>
+          <div class="form-group">
+            <label>Task Link</label>
+            <input type="text" id="ytTaskLink" placeholder="https://youtube.com/...">
+          </div>
+          <div class="form-group">
+            <label>Task Type</label>
+            <select id="ytTaskType">
+              <option value="Channel Visit">Channel Visit</option>
+              <option value="Channel Subscribe">Channel Subscribe</option>
+              <option value="Video Watch">Video Watch</option>
+              <option value="Video Like">Video Like</option>
+              <option value="Video Comment">Video Comment</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Instruction</label>
+            <textarea id="ytTaskInstruction" placeholder="Task instruction for the user"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Reward (৳)</label>
+            <input type="number" id="ytTaskReward" value="5">
+          </div>
+          <div class="form-group">
+            <label class="switch-label"><input type="checkbox" id="ytTaskRequired"> Required for Withdraw</label>
+          </div>
+          <input type="hidden" id="ytTaskId">
+          <div class="table-actions">
+            <button type="button" id="ytTaskSaveBtn" class="btn btn-primary">Save Task</button>
+            <button type="button" id="ytTaskCancelEditBtn" class="btn btn-secondary hidden">Cancel Edit</button>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Reward</th>
+                <th>Required</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="ytTaskListBody">
+              <tr><td colspan="6">Loading YouTube tasks...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="taskSubmissionsAdmin" class="task-admin-section">
+      <div class="container">
+        <h2 class="section-title">🔍 Task Submissions Review</h2>
+
+        <div class="card">
+          <div class="search-row">
+            <div class="form-group">
+              <label for="submissionPlatformFilter">Platform</label>
+              <select id="submissionPlatformFilter">
+                <option value="all">All</option>
+                <option value="facebook">Facebook</option>
+                <option value="youtube">YouTube</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="submissionStatusFilter">Status</label>
+              <select id="submissionStatusFilter">
+                <option value="pending">Pending</option>
+                <option value="completed">Completed</option>
+                <option value="rejected">Rejected</option>
+                <option value="all">All</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div id="submissionListContainer">
+          <div class="card">Loading submissions...</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="broadcast" class="broadcast-section">
+      <div class="container">
+        <h2 class="section-title">📢 Send Broadcast</h2>
+
+        <div class="card">
+          <div class="form-group">
+            <label for="broadcastTitleInput">Title</label>
+            <input type="text" id="broadcastTitleInput" placeholder="Broadcast title">
+          </div>
+          <div class="form-group">
+            <label for="broadcastMessageInput">Message</label>
+            <textarea id="broadcastMessageInput" placeholder="Write your broadcast message"></textarea>
+          </div>
+          <button type="button" id="sendBroadcastBtn" class="btn btn-primary">Send Broadcast</button>
+        </div>
+
+        <h2 class="section-title mt-30">Broadcast History</h2>
+        <div id="broadcastHistoryList">
+          <div class="card">No broadcasts sent yet.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="notifications" class="notification-section">
+      <div class="container">
+        <h2 class="section-title">🔔 Recent Notifications</h2>
+        <div id="adminNotificationList">
+          <div class="card">No notifications yet.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="leaderboard" class="leaderboard-section">
+      <div class="container">
+        <h2 class="section-title">Leaderboard</h2>
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>User</th>
+                <th>Referrals</th>
+                <th>Total Income</th>
+              </tr>
+            </thead>
+            <tbody id="adminLeaderboardTable">
+              <tr><td colspan="4">Loading leaderboard...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div id="userDetailsModal" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>User Details</h2>
+        <button type="button" id="closeUserDetailsModal" class="close-btn">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="info-box">
+          <p>Name <span id="udModalName">--</span></p>
+          <p>Email <span id="udModalEmail">--</span></p>
+          <p>Phone <span id="udModalPhone">--</span></p>
+          <p>District <span id="udModalDistrict">--</span></p>
+          <p>UID <span id="udModalUID">--</span></p>
+          <p>Referral Code <span id="udModalReferralCode">--</span></p>
+          <p>Status <span id="udModalStatus">--</span></p>
+          <p>Wallet Balance <span id="udModalWallet">--</span></p>
+          <p>Total Referrals <span id="udModalReferrals">--</span></p>
+          <p>Joined <span id="udModalJoined">--</span></p>
+        </div>
+        <div class="modal-actions">
+          <button type="button" id="udAddBalanceBtn" class="btn btn-primary">Add Balance</button>
+          <button type="button" id="udFreezeBtn" class="btn btn-danger">Freeze User</button>
+          <button type="button" id="udActivateBtn" class="btn btn-success">Activate User</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="addBalanceModal" class="modal hidden">
+    <div class="modal-content small-modal">
+      <h2>Add Balance</h2>
+      <p id="addBalanceUserName">--</p>
+      <input type="hidden" id="addBalanceUID">
+      <div class="form-group">
+        <label for="addBalanceAmount">Amount (৳)</label>
+        <input type="number" id="addBalanceAmount" placeholder="Enter amount">
+      </div>
+      <div class="form-group">
+        <label for="addBalanceReason">Reason / Note</label>
+        <input type="text" id="addBalanceReason" placeholder="e.g. Manual bonus">
+      </div>
+      <div class="modal-actions">
+        <button type="button" id="addBalanceSubmitBtn" class="btn btn-success">Add Balance</button>
+        <button type="button" id="addBalanceCancelBtn" class="btn btn-danger">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="rejectReasonModal" class="modal hidden">
+    <div class="modal-content small-modal">
+      <h2>Reject Reason</h2>
+      <p>রিজেক্ট করার কারণ লিখুন (User-কে দেখানো হবে):</p>
+      <input type="hidden" id="rejectSubmissionId">
+      <div class="form-group">
+        <textarea id="rejectReasonInput" placeholder="e.g. Screenshot অস্পষ্ট, আবার সঠিক তথ্য দিয়ে Submit করুন।"></textarea>
+      </div>
+      <div class="modal-actions">
+        <button type="button" id="rejectReasonSubmitBtn" class="btn btn-danger">Reject Submission</button>
+        <button type="button" id="rejectReasonCancelBtn" class="btn btn-secondary">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="screenshotViewModal" class="modal hidden">
+    <div class="modal-content">
+      <img id="screenshotViewImage" src="" alt="Screenshot" style="width:100%;border-radius:12px;">
+      <div class="modal-actions">
+        <button type="button" id="closeScreenshotView" class="btn btn-danger">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="confirmDialog" class="modal hidden">
+    <div class="modal-content small-modal">
+      <h2 id="confirmTitle">Confirmation</h2>
+      <p id="confirmMessage">Are you sure you want to continue?</p>
+      <div class="modal-actions">
+        <button type="button" id="confirmYesBtn" class="btn btn-success">Yes</button>
+        <button type="button" id="confirmNoBtn" class="btn btn-danger">No</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="successDialog" class="modal hidden">
+    <div class="modal-content small-modal">
+      <div class="dialog-icon success-icon">✅</div>
+      <h2>Success</h2>
+      <p id="successMessage">Operation completed successfully.</p>
+      <div class="modal-actions">
+        <button type="button" id="successOkBtn" class="btn btn-success">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="errorDialog" class="modal hidden">
+    <div class="modal-content small-modal">
+      <div class="dialog-icon error-icon">❌</div>
+      <h2>Error</h2>
+      <p id="errorMessage">Something went wrong.</p>
+      <div class="modal-actions">
+        <button type="button" id="errorOkBtn" class="btn btn-danger">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="warningDialog" class="modal hidden">
+    <div class="modal-content small-modal">
+      <div class="dialog-icon warning-icon">⚠️</div>
+      <h2>Warning</h2>
+      <p id="warningMessage">Please review before continuing.</p>
+      <div class="modal-actions">
+        <button type="button" id="warningOkBtn" class="btn btn-warning">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="loadingDialog" class="modal hidden">
+    <div class="modal-content small-modal">
+      <div class="loading-spinner"></div>
+      <h3>Please wait...</h3>
+      <p>Processing your request.</p>
+    </div>
+  </div>
+
+  <div id="toastContainer" class="toast-container">
+    <div id="toast" class="toast hidden">
+      <div class="toast-icon">🔔</div>
+      <div class="toast-content">
+        <h4 id="toastTitle">Notification</h4>
+        <p id="toastMessage">Admin action completed</p>
+      </div>
+      <button type="button" id="toastCloseBtn" class="toast-close">✕</button>
+    </div>
+  </div>
+
+  <div id="globalLoading" class="loading-overlay hidden">
+    <div class="loading-box">
+      <div class="loading-spinner"></div>
+      <h3>Loading...</h3>
+      <p>Please wait a moment.</p>
+    </div>
+  </div>
+
+  <button type="button" id="scrollTopBtn" class="scroll-top-btn" hidden>⬆</button>
+
+  <div id="sessionStatus" class="session-status hidden">
+    <span>Logged in as Admin</span>
+    <strong id="sessionUser">Guest</strong>
+  </div>
+
+  <footer id="footer" class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-column">
+          <img src="assets/logo.png" alt="Refer Earn Logo" class="footer-logo">
+          <h2>Refer Earn</h2>
+          <p>Admin Control Panel — Manage users, withdrawals, activations and tasks.</p>
+        </div>
+        <div class="footer-column">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="#dashboard">Dashboard</a></li>
+            <li><a href="#users">Users</a></li>
+            <li><a href="#withdraws">Withdraws</a></li>
+            <li><a href="#activations">Activations</a></li>
+          </ul>
+        </div>
+        <div class="footer-column">
+          <h3>Other</h3>
+          <ul>
+            <li><a href="index.html">User Site</a></li>
+            <li><a href="#facebookTaskAdmin">Facebook Tasks</a></li>
+            <li><a href="#youtubeTaskAdmin">YouTube Tasks</a></li>
+            <li><a href="#taskSubmissionsAdmin">Submissions</a></li>
+          </ul>
+        </div>
+      </div>
+      <hr class="footer-divider">
+      <div class="footer-bottom">
+        <p>© 2026 Refer Earn Admin. All Rights Reserved.</p>
+        <p>Version <span id="appVersion">v1.0.0</span></p>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="firebase.js"></script>
+  <script type="module" src="admin.js"></script>
+
+</body>
+          </html>
