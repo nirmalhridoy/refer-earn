@@ -1829,6 +1829,91 @@ ul{
     max-width:none;
   }
 }
+.referral-tree-section{
+  padding:50px 0 10px;
+}
+
+.tree-view-toggle{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:16px;
+}
+
+.tree-view-active{
+  background:var(--primary) !important;
+  color:#fff !important;
+  border-color:var(--primary) !important;
+}
+
+.tree-level-group{
+  margin-bottom:16px;
+}
+
+.tree-level-title{
+  font-size:13px;
+  font-weight:700;
+  color:var(--secondary);
+  margin-bottom:10px;
+  padding-bottom:6px;
+  border-bottom:1px solid var(--border);
+}
+
+.tree-node{
+  background:var(--card2);
+  border:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  padding:10px 14px;
+  margin-bottom:8px;
+  font-size:13px;
+  color:var(--text-light);
+}
+
+.payment-proof-card{
+  border-left:4px solid var(--success);
+}
+
+.payment-proof-card h3{
+  font-size:16px;
+  margin-bottom:12px;
+}
+
+.payment-proof-card p{
+  font-size:13px;
+  color:var(--text-light);
+  line-height:1.7;
+  margin-bottom:16px;
+}
+
+.support-categories-card h3{
+  font-size:15px;
+  margin-bottom:14px;
+}
+
+.support-categories-grid{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+}
+
+.support-category-tag{
+  background:var(--bg2);
+  border:1px solid var(--border);
+  border-radius:999px;
+  padding:8px 16px;
+  font-size:12px;
+  color:var(--text-light);
+}
+
+.support-team-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:12px;
+}
+
+.support-team-btn{
+  width:100%;
+    }
 
 /* ===========================
    END OF STYLE.CSS
