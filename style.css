@@ -1914,6 +1914,103 @@ ul{
 .support-team-btn{
   width:100%;
     }
+.contest-section{
+  padding:50px 0 10px;
+}
+
+.contest-card{
+  border-left:4px solid var(--warning);
+  background:linear-gradient(135deg,rgba(250,204,21,.08),rgba(37,99,235,.06));
+}
+
+.contest-card-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:10px;
+}
+
+.contest-card-header h3{
+  font-size:18px;
+  font-weight:700;
+}
+
+.contest-description{
+  font-size:13px;
+  color:var(--text-light);
+  margin-bottom:12px;
+  line-height:1.7;
+}
+
+.contest-dates{
+  font-size:12px;
+  color:var(--text-muted);
+  margin-bottom:14px;
+}
+
+.contest-prize-list{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:16px;
+}
+
+.contest-prize-item{
+  background:var(--card2);
+  border:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  padding:10px 16px;
+  font-size:13px;
+  color:var(--text-light);
+}
+
+.contest-my-rank-box{
+  margin-top:16px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:var(--card2);
+  border-radius:var(--radius-sm);
+  padding:12px 16px;
+}
+
+.contest-my-rank-box span{
+  font-size:12px;
+  color:var(--text-muted);
+}
+
+.contest-my-rank-box strong{
+  font-size:16px;
+  color:var(--warning);
+}
+
+.contest-history-item{
+  background:var(--card2);
+  border:1px solid var(--border);
+  border-radius:var(--radius-sm);
+  padding:16px;
+  margin-bottom:14px;
+}
+
+.contest-history-item h4{
+  font-size:14px;
+  margin-bottom:8px;
+}
+
+.contest-winner-row{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:8px 0;
+  border-top:1px solid var(--border);
+  font-size:13px;
+  color:var(--text-light);
+}
+
+.contest-winner-row:first-of-type{
+  border-top:none;
+  }
 
 /* ===========================
    END OF STYLE.CSS
