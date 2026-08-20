@@ -2179,6 +2179,82 @@ ul{
   color:var(--warning);
   text-align:center;
   }
+.auth-card{
+  max-width:420px;
+  margin:0 auto;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:var(--radius);
+  padding:24px;
+  box-shadow:var(--shadow);
+  text-align:left;
+}
+
+.auth-tabs{
+  display:flex;
+  gap:8px;
+  margin-bottom:20px;
+  background:var(--bg2);
+  border-radius:var(--radius-sm);
+  padding:4px;
+}
+
+.auth-tab{
+  flex:1;
+  height:42px;
+  border-radius:8px;
+  background:transparent;
+  color:var(--text-muted);
+  font-weight:600;
+  font-size:14px;
+}
+
+.auth-tab-active{
+  background:var(--primary);
+  color:#fff;
+}
+
+.auth-panel .btn{
+  margin-bottom:14px;
+}
+
+.auth-divider{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin:16px 0;
+  color:var(--text-muted);
+  font-size:12px;
+}
+
+.auth-divider::before,
+.auth-divider::after{
+  content:"";
+  flex:1;
+  height:1px;
+  background:var(--border);
+}
+
+.withdraw-condition-box{
+  background:linear-gradient(135deg,rgba(37,99,235,.15),rgba(56,189,248,.1));
+  border:1px solid var(--primary);
+  border-radius:var(--radius-sm);
+  padding:16px;
+  text-align:center;
+  margin-bottom:18px;
+}
+
+.withdraw-condition-box strong{
+  display:block;
+  font-size:18px;
+  color:var(--warning);
+  margin-bottom:6px;
+}
+
+.withdraw-condition-box span{
+  font-size:13px;
+  color:var(--text-light);
+  }
 
 /* ===========================
    END OF STYLE.CSS
