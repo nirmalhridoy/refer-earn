@@ -2863,7 +2863,45 @@ ul{
   color:var(--warning);
   border:1px solid rgba(250,204,21,.35);
   }
+.task-reject-reason-box{
+  background:rgba(220,38,38,.1);
+  border:1px solid rgba(220,38,38,.35);
+  border-radius:var(--radius-sm);
+  padding:14px;
+  margin-bottom:18px;
+  font-size:13px;
+  color:var(--text-light);
+}
 
+.task-reject-reason-box strong{
+  display:block;
+  color:var(--danger);
+  margin-bottom:6px;
+}
+
+.rejected-task-card{
+  background:var(--card);
+  border:1px solid rgba(220,38,38,.3);
+  border-radius:var(--radius);
+  padding:20px;
+  margin-bottom:16px;
+}
+
+.rejected-task-card h4{
+  font-size:15px;
+  margin-bottom:8px;
+  color:var(--danger);
+}
+
+.rejected-task-card p{
+  font-size:12.5px;
+  color:var(--text-light);
+  margin-bottom:6px;
+}
+
+.rejected-task-card .btn{
+  margin-top:10px;
+}
 /* ===========================
    END OF STYLE.CSS
    REFER EARN & MICROJOB — PRODUCTION READY
