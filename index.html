@@ -83,60 +83,103 @@
     </div>
   </div>
 
-  <section id="home" class="hero">
-    <div class="container">
-      <div class="hero-badges">
-        <span class="hero-badge hero-badge-accent">🚀 Referral & Earning Platform</span>
-        <span class="hero-badge hero-badge-live"><span class="live-dot"></span> Live Platform</span>
+<section id="home" class="hero lamp-scene">
+  <div class="container lamp-container">
+
+    <div class="lamp-stage-outer">
+      <div class="lamp-stage" id="lampStage">
+        <div class="lamp-glow-pool" id="lampGlowPool"></div>
+        <div class="lamp-light-cone" id="lampLightCone"></div>
+
+        <div class="lamp-base"></div>
+        <div class="lamp-pole"></div>
+        <div class="lamp-joint lamp-joint-bottom"></div>
+        <div class="lamp-arm">
+          <div class="lamp-joint lamp-joint-top"></div>
+          <div class="lamp-shade">
+            <div class="lamp-shade-inner"></div>
+            <div class="lamp-bulb" id="lampBulb"></div>
+          </div>
+        </div>
+
+        <div class="lamp-chain-zone"
+             id="lampChain"
+             role="button"
+             tabindex="0"
+             aria-label="Pull the chain to begin">
+          <div class="lamp-chain-rope"></div>
+          <div class="lamp-chain-pendant"></div>
+        </div>
+
+        <p class="lamp-instruction" id="lampInstruction">Pull the chain to begin</p>
       </div>
-      <h1>Welcome To <span>Refer Earn & Microjob</span></h1>
-      <p>Build your network, grow your community and enjoy a modern referral platform.</p>
+      <div class="lamp-desk"></div>
+    </div>
 
-      <div id="authCard" class="auth-card">
-        <div class="auth-tabs">
-          <button type="button" id="authTabLogin" class="auth-tab auth-tab-active">Login</button>
-          <button type="button" id="authTabSignup" class="auth-tab">Sign Up</button>
+    <div id="authCard" class="auth-card lamp-auth-panel">
+      <div class="lamp-brand-header">
+        <div class="lamp-brand-icon">📈</div>
+        <div>
+          <h1 class="lamp-brand-title">Refer Earn <span>&amp; Microjob</span></h1>
+          <p class="lamp-brand-tagline">Work · Earn · Grow Together</p>
         </div>
+      </div>
 
-        <div id="loginPanel" class="auth-panel">
-          <button type="button" id="loginBtn" class="btn btn-primary btn-full">🔵 Continue with Google</button>
-          <div class="auth-divider"><span>OR</span></div>
-          <div class="form-group">
-            <label>Phone Number</label>
-            <input type="text" id="loginPhoneInput" placeholder="01XXXXXXXXX">
+      <div class="auth-tabs">
+        <button type="button" id="authTabLogin" class="auth-tab auth-tab-active">👤 Login</button>
+        <button type="button" id="authTabSignup" class="auth-tab">➕ Sign Up</button>
+      </div>
+
+      <div id="loginPanel" class="auth-panel">
+        <div class="form-group input-icon-group">
+          <label>Email or Phone Number</label>
+          <div class="input-icon-wrapper">
+            <span class="input-icon">📧</span>
+            <input type="text" id="loginIdentifierInput" placeholder="Email or 01XXXXXXXXX">
           </div>
-          <div class="form-group">
-            <label>Password</label>
-            <div class="password-input-wrapper">
-              <input type="password" id="loginPasswordInput" placeholder="Password">
-              <button type="button" class="password-toggle-btn" data-target="loginPasswordInput">👁</button>
-            </div>
-          </div>
-          <button type="button" id="phoneLoginBtn" class="btn btn-success btn-full">🔐 Login With Phone</button>
         </div>
+        <div class="form-group input-icon-group">
+          <label>Password</label>
+          <div class="input-icon-wrapper password-input-wrapper">
+            <span class="input-icon">🔒</span>
+            <input type="password" id="loginPasswordInput" placeholder="Password">
+            <button type="button" class="password-toggle-btn" data-target="loginPasswordInput">👁</button>
+          </div>
+        </div>
+        <button type="button" id="phoneLoginBtn" class="btn btn-lamp-gold btn-full">Login →</button>
 
-        <div id="signupPanel" class="auth-panel hidden">
-          <button type="button" id="signupGoogleBtn" class="btn btn-primary btn-full">🔵 Continue with Google</button>
-          <div class="auth-divider"><span>OR</span></div>
-          <div class="form-group">
-            <label>Phone Number</label>
+        <div class="auth-divider"><span>OR CONTINUE WITH</span></div>
+        <button type="button" id="loginBtn" class="btn btn-lamp-google btn-full">🔵 Continue with Google</button>
+      </div>
+
+      <div id="signupPanel" class="auth-panel hidden">
+        <div class="form-group input-icon-group">
+          <label>Phone Number</label>
+          <div class="input-icon-wrapper">
+            <span class="input-icon">📱</span>
             <input type="text" id="signupPhoneInput" placeholder="01XXXXXXXXX">
           </div>
-          <div class="form-group">
-            <label>Password (কমপক্ষে ৬ অক্ষর)</label>
-            <div class="password-input-wrapper">
-              <input type="password" id="signupPasswordInput" placeholder="Password">
-              <button type="button" class="password-toggle-btn" data-target="signupPasswordInput">👁</button>
-            </div>
-          </div>
-          <button type="button" id="phoneSignupBtn" class="btn btn-success btn-full">📱 Sign Up With Phone</button>
         </div>
+        <div class="form-group input-icon-group">
+          <label>Password (কমপক্ষে ৬ অক্ষর)</label>
+          <div class="input-icon-wrapper password-input-wrapper">
+            <span class="input-icon">🔒</span>
+            <input type="password" id="signupPasswordInput" placeholder="Password">
+            <button type="button" class="password-toggle-btn" data-target="signupPasswordInput">👁</button>
+          </div>
+        </div>
+        <button type="button" id="phoneSignupBtn" class="btn btn-lamp-gold btn-full">📱 Sign Up With Phone</button>
+
+        <div class="auth-divider"><span>OR CONTINUE WITH</span></div>
+        <button type="button" id="signupGoogleBtn" class="btn btn-lamp-google btn-full">🔵 Continue with Google</button>
       </div>
-
-      <button type="button" id="logoutBtn" class="btn btn-danger" hidden>Logout</button>
     </div>
-  </section>
 
+  </div>
+
+  <button type="button" id="logoutBtn" class="btn btn-danger lamp-logout-btn" hidden>Logout</button>
+</section>
+  
   <main id="app" hidden>
 
     <section id="dashboard" class="dashboard">
