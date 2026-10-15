@@ -804,16 +804,37 @@ phoneSignupBtn.addEventListener("click", async () => {
   }
 });
 
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 phoneLoginBtn.addEventListener("click", async () => {
-  const phone = loginPhoneInput.value.trim();
+  const identifier = loginIdentifierInput.value.trim();
   const password = loginPasswordInput.value;
-  if (!BD_PHONE_REGEX.test(phone)) { showWarning("সঠিক ১১ ডিজিটের মোবাইল নাম্বার দিন (যেমন 01XXXXXXXXX)।"); return; }
-  if (!password) { showWarning("Password দিন।"); return; }
+
+  if (!identifier) {
+    showWarning("Email অথবা Phone Number দিন।");
+    return;
+  }
+  if (!password) {
+    showWarning("Password দিন।");
+    return;
+  }
+
+  let loginEmail;
+
+  if (BD_PHONE_REGEX.test(identifier)) {
+    loginEmail = phoneToPseudoEmail(identifier);
+  } else if (EMAIL_REGEX.test(identifier)) {
+    loginEmail = identifier;
+  } else {
+    showWarning("সঠিক Email অথবা ১১ ডিজিটের Phone Number দিন (যেমন 01XXXXXXXXX)।");
+    return;
+  }
 
   phoneLoginBtn.disabled = true;
+
   try {
     showGlobalLoading(true);
-    await signInWithEmailAndPassword(auth, phoneToPseudoEmail(phone), password);
+    await signInWithEmailAndPassword(auth, loginEmail, password);
   } catch (err) {
     showGlobalLoading(false);
     showError(friendlyAuthError(err));
