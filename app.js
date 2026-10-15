@@ -2053,3 +2053,39 @@ window.addEventListener("offline", () => {
 
 window.addEventListener("scroll", () => { scrollTopBtn.hidden = window.scrollY < 400; });
 scrollTopBtn.addEventListener("click", () => { window.scrollTo({ top: 0, behavior: "smooth" }); });
+
+/* ===== LAMP CHAIN INTERACTION ===== */
+
+const lampStage = $("lampStage");
+const lampChain = $("lampChain");
+const lampBulb = $("lampBulb");
+
+let lampIsOn = false;
+
+function pullLampChain() {
+  if (!lampChain || lampChain.classList.contains("chain-pulling")) return;
+
+  lampChain.classList.add("chain-pulling");
+  setTimeout(() => lampChain.classList.remove("chain-pulling"), 600);
+
+  lampIsOn = !lampIsOn;
+  lampStage.classList.toggle("lamp-on", lampIsOn);
+
+  if (lampIsOn) {
+    setTimeout(() => {
+      authCard.classList.add("panel-revealed");
+    }, 350);
+  } else {
+    authCard.classList.remove("panel-revealed");
+  }
+}
+
+if (lampChain) {
+  lampChain.addEventListener("click", pullLampChain);
+  lampChain.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      pullLampChain();
+    }
+  });
+                        }
