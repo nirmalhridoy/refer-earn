@@ -2903,1031 +2903,678 @@ ul{
   margin-top:10px;
 }
 
-/* ============================================
-PREMIUM CINEMATIC LAMP LOGIN EXPERIENCE
-Refer Earn & Microjob
-Enhanced lamp size, golden illumination,
-chain interaction and responsive layout
-============================================ */
-
-/* ===== MAIN SCENE ===== */
+/* ==========================================================
+   REFER EARN & MICROJOB
+   PREMIUM CINEMATIC GOLDEN LAMP LOGIN — V4
+   Existing class names preserved
+========================================================== */
 
 .lamp-scene {
-position: relative;
-isolation: isolate;
-padding: 55px 18px 70px;
-overflow: hidden;
-background:
-radial-gradient(ellipse at 24% 48%,
-rgba(255, 174, 55, .10), transparent 42%),
-radial-gradient(ellipse at 80% 50%,
-rgba(37, 99, 235, .13), transparent 55%),
-linear-gradient(135deg, #030611 0%, #071127 55%, #030713 100%);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 60px 20px 76px;
+  background:
+    radial-gradient(ellipse at 25% 45%, rgba(255,177,65,.14), transparent 44%),
+    radial-gradient(ellipse at 78% 60%, rgba(35,78,165,.18), transparent 48%),
+    linear-gradient(135deg, #050711, #091126 58%, #050817);
 }
 
-/* Warm ambient light across the scene */
-
 .lamp-scene::before {
-content: "";
-position: absolute;
-inset: 0;
-z-index: -1;
-pointer-events: none;
-background:
-radial-gradient(ellipse at 27% 54%,
-rgba(255, 166, 43, .11), transparent 42%),
-radial-gradient(ellipse at 28% 90%,
-rgba(255, 190, 75, .09), transparent 40%);
-opacity: .9;
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 30% 62%, rgba(255,178,61,.08), transparent 42%);
 }
 
 .lamp-container {
-position: relative;
-z-index: 1;
-display: flex;
-flex-wrap: wrap;
-align-items: center;
-justify-content: center;
-gap: 44px;
-width: 100%;
-max-width: 1120px;
-margin: 0 auto;
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(28px, 5vw, 70px);
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
 }
 
-/* ============================================
-LAMP STAGE
-============================================ */
+/* ================= LAMP STAGE ================= */
 
 .lamp-stage-outer {
-position: relative;
-display: flex;
-flex-direction: column;
-align-items: center;
-flex: 0 1 360px;
-min-width: 0;
+  position: relative;
+  display: flex;
+  flex: 0 1 440px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  z-index: 2;
 }
 
 .lamp-stage {
-position: relative;
-isolation: isolate;
-width: 340px;
-max-width: 100%;
-height: 400px;
-flex-shrink: 0;
-overflow: visible;
+  position: relative;
+  isolation: isolate;
+  width: 380px;
+  max-width: 100%;
+  height: 470px;
+  flex: 0 0 auto;
+  overflow: visible;
 }
 
-/* Ambient halo behind the lamp */
-
-.lamp-stage::before {
-content: "";
-position: absolute;
-z-index: -1;
-left: 50%;
-top: 22%;
-width: 330px;
-height: 310px;
-max-width: 120vw;
-transform: translateX(-50%);
-border-radius: 50%;
-background: radial-gradient(ellipse,
-rgba(255, 166, 53, .15) 0%,
-rgba(255, 177, 68, .07) 35%,
-transparent 72%);
-opacity: .55;
-transition: opacity 1s ease, background 1s ease;
-pointer-events: none;
-}
-
-.lamp-stage.lamp-on::before {
-opacity: 1;
-background: radial-gradient(ellipse,
-rgba(255, 171, 52, .32) 0%,
-rgba(255, 174, 63, .18) 34%,
-rgba(255, 153, 35, .07) 56%,
-transparent 78%);
-}
-
-/* ===== DESK ===== */
+/* ================= DESK ================= */
 
 .lamp-desk {
-position: relative;
-z-index: 4;
-width: 310px;
-max-width: 100%;
-height: 17px;
-margin-top: -3px;
-border-radius: 4px;
-background: linear-gradient(180deg,
-#6a431d 0%,
-#34200f 40%,
-#160e09 100%);
-box-shadow:
-0 5px 8px rgba(0, 0, 0, .6),
-0 0 0 1px rgba(232, 174, 72, .15),
-0 0 18px rgba(255, 165, 51, .06);
-transition: box-shadow 1s ease;
+  position: relative;
+  z-index: 4;
+  width: 94%;
+  height: 17px;
+  margin-top: -2px;
+  border: 1px solid rgba(221,166,69,.6);
+  border-radius: 4px;
+  background: linear-gradient(180deg, #603a1d, #321b0c 50%, #170d08);
+  box-shadow:
+    0 7px 15px rgba(0,0,0,.65),
+    0 0 24px rgba(255,173,52,.2),
+    inset 0 2px 2px rgba(255,226,158,.18);
 }
 
-.lamp-stage.lamp-on + .lamp-desk {
-box-shadow:
-0 5px 8px rgba(0, 0, 0, .6),
-0 0 0 1px rgba(232, 174, 72, .25),
-0 0 35px rgba(255, 174, 55, .35);
-}
-
-/* ============================================
-LAMP BASE
-============================================ */
+/* ================= BASE ================= */
 
 .lamp-base {
-position: absolute;
-left: 50%;
-bottom: 0;
-width: 124px;
-height: 29px;
-margin-left: -62px;
-border-radius: 50%;
-background:
-radial-gradient(ellipse at 35% 22%,
-#e7c77b 0%,
-#8b6429 20%,
-#30200e 48%,
-#090b10 78%);
-border: 2px solid #c9a24b;
-box-shadow:
-inset 0 2px 3px rgba(255, 237, 177, .45),
-inset 0 -5px 9px rgba(0, 0, 0, .75),
-0 7px 14px rgba(0, 0, 0, .65),
-0 0 10px rgba(201, 162, 75, .12);
-z-index: 4;
-}
-
-.lamp-base::before {
-content: "";
-position: absolute;
-top: 4px;
-left: 12%;
-right: 12%;
-height: 3px;
-border-radius: 50%;
-background: linear-gradient(90deg,
-transparent,
-rgba(255, 241, 193, .85),
-transparent);
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  width: 112px;
+  height: 29px;
+  margin-left: -56px;
+  z-index: 5;
+  border: 2px solid #c99c45;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 35% 24%, #f5da91, #9d722e 32%, #35230f 64%, #0b0c12 88%);
+  box-shadow:
+    0 5px 13px rgba(0,0,0,.65),
+    0 0 18px rgba(255,190,68,.35),
+    inset 0 2px 3px rgba(255,242,194,.5);
 }
 
 .lamp-base::after {
-content: "";
-position: absolute;
-top: 8px;
-left: 50%;
-width: 48px;
-height: 8px;
-margin-left: -24px;
-border-radius: 50%;
-background: rgba(255, 255, 255, .10);
+  content: "";
+  position: absolute;
+  top: 5px;
+  left: 18%;
+  width: 64%;
+  height: 8px;
+  border-radius: 50%;
+  background: linear-gradient(90deg, transparent, rgba(255,237,177,.5), transparent);
 }
 
-/* ===== LAMP POLE ===== */
+/* ================= STRAIGHT POLE ================= */
 
 .lamp-pole {
-position: absolute;
-left: 50%;
-bottom: 23px;
-width: 11px;
-height: 139px;
-margin-left: -5.5px;
-border-radius: 8px;
-background: linear-gradient(90deg,
-#68471d 0%,
-#f1d28b 17%,
-#9b722f 32%,
-#17151a 49%,
-#080a10 61%,
-#bd9141 83%,
-#f5d993 100%);
-box-shadow:
-inset 1px 0 2px rgba(255, 238, 180, .45),
-2px 0 4px rgba(0, 0, 0, .55);
-z-index: 3;
+  position: absolute;
+  left: 50%;
+  bottom: 36px;
+  width: 10px;
+  height: 165px;
+  margin-left: -5px;
+  z-index: 4;
+  border-radius: 8px;
+  background: linear-gradient(90deg, #5a3a17, #f3d68a 20%, #9c702b 39%, #30200e 55%, #e8c36e 80%, #65431b);
+  box-shadow: 2px 0 5px rgba(0,0,0,.6);
 }
 
-/* ===== BOTTOM JOINT ===== */
+/* ================= JOINTS ================= */
 
 .lamp-joint-bottom {
-position: absolute;
-left: 50%;
-bottom: 151px;
-width: 25px;
-height: 25px;
-margin-left: -12.5px;
-border-radius: 50%;
-background: radial-gradient(circle at 32% 28%,
-#fff0bb 0%,
-#d7ad55 20%,
-#8c6426 55%,
-#21180d 100%);
-border: 2px solid #4c391a;
-box-shadow:
-inset 0 1px 2px rgba(255, 255, 255, .45),
-0 3px 7px rgba(0, 0, 0, .55);
-z-index: 5;
+  position: absolute;
+  left: 50%;
+  bottom: 190px;
+  width: 27px;
+  height: 27px;
+  margin-left: -13.5px;
+  z-index: 6;
+  border: 2px solid #79531e;
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 25%, #fff2b8, #d9ad52 30%, #926324 65%, #38220c);
+  box-shadow: 0 3px 8px rgba(0,0,0,.55), 0 0 10px rgba(255,194,82,.24);
 }
 
-/* ===== ARTICULATED ARM ===== */
-
 .lamp-arm {
-position: absolute;
-left: 50%;
-bottom: 163px;
-width: 9px;
-height: 151px;
-margin-left: -4.5px;
-border-radius: 8px;
-background: linear-gradient(90deg,
-#704c20 0%,
-#f5d58a 18%,
-#9a702e 34%,
-#17151a 50%,
-#080a0e 62%,
-#b88a39 82%,
-#ffe4a0 100%);
-box-shadow:
-inset 1px 0 2px rgba(255, 236, 180, .4),
-2px 0 5px rgba(0, 0, 0, .5);
-transform-origin: bottom center;
-transform: rotate(-36deg);
-z-index: 3;
+  position: absolute;
+  left: 50%;
+  bottom: 202px;
+  width: 9px;
+  height: 148px;
+  margin-left: -4.5px;
+  z-index: 5;
+  border-radius: 8px;
+  transform: rotate(-34deg);
+  transform-origin: bottom center;
+  background: linear-gradient(90deg, #593916, #f5d989 20%, #9e712b 40%, #33200e 57%, #e8c36e 82%, #67451b);
+  box-shadow: 2px 1px 5px rgba(0,0,0,.55);
 }
 
 .lamp-joint-top {
-position: absolute;
-top: -11px;
-left: 50%;
-width: 25px;
-height: 25px;
-margin-left: -12.5px;
-border-radius: 50%;
-background: radial-gradient(circle at 30% 28%,
-#fff0b6 0%,
-#d9b260 22%,
-#8b6428 57%,
-#21170b 100%);
-border: 2px solid #60471f;
-box-shadow:
-inset 0 1px 3px rgba(255, 255, 255, .35),
-0 3px 7px rgba(0, 0, 0, .6);
-z-index: 5;
+  position: absolute;
+  top: -11px;
+  left: 50%;
+  width: 24px;
+  height: 24px;
+  margin-left: -12px;
+  border: 2px solid #77521f;
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 25%, #fff0b1, #d8ad58 30%, #926324 65%, #38220c);
+  box-shadow: 0 2px 8px rgba(0,0,0,.6), 0 0 9px rgba(255,190,75,.2);
 }
 
-/* ============================================
-LAMP SHADE
-============================================ */
+/* ================= PREMIUM METAL SHADE ================= */
 
 .lamp-shade {
-position: absolute;
-top: -19px;
-left: 50%;
-width: 142px;
-height: 87px;
-margin-left: -22px;
-border-radius: 76px 76px 22px 22px;
-background:
-linear-gradient(145deg,
-#51505a 0%,
-#22232c 17%,
-#080a10 54%,
-#17151b 76%,
-#040509 100%);
-border: 2px solid #d3ad5b;
-box-shadow:
-inset 0 3px 5px rgba(255, 255, 255, .13),
-inset 0 -5px 9px rgba(0, 0, 0, .75),
-0 8px 20px rgba(0, 0, 0, .65),
-0 0 8px rgba(201, 162, 75, .12);
-overflow: visible;
-transform: rotate(36deg);
-transform-origin: 22% 18%;
-z-index: 6;
+  position: absolute;
+  top: 104px;
+  left: calc(50% - 133px);
+  width: 154px;
+  height: 91px;
+  margin-left: 0;
+  z-index: 8;
+  overflow: hidden;
+  border: 2px solid #d5aa50;
+  border-bottom: 4px solid #f1cc72;
+  border-radius: 78px 78px 23px 23px;
+  transform: rotate(0deg);
+  transform-origin: center;
+  background: radial-gradient(ellipse at 38% 8%, #4d3820, #17171a 30%, #090b11 70%, #02040a);
+  box-shadow:
+    0 5px 12px rgba(0,0,0,.62),
+    0 0 10px rgba(255,191,75,.25),
+    inset 0 3px 7px rgba(255,228,157,.12);
 }
 
 .lamp-shade::before {
-content: "";
-position: absolute;
-left: 5%;
-right: 5%;
-top: 5px;
-height: 12px;
-border-radius: 50%;
-background: linear-gradient(90deg,
-transparent,
-rgba(255, 255, 255, .16),
-transparent);
-}
-
-.lamp-shade::after {
-content: "";
-position: absolute;
-left: -2px;
-right: -2px;
-bottom: -2px;
-height: 8px;
-border-radius: 50%;
-border: 2px solid #f3cd79;
-background: linear-gradient(180deg,
-#d6ae5c,
-#65491c);
-box-shadow: 0 2px 6px rgba(0, 0, 0, .5);
+  content: "";
+  position: absolute;
+  top: 7px;
+  left: 18%;
+  width: 52%;
+  height: 7px;
+  border-radius: 50%;
+  background: linear-gradient(90deg, transparent, rgba(255,226,150,.7), transparent);
+  filter: blur(1px);
 }
 
 .lamp-shade-inner {
-position: absolute;
-left: 7px;
-right: 7px;
-bottom: 1px;
-height: 43px;
-border-radius: 50% 50% 45% 45%;
-background: radial-gradient(ellipse at 50% 100%,
-#4a3415 0%,
-#24190d 42%,
-rgba(10, 10, 12, .2) 78%);
-transition: background .7s ease, box-shadow .7s ease;
-z-index: 1;
+  position: absolute;
+  left: 5px;
+  right: 5px;
+  bottom: -2px;
+  height: 35px;
+  border-radius: 50% 50% 18px 18px;
+  background: radial-gradient(ellipse at 50% 100%, #ffedb0, #ffce61 28%, #bd791f 58%, rgba(87,49,13,.2) 83%);
+  opacity: .48;
+  transition: opacity .45s ease, filter .45s ease;
 }
+
+/* ================= BULB ================= */
 
 .lamp-bulb {
-position: absolute;
-left: 50%;
-bottom: 8px;
-width: 25px;
-height: 24px;
-margin-left: -12.5px;
-border-radius: 50% 50% 44% 44%;
-background: #493216;
-box-shadow: none;
-transition:
-background .7s ease,
-box-shadow .7s ease;
-z-index: 2;
+  position: absolute;
+  left: 50%;
+  bottom: 5px;
+  width: 25px;
+  height: 25px;
+  margin-left: -12.5px;
+  z-index: 9;
+  border-radius: 50%;
+  background: #403019;
+  box-shadow: none;
+  transition: background .45s ease, box-shadow .45s ease;
 }
 
-/* ON STATE: bright glowing bulb */
+/* ================= WIDE LIGHT CONE ================= */
+
+.lamp-glow-pool {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 370px;
+  height: 225px;
+  margin-left: -185px;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(ellipse at 50% 85%,
+    rgba(255,220,135,.75) 0%,
+    rgba(255,183,73,.48) 23%,
+    rgba(255,151,42,.25) 45%,
+    rgba(255,145,35,.08) 65%,
+    transparent 78%);
+  filter: blur(7px);
+  transition: opacity .65s ease;
+}
+
+.lamp-light-cone {
+  position: absolute;
+  left: 50%;
+  top: 160px;
+  width: 340px;
+  height: 280px;
+  margin-left: -170px;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  clip-path: polygon(39% 0, 61% 0, 100% 100%, 0 100%);
+  background: linear-gradient(180deg,
+    rgba(255,245,198,.68) 0%,
+    rgba(255,218,135,.46) 22%,
+    rgba(255,181,75,.29) 50%,
+    rgba(255,160,48,.15) 76%,
+    rgba(255,146,35,.04) 100%);
+  filter: blur(7px);
+  transition: opacity .65s ease;
+}
+
+/* ON STATE */
 
 .lamp-stage.lamp-on .lamp-shade-inner {
-background: radial-gradient(ellipse at 50% 100%,
-#fff8d8 0%,
-#ffe29b 23%,
-#ffbd4d 49%,
-rgba(255, 169, 47, .38) 72%,
-transparent 100%);
-box-shadow:
-0 0 17px rgba(255, 204, 100, .75);
+  opacity: 1;
+  filter: brightness(1.4);
 }
 
 .lamp-stage.lamp-on .lamp-bulb {
-background: #fff8cf;
-box-shadow:
-0 0 10px 5px rgba(255, 242, 185, .98),
-0 0 30px 15px rgba(255, 194, 81, .85),
-0 0 65px 32px rgba(255, 158, 45, .45);
+  background: #fff9d8;
+  box-shadow:
+    0 0 10px 5px rgba(255,249,211,.98),
+    0 0 28px 14px rgba(255,221,133,.92),
+    0 0 65px 32px rgba(255,172,64,.62);
 }
 
-/* ============================================
-BRIGHT LIGHT CONE
-============================================ */
-
-.lamp-light-cone {
-position: absolute;
-left: 50%;
-bottom: 12px;
-width: 330px;
-height: 325px;
-margin-left: -165px;
-background:
-linear-gradient(180deg,
-rgba(255, 242, 183, .72) 0%,
-rgba(255, 208, 112, .54) 15%,
-rgba(255, 179, 67, .35) 42%,
-rgba(255, 166, 52, .20) 67%,
-rgba(255, 157, 45, .07) 86%,
-transparent 100%);
-clip-path: polygon(43% 0%, 57% 0%, 100% 100%, 0% 100%);
-filter: blur(7px);
-opacity: 0;
-transform: scaleY(.88);
-transform-origin: top center;
-transition:
-opacity 1s ease,
-transform 1.2s ease;
-z-index: 1;
-pointer-events: none;
-}
-
+.lamp-stage.lamp-on .lamp-glow-pool,
 .lamp-stage.lamp-on .lamp-light-cone {
-opacity: 1;
-transform: scaleY(1);
+  opacity: 1;
 }
 
-/* Wider soft light surrounding the cone */
-
-.lamp-stage::after {
-content: "";
-position: absolute;
-left: 50%;
-bottom: 10px;
-width: 300px;
-height: 285px;
-margin-left: -150px;
-background: radial-gradient(ellipse at 50% 12%,
-rgba(255, 199, 91, .0) 0%,
-rgba(255, 181, 67, .0) 30%,
-rgba(255, 173, 59, .0) 60%,
-transparent 100%);
-filter: blur(15px);
-opacity: 0;
-transition: opacity 1s ease;
-z-index: 1;
-pointer-events: none;
+.lamp-stage.lamp-on .lamp-base {
+  box-shadow:
+    0 5px 13px rgba(0,0,0,.55),
+    0 0 28px rgba(255,184,68,.6),
+    0 0 58px rgba(255,163,48,.28),
+    inset 0 2px 3px rgba(255,238,180,.65);
 }
 
-.lamp-stage.lamp-on::after {
-background: radial-gradient(ellipse at 50% 12%,
-rgba(255, 223, 147, .28) 0%,
-rgba(255, 185, 76, .24) 35%,
-rgba(255, 163, 47, .14) 63%,
-transparent 100%);
-opacity: 1;
+.lamp-stage.lamp-on .lamp-pole,
+.lamp-stage.lamp-on .lamp-arm {
+  filter: brightness(1.22);
 }
 
-/* ===== LIGHT POOL ON THE DESK ===== */
-
-.lamp-glow-pool {
-position: absolute;
-left: 50%;
-bottom: -10px;
-width: 340px;
-max-width: 120vw;
-height: 120px;
-margin-left: -170px;
-border-radius: 50%;
-background: radial-gradient(ellipse at 50% 45%,
-rgba(255, 227, 155, .0) 0%,
-rgba(255, 202, 106, .0) 22%,
-rgba(255, 172, 58, .0) 50%,
-transparent 75%);
-filter: blur(9px);
-opacity: 0;
-transition: opacity 1.1s ease;
-z-index: 2;
-pointer-events: none;
+.lamp-stage.lamp-on .lamp-shade {
+  box-shadow:
+    0 5px 12px rgba(0,0,0,.6),
+    0 0 18px rgba(255,190,70,.42),
+    inset 0 3px 7px rgba(255,228,157,.18);
 }
 
-.lamp-stage.lamp-on .lamp-glow-pool {
-background: radial-gradient(ellipse at 50% 45%,
-rgba(255, 235, 179, .35) 0%,
-rgba(255, 202, 106, .32) 22%,
-rgba(255, 172, 58, .20) 50%,
-transparent 75%);
-opacity: 1;
-}
-
-/* ============================================
-PULL CHAIN
-============================================ */
+/* ================= PULL CHAIN ================= */
 
 .lamp-chain-zone {
-position: absolute;
-left: 50%;
-top: 8px;
-width: 44px;
-height: 105px;
-margin-left: -22px;
-display: flex;
-flex-direction: column;
-align-items: center;
-cursor: pointer;
-touch-action: manipulation;
--webkit-tap-highlight-color: transparent;
-user-select: none;
--webkit-user-select: none;
-z-index: 8;
+  position: absolute;
+  top: 155px;
+  left: calc(50% - 8px);
+  width: 34px;
+  height: 100px;
+  margin-left: 0;
+  z-index: 12;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .lamp-chain-rope {
-width: 2px;
-height: 72px;
-border-radius: 2px;
-background: linear-gradient(180deg,
-#ffe7a5 0%,
-#c9a24b 45%,
-#8a6429 100%);
-box-shadow: 0 0 4px rgba(255, 199, 88, .25);
-transform-origin: top center;
-transition: transform .3s ease;
+  display: block;
+  width: 3px;
+  height: 68px;
+  flex: 0 0 68px;
+  border-radius: 4px;
+  background: repeating-linear-gradient(180deg, #f5d98e 0, #9a6b24 3px, #f3d17a 5px);
+  box-shadow: 0 0 4px rgba(255,204,105,.3);
+  transform-origin: top center;
+  transition: transform .25s ease;
 }
 
 .lamp-chain-pendant {
-width: 14px;
-height: 19px;
-margin-top: -2px;
-border-radius: 50% 50% 45% 45%;
-background: radial-gradient(circle at 32% 24%,
-#fff4c7 0%,
-#e2bd69 25%,
-#a47b34 67%,
-#604318 100%);
-border: 1px solid rgba(255, 225, 148, .75);
-box-shadow:
-inset 0 1px 2px rgba(255, 255, 255, .55),
-0 2px 6px rgba(0, 0, 0, .55);
+  display: block;
+  flex: 0 0 auto;
+  width: 16px;
+  height: 22px;
+  margin-top: -2px;
+  border: 1px solid #f5d98e;
+  border-radius: 48% 48% 55% 55%;
+  background: radial-gradient(circle at 32% 25%, #fff6cb, #e5bc64 32%, #a36d25 72%, #4a2b0d);
+  box-shadow: 0 2px 7px rgba(0,0,0,.55), 0 0 9px rgba(255,198,83,.35);
 }
 
 .lamp-chain-zone.chain-pulling .lamp-chain-rope {
-animation: chainPull .6s ease;
+  animation: chainPull .55s ease;
+}
+
+.lamp-chain-zone.chain-pulling .lamp-chain-pendant {
+  animation: pendantPull .55s ease;
 }
 
 @keyframes chainPull {
-0% {
-transform: translateY(0) rotate(0);
+  0%, 100% { transform: translateY(0) rotate(0); }
+  30% { transform: translateY(14px) rotate(5deg); }
+  55% { transform: translateY(7px) rotate(-4deg); }
 }
-28% {
-transform: translateY(18px) rotate(7deg);
-}
-52% {
-transform: translateY(9px) rotate(-5deg);
-}
-75% {
-transform: translateY(4px) rotate(2deg);
-}
-100% {
-transform: translateY(0) rotate(0);
-}
+
+@keyframes pendantPull {
+  0%, 100% { transform: translateY(0); }
+  30% { transform: translateY(12px); }
+  55% { transform: translateY(5px); }
 }
 
 .lamp-chain-zone:hover .lamp-chain-rope {
-transform: translateY(4px);
+  transform: translateY(3px);
 }
 
-.lamp-chain-zone:focus,
 .lamp-chain-zone:focus-visible {
-outline: 2px solid #38bdf8;
-outline-offset: 5px;
-border-radius: 9px;
+  outline: 2px solid #38bdf8;
+  outline-offset: 5px;
+  border-radius: 8px;
 }
 
-/* ===== BENGALI INSTRUCTION ===== */
+/* ================= UPDATED BENGALI INSTRUCTION ================= */
 
 .lamp-instruction {
-position: absolute;
-left: 50%;
-top: 112px;
-width: 205px;
-max-width: 85vw;
-margin: 0;
-transform: translateX(-50%);
-color: #ffe2a0;
-font-family: inherit;
-font-size: 13px;
-font-weight: 500;
-font-style: normal;
-line-height: 1.65;
-letter-spacing: 0;
-text-align: center;
-text-shadow:
-0 1px 3px rgba(0, 0, 0, .95),
-0 0 10px rgba(255, 183, 67, .3);
-opacity: 1;
-transition: opacity .5s ease;
-z-index: 9;
-pointer-events: none;
+  position: absolute;
+  top: 264px;
+  left: calc(50% + 8px);
+  width: 205px;
+  max-width: 68%;
+  margin: 0;
+  transform: none;
+  z-index: 13;
+  color: #ffe2a0;
+  font-size: 13px;
+  font-weight: 700;
+  font-style: normal;
+  line-height: 1.7;
+  text-align: left;
+  text-shadow: 0 1px 5px rgba(0,0,0,.98), 0 0 12px rgba(255,176,55,.3);
+  pointer-events: none;
+  transition: opacity .35s ease;
 }
 
 .lamp-stage.lamp-on .lamp-instruction {
-opacity: 0;
+  opacity: 0;
 }
 
-/* ============================================
-LOGIN / REGISTER PANEL
-============================================ */
+/* ================= AUTH PANEL ================= */
 
 .lamp-auth-panel {
-position: relative;
-max-width: 430px;
-width: 100%;
-box-sizing: border-box;
-background:
-linear-gradient(145deg,
-rgba(12, 20, 38, .93),
-rgba(4, 10, 23, .96));
-backdrop-filter: blur(18px);
--webkit-backdrop-filter: blur(18px);
-border: 1px solid rgba(201, 162, 75, .42);
-border-radius: 22px;
-padding: 28px 26px;
-box-shadow:
-0 20px 50px rgba(0, 0, 0, .55),
-0 0 0 1px rgba(201, 162, 75, .08) inset,
-0 0 22px rgba(201, 162, 75, .08);
-opacity: 0;
-transform: translateY(24px) scale(.97);
-pointer-events: none;
-transition:
-opacity .7s ease,
-transform .7s ease,
-box-shadow .7s ease;
+  position: relative;
+  z-index: 15;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 440px;
+  min-width: 0;
+  padding: 30px 28px;
+  border: 1px solid rgba(220,177,89,.3);
+  border-radius: 22px;
+  background: linear-gradient(145deg, rgba(15,22,39,.96), rgba(7,12,27,.97));
+  box-shadow: 0 24px 60px rgba(0,0,0,.48), 0 0 28px rgba(255,180,65,.06), inset 0 1px 0 rgba(255,255,255,.04);
+  opacity: 0;
+  transform: translateY(22px) scale(.98);
+  pointer-events: none;
+  transition: opacity .6s ease, transform .6s ease;
 }
 
 .lamp-auth-panel.panel-revealed {
-opacity: 1;
-transform: translateY(0) scale(1);
-pointer-events: auto;
-box-shadow:
-0 20px 50px rgba(0, 0, 0, .55),
-0 0 0 1px rgba(201, 162, 75, .10) inset,
-0 0 28px rgba(201, 162, 75, .12);
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
 }
 
-/* ===== BRAND HEADER ===== */
-
 .lamp-brand-header {
-display: flex;
-align-items: center;
-gap: 12px;
-margin-bottom: 22px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 22px;
 }
 
 .lamp-brand-icon {
-font-size: 28px;
-filter: drop-shadow(0 0 7px rgba(56, 189, 248, .5));
+  flex: 0 0 auto;
+  font-size: 29px;
+  filter: drop-shadow(0 0 7px rgba(56,189,248,.4));
 }
 
 .lamp-brand-title {
-font-size: 20px;
-font-weight: 750;
-line-height: 1.35;
-color: #fff;
+  color: #fff;
+  font-size: 23px;
+  font-weight: 800;
+  line-height: 1.3;
 }
 
 .lamp-brand-title span {
-color: var(--secondary, #38bdf8);
+  color: #f2c75e;
 }
 
 .lamp-brand-tagline {
-margin-top: 3px;
-color: #e9ce8d;
-font-size: 11px;
-letter-spacing: .35px;
+  margin-top: 5px;
+  color: #c1c9d8;
+  font-size: 12px;
+  letter-spacing: .3px;
 }
 
-/* ===== AUTH TABS ===== */
-
 .lamp-auth-panel .auth-tabs {
-background: rgba(0, 0, 0, .32);
-border: 1px solid rgba(201, 162, 75, .2);
-border-radius: 12px;
+  border: 1px solid rgba(201,162,75,.23);
+  border-radius: 12px;
+  background: rgba(0,0,0,.27);
 }
 
 .lamp-auth-panel .auth-tab-active {
-background: linear-gradient(135deg,
-#f3da9e,
-#c9a24b 58%,
-#99702c);
-color: #171006;
-box-shadow: 0 3px 12px rgba(201, 162, 75, .2);
+  color: #171005;
+  background: linear-gradient(135deg, #ffe5a0, #d0a13d 65%, #a77825);
+  box-shadow: 0 4px 16px rgba(201,162,75,.18);
 }
 
-/* ============================================
-INPUTS
-============================================ */
+/* ================= INPUTS ================= */
 
 .input-icon-group .input-icon-wrapper {
-position: relative;
-display: flex;
-align-items: center;
+  position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .input-icon-wrapper .input-icon {
-position: absolute;
-left: 14px;
-font-size: 14px;
-pointer-events: none;
-z-index: 2;
-opacity: .85;
+  position: absolute;
+  left: 14px;
+  z-index: 2;
+  font-size: 14px;
+  pointer-events: none;
+  opacity: .9;
 }
 
 .input-icon-wrapper input {
-box-sizing: border-box;
-width: 100%;
-min-width: 0;
-height: 48px;
-padding: 0 14px 0 40px;
-background: rgba(0, 0, 0, .32);
-border: 1px solid rgba(201, 162, 75, .27);
-border-radius: 12px;
-color: #fff;
-font-size: 13px;
-transition:
-border-color .25s ease,
-box-shadow .25s ease,
-background .25s ease;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  height: 49px;
+  padding: 0 14px 0 41px;
+  border: 1px solid rgba(201,162,75,.22);
+  border-radius: 12px;
+  outline: none;
+  color: #f7f9ff;
+  background: rgba(3,7,17,.72);
+  font-size: 13px;
+  transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
 }
 
 .input-icon-wrapper input::placeholder {
-color: #a9b2c4;
-opacity: 1;
+  color: #8490a6;
 }
 
 .input-icon-wrapper input:focus {
-outline: none;
-border-color: var(--secondary, #38bdf8);
-background: rgba(4, 10, 22, .65);
-box-shadow: 0 0 0 3px rgba(56, 189, 248, .13);
+  border-color: #d8b257;
+  background: rgba(5,10,22,.95);
+  box-shadow: 0 0 0 3px rgba(201,162,75,.12);
 }
 
 .input-icon-wrapper.password-input-wrapper input {
-padding-right: 44px;
+  padding-right: 45px;
 }
 
-/* ===== GOLD LOGIN BUTTON ===== */
+/* ================= BUTTONS ================= */
 
 .btn-lamp-gold {
-background: linear-gradient(135deg,
-#ffe9a6 0%,
-#f5bd3e 48%,
-#d58c13 100%);
-color: #171006;
-font-weight: 750;
-border: 1px solid rgba(255, 224, 143, .65);
-box-shadow:
-0 6px 18px rgba(201, 162, 75, .27),
-inset 0 1px 0 rgba(255, 255, 255, .35);
-transition:
-transform .25s ease,
-box-shadow .25s ease,
-filter .25s ease;
+  border: 1px solid rgba(255,232,168,.38);
+  border-radius: 12px;
+  color: #1b1305;
+  font-weight: 800;
+  background: linear-gradient(110deg, #ffe7a0, #e8bd52 45%, #bd8b2b);
+  box-shadow: 0 8px 22px rgba(201,162,75,.25), inset 0 1px 0 rgba(255,255,255,.38);
+  transition: transform .2s ease, box-shadow .2s ease, filter .2s ease;
 }
 
 .btn-lamp-gold:hover {
-transform: translateY(-2px);
-filter: brightness(1.04);
-box-shadow:
-0 10px 26px rgba(201, 162, 75, .38),
-inset 0 1px 0 rgba(255, 255, 255, .4);
+  transform: translateY(-2px);
+  filter: brightness(1.06);
+  box-shadow: 0 12px 28px rgba(201,162,75,.35), inset 0 1px 0 rgba(255,255,255,.4);
 }
-
-.btn-lamp-gold:focus-visible {
-outline: 2px solid #ffe9a6;
-outline-offset: 3px;
-}
-
-/* ===== GOOGLE BUTTON ===== */
 
 .btn-lamp-google {
-background: rgba(0, 0, 0, .35);
-border: 1px solid rgba(255, 255, 255, .15);
-color: #fff;
-transition:
-border-color .25s ease,
-background .25s ease;
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 12px;
+  color: #f5f7fc;
+  background: rgba(3,7,17,.7);
+  transition: border-color .2s ease, background .2s ease;
 }
 
 .btn-lamp-google:hover {
-border-color: var(--secondary, #38bdf8);
-background: rgba(0, 0, 0, .5);
+  border-color: rgba(201,162,75,.55);
+  background: rgba(12,18,32,.96);
 }
-
-/* ===== LOGOUT BUTTON ===== */
 
 .lamp-logout-btn {
-position: absolute;
-top: 20px;
-right: 20px;
-z-index: 10;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 20;
 }
 
-/* ============================================
-TABLET LAYOUT
-============================================ */
+/* ================= DESKTOP ================= */
+
+@media (min-width: 901px) {
+  .lamp-container {
+    flex-wrap: nowrap;
+  }
+
+  .lamp-stage-outer {
+    flex-basis: 440px;
+  }
+
+  .lamp-auth-panel {
+    flex: 0 1 440px;
+  }
+}
+
+/* ================= MOBILE ================= */
 
 @media (max-width: 900px) {
-.lamp-container {
-flex-direction: column;
-gap: 22px;
+  .lamp-scene {
+    padding: 35px 16px 48px;
+  }
+
+  .lamp-container {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .lamp-stage-outer {
+    flex: 0 0 auto;
+    width: 100%;
+    margin: 0;
+    transform: none;
+  }
+
+  .lamp-stage {
+    width: 340px;
+    max-width: 100%;
+    height: 430px;
+    transform: scale(.92);
+    transform-origin: top center;
+    margin-bottom: -34px;
+  }
+
+  .lamp-desk {
+    width: min(310px, 94%);
+  }
+
+  .lamp-glow-pool {
+    width: 330px;
+    margin-left: -165px;
+  }
+
+  .lamp-light-cone {
+    width: 310px;
+    margin-left: -155px;
+  }
+
+  .lamp-auth-panel {
+    width: 100%;
+    max-width: 440px;
+    padding: 26px 22px;
+  }
+
+  .lamp-logout-btn {
+    top: 12px;
+    right: 12px;
+  }
 }
 
-.lamp-stage-outer {
-flex: 0 1 auto;
-width: 100%;
-transform: none;
-margin-bottom: 0;
+@media (max-width: 380px) {
+  .lamp-scene {
+    padding: 25px 12px 36px;
+  }
+
+  .lamp-stage {
+    transform: scale(.82);
+    margin-bottom: -76px;
+  }
+
+  .lamp-auth-panel {
+    padding: 22px 16px;
+    border-radius: 18px;
+  }
+
+  .lamp-brand-title {
+    font-size: 21px;
+  }
+
+  .lamp-instruction {
+    font-size: 12px;
+  }
 }
 
-.lamp-stage {
-width: 340px;
-height: 400px;
-margin: 0 auto;
-}
-
-.lamp-desk {
-width: 310px;
-}
-
-.lamp-auth-panel {
-max-width: 460px;
-}
-}
-
-/* ============================================
-MOBILE LAYOUT
-============================================ */
-
-@media (max-width: 480px) {
-.lamp-scene {
-padding: 32px 12px 44px;
-}
-
-.lamp-container {
-gap: 12px;
-}
-
-.lamp-stage-outer {
-width: 100%;
-transform: none;
-margin-bottom: 0;
-}
-
-.lamp-stage {
-width: 320px;
-max-width: 100%;
-height: 375px;
-margin: 0 auto;
-}
-
-.lamp-base {
-width: 112px;
-height: 27px;
-margin-left: -56px;
-}
-
-.lamp-pole {
-height: 130px;
-bottom: 21px;
-}
-
-.lamp-joint-bottom {
-bottom: 141px;
-}
-
-.lamp-arm {
-height: 140px;
-bottom: 152px;
-}
-
-.lamp-shade {
-width: 130px;
-height: 80px;
-}
-
-.lamp-desk {
-width: min(290px, 94%);
-height: 15px;
-}
-
-.lamp-light-cone {
-width: 300px;
-height: 300px;
-margin-left: -150px;
-bottom: 12px;
-}
-
-.lamp-glow-pool {
-width: 310px;
-height: 110px;
-margin-left: -155px;
-}
-
-.lamp-stage::before {
-width: 290px;
-height: 280px;
-}
-
-.lamp-stage::after {
-width: 290px;
-height: 260px;
-margin-left: -145px;
-}
-
-.lamp-chain-zone {
-width: 44px;
-height: 100px;
-}
-
-.lamp-instruction {
-top: 105px;
-width: 205px;
-font-size: 12px;
-line-height: 1.7;
-}
-
-.lamp-auth-panel {
-width: 100%;
-max-width: 430px;
-padding: 22px 18px;
-border-radius: 18px;
-}
-
-.lamp-brand-header {
-gap: 10px;
-margin-bottom: 18px;
-}
-
-.lamp-brand-title {
-font-size: 19px;
-}
-
-.lamp-logout-btn {
-top: 12px;
-right: 12px;
-}
-}
-
-/* Small phones */
-
-@media (max-width: 360px) {
-.lamp-scene {
-padding-left: 8px;
-padding-right: 8px;
-}
-
-.lamp-stage {
-width: 300px;
-height: 360px;
-}
-
-.lamp-base {
-width: 104px;
-margin-left: -52px;
-}
-
-.lamp-pole {
-height: 122px;
-}
-
-.lamp-joint-bottom {
-bottom: 133px;
-}
-
-.lamp-arm {
-height: 132px;
-bottom: 144px;
-}
-
-.lamp-shade {
-width: 122px;
-height: 75px;
-}
-
-.lamp-desk {
-width: 270px;
-}
-
-.lamp-light-cone {
-width: 280px;
-height: 280px;
-margin-left: -140px;
-}
-
-.lamp-glow-pool {
-width: 285px;
-margin-left: -142.5px;
-}
-
-.lamp-auth-panel {
-padding: 20px 14px;
-}
-}
-
-/* ============================================
-ACCESSIBILITY
-============================================ */
+/* ================= REDUCED MOTION ================= */
 
 @media (prefers-reduced-motion: reduce) {
-.lamp-chain-zone.chain-pulling .lamp-chain-rope {
-animation: none;
-}
+  .lamp-chain-zone.chain-pulling .lamp-chain-rope,
+  .lamp-chain-zone.chain-pulling .lamp-chain-pendant {
+    animation: none;
+  }
 
-.lamp-auth-panel,
-.lamp-glow-pool,
-.lamp-light-cone,
-.lamp-instruction,
-.lamp-bulb,
-.lamp-shade-inner,
-.lamp-stage::before,
-.lamp-stage::after,
-.lamp-scene::before,
-.btn-lamp-gold,
-.btn-lamp-google {
-transition: none !important;
-}
-}
+  .lamp-auth-panel,
+  .lamp-glow-pool,
+  .lamp-light-cone,
+  .lamp-instruction,
+  .lamp-bulb,
+  .lamp-shade-inner {
+    transition: none;
+  }
+                              }
