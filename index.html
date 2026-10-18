@@ -88,30 +88,111 @@
 
     <div class="lamp-stage-outer">
       <div class="lamp-stage" id="lampStage">
-        <div class="lamp-glow-pool" id="lampGlowPool"></div>
-        <div class="lamp-light-cone" id="lampLightCone"></div>
 
-        <div class="lamp-base"></div>
-        <div class="lamp-pole"></div>
-        <div class="lamp-joint lamp-joint-bottom"></div>
-        <div class="lamp-arm">
-          <div class="lamp-joint lamp-joint-top"></div>
-          <div class="lamp-shade">
-            <div class="lamp-shade-inner"></div>
-            <div class="lamp-bulb" id="lampBulb"></div>
-          </div>
-        </div>
+        <svg class="lamp-svg" viewBox="0 0 320 340" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="goldMetal" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#F8E3A3"/>
+              <stop offset="25%" stop-color="#D9AE51"/>
+              <stop offset="50%" stop-color="#9C7429"/>
+              <stop offset="75%" stop-color="#E9CE8D"/>
+              <stop offset="100%" stop-color="#8a6a28"/>
+            </linearGradient>
+            <linearGradient id="darkMetal" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#2b2f38"/>
+              <stop offset="45%" stop-color="#14161b"/>
+              <stop offset="100%" stop-color="#05060a"/>
+            </linearGradient>
+            <radialGradient id="shadeInnerOff" cx="50%" cy="85%" r="70%">
+              <stop offset="0%" stop-color="#3a2a12"/>
+              <stop offset="100%" stop-color="#121418" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="shadeInnerOn" cx="50%" cy="85%" r="75%">
+              <stop offset="0%" stop-color="#FFEFB0"/>
+              <stop offset="35%" stop-color="#FFC85E"/>
+              <stop offset="75%" stop-color="#C9861A" stop-opacity="0.5"/>
+              <stop offset="100%" stop-color="#C9861A" stop-opacity="0"/>
+            </radialGradient>
+            <radialGradient id="bulbGlow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#FFFBEA"/>
+              <stop offset="60%" stop-color="#FFD98A"/>
+              <stop offset="100%" stop-color="#FFD98A" stop-opacity="0"/>
+            </radialGradient>
+            <filter id="softGlow" x="-100%" y="-100%" width="300%" height="300%">
+              <feGaussianBlur stdDeviation="8" result="blur"/>
+              <feMerge>
+                <feMergeNode in="blur"/>
+                <feMergeNode in="SourceGraphic"/>
+              </feMerge>
+            </filter>
+          </defs>
 
-        <div class="lamp-chain-zone"
-             id="lampChain"
-             role="button"
-             tabindex="0"
-             aria-label="Pull the chain to begin">
+          <!-- Light cone (behind everything, only visible when lamp is on) -->
+          <polygon id="svgLightCone" class="lamp-light-cone-svg" points="150,95 190,95 260,300 80,300" />
+
+          <!-- Desk glow pool -->
+          <ellipse id="svgGlowPool" class="lamp-glow-pool-svg" cx="170" cy="310" rx="130" ry="26" />
+
+          <!-- Base -->
+          <ellipse cx="170" cy="312" rx="62" ry="14" fill="url(#darkMetal)" stroke="url(#goldMetal)" stroke-width="3"/>
+          <ellipse cx="170" cy="308" rx="34" ry="6" fill="#ffffff" opacity="0.07"/>
+
+          <!-- Pole -->
+          <rect x="163" y="205" width="10" height="100" rx="5" fill="url(#goldMetal)"/>
+          <rect x="166" y="205" width="4" height="100" fill="url(#darkMetal)"/>
+
+          <!-- Bottom joint -->
+          <circle cx="168" cy="205" r="13" fill="url(#goldMetal)" stroke="#05060a" stroke-width="1.5"/>
+          <circle cx="168" cy="205" r="4" fill="#05060a"/>
+
+          <!-- Lower arm (angled) -->
+          <g>
+            <rect x="163" y="110" width="10" height="100" rx="5"
+                  fill="url(#goldMetal)"
+                  transform="rotate(-32 168 205)"/>
+            <rect x="166" y="110" width="4" height="100"
+                  fill="url(#darkMetal)"
+                  transform="rotate(-32 168 205)"/>
+          </g>
+
+          <!-- Top joint (where arm meets shade) -->
+          <circle cx="110" cy="128" r="13" fill="url(#goldMetal)" stroke="#05060a" stroke-width="1.5"/>
+          <circle cx="110" cy="128" r="4" fill="#05060a"/>
+
+          <!-- Shade group -->
+          <g>
+            <!-- Shade outer dome -->
+            <path d="M 55 118 Q 55 68 110 60 Q 165 68 165 118 Z"
+                  fill="url(#darkMetal)" stroke="url(#goldMetal)" stroke-width="3"/>
+            <!-- Shade bottom rim -->
+            <ellipse cx="110" cy="118" rx="55" ry="10" fill="url(#goldMetal)" opacity="0.9"/>
+            <!-- Shade inner glow (off/on controlled via class) -->
+            <ellipse id="svgShadeInner" cx="110" cy="113" rx="46" ry="16"
+                     fill="url(#shadeInnerOff)" class="lamp-shade-inner-svg"/>
+            <!-- Bulb -->
+            <circle id="svgBulb" cx="110" cy="112" r="9" fill="#3a2a12" class="lamp-bulb-svg"/>
+            <circle id="svgBulbGlow" cx="110" cy="112" r="26" fill="url(#bulbGlow)"
+                    class="lamp-bulb-glow-svg" filter="url(#softGlow)"/>
+          </g>
+        </svg>
+
+        <!-- Chain + pendant, positioned to hang from shade bottom -->
+        <div class="lamp-chain-zone" id="lampChain">
           <div class="lamp-chain-rope"></div>
           <div class="lamp-chain-pendant"></div>
+          <button type="button"
+                  class="lamp-chain-hit-area"
+                  id="lampChainBtn"
+                  aria-label="Login অথবা Sign Up করতে চেইনের সুইচে ক্লিক করুন">
+          </button>
+          <span class="lamp-hand-pointer">👆</span>
         </div>
 
-        <p class="lamp-instruction" id="lampInstruction">Pull the chain to begin</p>
+        <div class="lamp-instruction-box" id="lampInstructionBox">
+          <span class="lamp-instruction-icon">👆</span>
+          <p class="lamp-instruction-text">Login/Sign Up করতে চেইনের সুইচে ক্লিক করুন</p>
+        </div>
+
       </div>
       <div class="lamp-desk"></div>
     </div>
@@ -178,8 +259,7 @@
   </div>
 
   <button type="button" id="logoutBtn" class="btn btn-danger lamp-logout-btn" hidden>Logout</button>
-</section>
-  
+              </section>
   <main id="app" hidden>
 
     <section id="dashboard" class="dashboard">
