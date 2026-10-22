@@ -3341,3 +3341,145 @@ ul{
     transition:none;
   }
                             }
+
+/* ============================================
+   LAMP — SMALL SCREEN FIX (Messenger / WhatsApp / Facebook in-app browsers)
+============================================ */
+
+/* Login করার পর Welcome Panel ও Logout বাটন দেখানোর নিশ্চিত ব্যবস্থা */
+#authCard[hidden] ~ #welcomePanel.hidden{
+  display:flex !important;
+}
+
+@media (max-width: 719px){
+
+  .lamp-scene{
+    padding:18px 0 26px;
+  }
+
+  .lamp-scene .lamp-container{
+    display:flex;
+    flex-wrap:nowrap;
+    align-items:center;
+    justify-content:center;
+    width:100%;
+    max-width:none;
+    padding:0 12px;
+    gap:14px;
+  }
+
+  .lamp-scene .lamp-stage-outer{
+    width:230px;
+    min-width:230px;
+    max-width:230px;
+    flex:0 0 230px;
+    align-self:center;
+  }
+
+  .lamp-scene .lamp-stage{
+    flex:none;
+    width:100%;
+    height:auto;
+    min-height:0;
+    max-height:none;
+    aspect-ratio:320 / 340;
+  }
+
+  .lamp-scene .lamp-desk{
+    width:90%;
+    height:12px;
+    margin-top:-6px;
+  }
+
+  .lamp-scene .lamp-chain-zone{
+    left:70.6%;
+    top:37.6%;
+    width:110px;
+    transform:translateX(-50%);
+  }
+
+  .lamp-scene .lamp-chain-rope{
+    height:38px;
+  }
+
+  .lamp-scene .lamp-chain-pendant{
+    width:11px;
+    height:15px;
+  }
+
+  .lamp-scene .lamp-switch-box{
+    width:32px;
+    height:32px;
+    margin-top:-3px;
+    border-radius:8px;
+  }
+
+  .lamp-scene .lamp-instruction-box{
+    width:104px;
+    margin-top:6px;
+    padding:6px;
+    gap:2px;
+    border-radius:10px;
+  }
+
+  .lamp-scene .lamp-instruction-icon{
+    font-size:13px;
+  }
+
+  .lamp-scene .lamp-instruction-text{
+    font-size:10px;
+    line-height:1.4;
+  }
+
+  .lamp-scene .lamp-auth-panel{
+    max-width:420px;
+    padding:18px;
+    border-radius:20px;
+  }
+
+  .lamp-scene .lamp-brand-header{
+    margin-bottom:14px;
+  }
+
+  .lamp-scene .lamp-brand-title{
+    font-size:22px;
+    line-height:1.25;
+  }
+
+  .lamp-scene .lamp-brand-tagline{
+    font-size:10.5px;
+  }
+
+  .lamp-scene .auth-tab{
+    font-size:13px;
+  }
+
+  .lamp-scene .input-icon-wrapper input{
+    height:44px;
+    font-size:13px;
+  }
+
+  .lamp-scene .welcome-panel h1{
+    font-size:22px;
+  }
+
+  .lamp-scene .welcome-panel p{
+    font-size:12.5px;
+  }
+
+  .lamp-scene .hero-badge{
+    font-size:11px;
+    padding:6px 12px;
+  }
+}
+
+/* পর্দার প্রস্থ অনুযায়ী পুরো ল্যাম্প+ফর্মকে ছোট-বড় করার ধাপ */
+@media (max-width: 539px){ .lamp-scene .lamp-container{ zoom:.85; } }
+@media (max-width: 479px){ .lamp-scene .lamp-container{ zoom:.78; } }
+@media (max-width: 449px){ .lamp-scene .lamp-container{ zoom:.72; } }
+@media (max-width: 419px){ .lamp-scene .lamp-container{ zoom:.68; } }
+@media (max-width: 399px){ .lamp-scene .lamp-container{ zoom:.65; } }
+@media (max-width: 379px){ .lamp-scene .lamp-container{ zoom:.62; } }
+@media (max-width: 359px){ .lamp-scene .lamp-container{ zoom:.58; } }
+@media (max-width: 339px){ .lamp-scene .lamp-container{ zoom:.54; } }
+@media (max-width: 319px){ .lamp-scene .lamp-container{ zoom:.5; } }
