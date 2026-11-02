@@ -15,7 +15,7 @@
     // (≤700px) — tablets/desktops keep the normal, fully-responsive view.
     (function () {
       var w = (window.screen && window.screen.width) || window.innerWidth || 0;
-      var LOCKED_VIEWPORT = "width=1024, initial-scale=0.33, maximum-scale=0.33, minimum-scale=0.33, user-scalable=no";
+      var LOCKED_VIEWPORT = "width=1024, initial-scale=0.33, maximum-scale=0.30, minimum-scale=0.33, user-scalable=no";
       if (w > 0 && w <= 700) {
         var meta = document.getElementById("viewportMeta");
         if (meta) meta.setAttribute("content", LOCKED_VIEWPORT);
@@ -78,7 +78,7 @@
         </div>
         <nav class="nav">
           <div class="nav-row">
-            <a href="#activation">🔐 Activation</a>
+            <a href="#activation">Activation</a>
             <a href="#home">Home</a>
             <a href="#dashboard">Dashboard</a>
             <a href="#commission">Commission</a>
@@ -86,7 +86,7 @@
             <a href="#profile">Profile</a>
           </div>
           <div class="nav-row">
-            <a href="#withdraw">💸 Withdraw</a>
+            <a href="#withdraw">Withdraw</a>
             <a href="#taskHub">Tasks</a>
             <a href="#notifications">Notification</a>
             <a href="#support">Support</a>
