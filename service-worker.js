@@ -1,4 +1,4 @@
-const CACHE_NAME = "refer-earn-cache-v5";
+const CACHE_NAME = "refer-earn-cache-v6";
 
 const STATIC_ASSETS = [
   "./index.html",
