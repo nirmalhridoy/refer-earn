@@ -1,0 +1,291 @@
+/* Premium part 4 */
+.pm-card-note{font-size:22.5px!important;font-weight:600;color:var(--text-muted,#A9B2C9)!important;margin-top:6px!important;line-height:1.4}
+
+/* ---- 7. Account Status ---- */
+#accountStatusSection .status-card{position:relative;overflow:hidden;border:2px solid rgba(212,175,55,.45);background:linear-gradient(160deg,#17214a,#0b1022);box-shadow:0 8px 22px rgba(0,0,0,.4)}
+#accountStatusSection .status-card::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;background:linear-gradient(90deg,#D4AF37,#F3DA9E,#D4AF37)}
+#accountStatusSection .status-card h3{color:#cbd5e1;letter-spacing:.3px}
+#accountStatus{color:#e2e8f0}
+#accountStatus[data-s="active"]{color:#34d399;text-shadow:0 0 16px rgba(52,211,153,.55)}
+#accountStatus[data-s="inactive"]{color:#fb923c;text-shadow:0 0 16px rgba(251,146,60,.45)}
+#accountStatus[data-s="pending"]{color:#facc15;text-shadow:0 0 16px rgba(250,204,21,.45)}
+#accountStatus[data-s="frozen"]{color:#60a5fa;text-shadow:0 0 16px rgba(96,165,250,.5)}
+#joinDate{background:linear-gradient(90deg,#7dd3fc,#c4b5fd);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+#referralCode{background:linear-gradient(90deg,#FFF3C4,#D4AF37,#F3DA9E);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;letter-spacing:1.5px}
+
+/* ---- 8. My Referral ---- */
+#referral .card{border:3px solid rgba(212,175,55,.55);border-radius:24px;
+  background:radial-gradient(circle at 92% 0%,rgba(212,175,55,.16),transparent 55%),linear-gradient(160deg,#17214a,#0b1022);
+  box-shadow:0 14px 34px rgba(0,0,0,.45),0 0 0 4px rgba(212,175,55,.06)}
+#referral .card > label{color:#F3DA9E;font-weight:700;letter-spacing:.3px}
+#referral .card > label::before{content:"🔗 "}
+#referral .referral-box input{border:3px solid var(--secondary,#D4AF37);border-radius:14px;background:rgba(5,8,22,.78);color:#F3DA9E;font-weight:600;box-shadow:inset 0 2px 8px rgba(0,0,0,.4)}
+#copyLinkBtn{border:3px solid #7ee2b0;border-radius:14px;font-weight:800;background:linear-gradient(135deg,#22c55e,#0f7d3a);box-shadow:0 8px 20px rgba(34,197,94,.4),inset 0 1px 0 rgba(255,255,255,.3)}
+#copyLinkBtn:active{transform:scale(.95)}
+#referral .card h3{background:linear-gradient(90deg,#FFF3C4,#D4AF37);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+#referral .progress{height:26px;border:2px solid rgba(255,255,255,.14);background:rgba(255,255,255,.07);box-shadow:inset 0 2px 6px rgba(0,0,0,.4)}
+#referral .progress-bar{background:linear-gradient(90deg,#D4AF37,#FFF3C4 60%,#34d399);box-shadow:0 0 14px rgba(212,175,55,.5)}
+#referral .card p{color:#cbd5e1}
+#progressReferral{display:inline-block;padding:2px 16px;margin-left:6px;border-radius:999px;color:#1a1206;background:linear-gradient(135deg,#F7E6C4,#D4AF37);box-shadow:0 4px 12px rgba(212,175,55,.4)}
+
+/* ---- 9. Referral Commission: shiny, premium ---- */
+.commission-info-card{border:3px solid var(--secondary,#D4AF37)!important;
+  background:radial-gradient(circle at 90% 0%,rgba(243,218,158,.2),transparent 55%),linear-gradient(160deg,#18234f,#0a0f20)!important;
+  box-shadow:0 18px 44px rgba(0,0,0,.5),0 0 0 4px rgba(212,175,55,.08),inset 0 1px 0 rgba(255,255,255,.14)!important}
+.commission-info-card > h3{background:linear-gradient(90deg,#FFF3C4,#D4AF37,#FFF3C4);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;text-shadow:none}
+.commission-info-card .rank-info-subtitle{color:#F3DA9E!important;font-weight:600}
+.commission-level-item{border:2px solid rgba(243,218,158,.55)!important;
+  background:linear-gradient(145deg,rgba(255,255,255,.16),rgba(255,255,255,.03) 42%,rgba(0,0,0,.25))!important;
+  box-shadow:0 8px 20px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.25)}
+.commission-level-amount{background:linear-gradient(180deg,#FFF8DC,#D4AF37);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;font-weight:800}
+.commission-level-name{color:#e2e8f0!important}
+.commission-visual-example{border:2px solid rgba(243,218,158,.4)!important;background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(0,0,0,.2))!important}
+.commission-visual-title{color:#F3DA9E!important;font-weight:800}
+.commission-chain-gain{color:#6ee7b7!important;font-weight:800;text-shadow:0 0 10px rgba(110,231,183,.45)}
+.commission-chain-level-tag{color:#fde68a!important}
+.commission-visual-note{color:#e2e8f0!important}
+.commission-visual-note strong{color:#FFF3C4}
+
+/* flow caption: bigger + bold + colourful */
+#commission .cm-caption{font-size:30.5px!important;font-weight:800!important;line-height:1.5;margin-top:14px!important;
+  background:linear-gradient(90deg,#FFF3C4,#F59E0B 45%,#34d399);-webkit-background-clip:text;background-clip:text;color:transparent!important;-webkit-text-fill-color:transparent}
+/* remove the small Receiver/Level/Amount table */
+#commission .cm-table{display:none!important}
+#commission .cm-h{background:linear-gradient(90deg,#FFF3C4,#D4AF37);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+#commission .cm-level,#commission .cm-recv,#commission .cm-node{box-shadow:0 8px 20px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.22);
+  background-image:linear-gradient(145deg,rgba(255,255,255,.14),rgba(255,255,255,.02) 45%,rgba(0,0,0,.2))}
+#commission .cm-recv b{background:linear-gradient(180deg,#FFF8DC,#D4AF37);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+#commission .cm-how{background:linear-gradient(135deg,rgba(243,218,158,.16),rgba(47,79,214,.1))}
+#commission .cm-how li{color:#e2e8f0}
+#commission .cm-note{color:#fde68a}
+
+/* ---- 10. Withdrawal form ---- */
+.pm-wd-card .withdraw-condition-box{border:3px solid var(--secondary,#D4AF37);border-radius:18px;
+  background:linear-gradient(135deg,rgba(243,218,158,.22),rgba(47,79,214,.14));
+  box-shadow:0 10px 26px rgba(212,175,55,.2),inset 0 1px 0 rgba(255,255,255,.2)}
+.pm-wd-card .withdraw-condition-box strong{background:linear-gradient(180deg,#FFF8DC,#D4AF37);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.pm-wd-card .withdraw-condition-box span{color:#e2e8f0}
+.pm-wd-notice{margin:0 0 18px;border-radius:16px;font-size:26px;line-height:1.6}
+.pm-wd-notice.bad{padding:14px 16px;border:2px solid rgba(248,113,113,.65);background:rgba(248,113,113,.09);color:#fecaca}
+.pm-wd-notice.ok{padding:14px 16px;border:2px solid rgba(52,211,153,.65);background:rgba(52,211,153,.1);color:#a7f3d0}
+.pm-wd-notice ul{margin:8px 0 0 26px;padding:0;list-style:disc}
+.pm-wd-notice li{font-size:26px;margin-bottom:4px}
+#withdrawBtn.pay-submit{font-size:26px;border-color:#fff3d6;color:#1a1206;
+  background:linear-gradient(135deg,#F7E6C4,#E7C27E 45%,#C79A45);box-shadow:0 10px 24px rgba(212,175,55,.45),inset 0 1px 0 rgba(255,255,255,.55)}
+#withdrawBtn.pay-submit:hover:not(:disabled){box-shadow:0 14px 30px rgba(212,175,55,.65)}
+#withdrawBtn.pm-wd-locked{filter:grayscale(.55);opacity:.85}
+
+
+/* =====================================================================
+   PART 5 — premium look for the listed sections (sizes of existing text unchanged,
+   except Task History texts and the Commission example, which were asked to be bigger)
+   ===================================================================== */
+
+/* ---- 2. Dashboard ---- */
+#dashboard .dashboard-grid .card{--ac:#D4AF37;position:relative;overflow:hidden;border:2px solid var(--ac);border-radius:22px;
+  background:linear-gradient(160deg,#192552,#0a0f22);box-shadow:0 12px 28px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.12)}
+#dashboard .dashboard-grid .card::before{content:"";position:absolute;left:0;right:0;top:0;height:6px;background:linear-gradient(90deg,var(--ac),rgba(255,255,255,.0))}
+#dashboard .dashboard-grid .card::after{content:"";position:absolute;right:-44px;top:-44px;width:130px;height:130px;border-radius:50%;background:radial-gradient(circle,var(--ac),transparent 70%);opacity:.2;pointer-events:none}
+#dashboard .dashboard-grid .card:nth-child(1){--ac:#D4AF37}
+#dashboard .dashboard-grid .card:nth-child(2){--ac:#60a5fa}
+#dashboard .dashboard-grid .card:nth-child(3){--ac:#34d399}
+#dashboard .dashboard-grid .card:nth-child(4){--ac:#a78bfa}
+#dashboard .dashboard-grid .card:nth-child(5){--ac:#fbbf24}
+#dashboard .dashboard-grid .card:nth-child(6){--ac:#38bdf8}
+#dashboard .dashboard-grid .card:nth-child(7){--ac:#f472b6}
+#dashboard .dashboard-grid .card:nth-child(8){--ac:#fb7185}
+#dashboard .dashboard-grid .card:nth-child(9){--ac:#22d3ee}
+#dashboard .dashboard-grid .card:nth-child(10){--ac:#f59e0b}
+#dashboard .dashboard-grid .card:nth-child(11){--ac:#94a3b8}
+#dashboard .dashboard-grid .card:nth-child(12){--ac:#facc15}
+#dashboard .dashboard-grid .card h3{color:#cbd5e1}
+#dashboard .dashboard-grid .card h1,#dashboard .dashboard-grid .card h2{color:#fff;text-shadow:0 0 16px var(--ac)}
+#dashboard .dashboard-grid .card h1{color:#F3DA9E}
+.pm-income-card h2{color:#fff}
+
+/* ---- 3. Statistics ---- */
+#statisticsSection .stat-card{--ac:#D4AF37;position:relative;overflow:hidden;border:2px solid var(--ac);border-radius:22px;
+  background:linear-gradient(160deg,#192552,#0a0f22);box-shadow:0 12px 28px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.12)}
+#statisticsSection .stat-card::before{content:"";position:absolute;left:0;right:0;top:0;height:6px;background:linear-gradient(90deg,var(--ac),rgba(255,255,255,0))}
+#statisticsSection .stat-card::after{content:"";position:absolute;right:-44px;bottom:-44px;width:130px;height:130px;border-radius:50%;background:radial-gradient(circle,var(--ac),transparent 70%);opacity:.18;pointer-events:none}
+#statisticsSection .stat-card:nth-child(1){--ac:#60a5fa}
+#statisticsSection .stat-card:nth-child(2){--ac:#34d399}
+#statisticsSection .stat-card:nth-child(3){--ac:#fbbf24}
+#statisticsSection .stat-card:nth-child(4){--ac:#a78bfa}
+#statisticsSection .stat-card:nth-child(5){--ac:#22d3ee}
+#statisticsSection .stat-card:nth-child(6){--ac:#f472b6}
+#statisticsSection .stat-card:nth-child(7){--ac:#D4AF37}
+#statisticsSection .stat-card:nth-child(8){--ac:#38bdf8}
+#statisticsSection .stat-card h3{color:#cbd5e1}
+#statisticsSection .stat-card h2{color:#fff;text-shadow:0 0 16px var(--ac)}
+.pm-stat-rank h2,.pm-stat-next h2{font-size:33px;word-break:break-word}
+.pm-stat-rank h2{color:#F3DA9E!important}
+.pm-stat-next h2{color:#93c5fd!important}
+.pm-mini{height:18px;margin-top:10px}
+.pm-mini .progress-bar{font-size:19.5px}
+
+/* ---- 5. My Referral Team ---- */
+#referralTeam .card{border:3px solid rgba(212,175,55,.5);border-radius:24px;
+  background:radial-gradient(circle at 92% 0%,rgba(212,175,55,.14),transparent 55%),linear-gradient(160deg,#17214a,#0b1022);
+  box-shadow:0 14px 34px rgba(0,0,0,.45)}
+#referralTeam .task-section-subtitle{color:#F3DA9E;font-weight:600}
+#referralTeam .form-group label{color:#F3DA9E;font-weight:700}
+#referralTeam .form-group input,#referralTeam .form-group select{border:3px solid rgba(212,175,55,.5);border-radius:14px;background:rgba(5,8,22,.78);color:#fff}
+#referralTeam .tree-view-toggle .btn{border:2px solid rgba(212,175,55,.55);border-radius:999px;font-weight:700}
+#referralTeam .tree-view-toggle .tree-view-active{background:linear-gradient(135deg,#F7E6C4,#D4AF37)!important;color:#1a1206!important;border-color:#fff3d6!important}
+#loadReferralTreeBtn{background:linear-gradient(135deg,#22c55e,#0f7d3a);border-color:#7ee2b0!important;color:#fff}
+#referralTreeContainer .tree-level-title{color:#F3DA9E;border-bottom:2px solid rgba(212,175,55,.45)}
+#referralTreeContainer .tree-node{border:2px solid rgba(212,175,55,.35);border-left:6px solid #D4AF37;border-radius:14px;background:linear-gradient(135deg,#1a2554,#0d1330);color:#e2e8f0}
+
+/* shared premium table look (Referral History, Withdraw History, Transactions, tree list) */
+#referralHistorySection .table-responsive,#withdrawHistorySection .table-responsive,#transactionSection .table-responsive,#referralTreeContainer .table-responsive{
+  border:3px solid rgba(212,175,55,.5);border-radius:22px;box-shadow:0 14px 34px rgba(0,0,0,.45);background:#0b1022}
+#referralHistorySection .table th,#withdrawHistorySection .table th,#transactionSection .table th,#referralTreeContainer .table th{
+  background:linear-gradient(180deg,#26346e,#18224a);color:#F3DA9E;border-bottom:3px solid #D4AF37}
+#referralHistorySection .table td,#withdrawHistorySection .table td,#transactionSection .table td,#referralTreeContainer .table td{color:#e2e8f0;border-top:1px solid rgba(212,175,55,.2)}
+#referralHistorySection .table tbody tr:nth-child(even) td,#withdrawHistorySection .table tbody tr:nth-child(even) td,
+#transactionSection .table tbody tr:nth-child(even) td,#referralTreeContainer .table tbody tr:nth-child(even) td{background:rgba(255,255,255,.035)}
+#referralHistorySection .table tbody tr:hover td,#withdrawHistorySection .table tbody tr:hover td,
+#transactionSection .table tbody tr:hover td,#referralTreeContainer .table tbody tr:hover td{background:rgba(212,175,55,.12)}
+
+/* ---- 7. RANK & BONUS ---- */
+.rb-section{border:3px solid var(--secondary,#D4AF37)!important;
+  background:radial-gradient(circle at 85% 0%,rgba(243,218,158,.2),transparent 55%),linear-gradient(160deg,#18234f,#0a0f20)!important;
+  box-shadow:0 18px 44px rgba(0,0,0,.5),0 0 0 4px rgba(212,175,55,.08)!important}
+.rb-section > h3{background:linear-gradient(90deg,#FFF3C4,#D4AF37,#FFF3C4);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.rb-grid{grid-template-columns:repeat(auto-fill,minmax(190px,1fr))!important;gap:16px}
+.rb-card{overflow:hidden;border-width:3px;background:linear-gradient(170deg,rgba(255,255,255,.1),rgba(255,255,255,.02) 40%,#0b1022 85%)!important;box-shadow:0 12px 26px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.2)}
+.rb-card::before{content:"";position:absolute;left:0;right:0;top:0;height:6px;background:linear-gradient(90deg,var(--c2),var(--c1),var(--c2))}
+.rb-bonus{background:linear-gradient(135deg,rgba(243,218,158,.25),rgba(212,175,55,.08))!important;border:2px solid rgba(243,218,158,.7)!important}
+.rb-bonus b{background:linear-gradient(180deg,#FFF8DC,#D4AF37);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.rb-req{color:#e2e8f0!important;font-weight:600}
+
+/* ---- 8. Task History (Approved): bigger text ---- */
+#taskHistorySection .task-section-subtitle{font-size:30.5px;color:#F3DA9E;font-weight:600}
+#taskHistorySection .task-history-toggle{border:3px solid rgba(212,175,55,.55);border-radius:22px;padding:22px 24px;
+  background:linear-gradient(135deg,#1c2960,#0b1022);box-shadow:0 12px 28px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.12)}
+#taskHistorySection .task-history-toggle span:first-child{font-size:30.5px;font-weight:700;color:#fff}
+#taskHistorySection .task-history-toggle b{color:#34d399;font-size:33px}
+#taskHistorySection .toggle-arrow{font-size:33px;color:#D4AF37}
+#taskHistorySection .task-history-item{font-size:28px;padding:18px 20px;border:2px solid rgba(52,211,153,.45);border-left:8px solid #34d399;border-radius:16px;
+  background:linear-gradient(135deg,rgba(52,211,153,.12),#0d1330);color:#e2e8f0;line-height:1.6}
+#taskHistorySection .task-history-item strong{font-size:30.5px;color:#F3DA9E}
+
+/* ---- 9. Rejected Tasks ---- */
+#rejectedTaskSection .rejected-task-card{position:relative;overflow:hidden;border:3px solid rgba(248,113,113,.7);border-left:10px solid #ef4444;border-radius:22px;
+  background:linear-gradient(135deg,rgba(239,68,68,.16),#0b1022 70%);box-shadow:0 12px 28px rgba(0,0,0,.45),0 0 22px rgba(239,68,68,.18)}
+#rejectedTaskSection .rejected-task-card h4{color:#fecaca}
+#rejectedTaskSection .rejected-task-card p{color:#e2e8f0}
+#rejectedTaskSection .rejected-task-card strong{color:#fca5a5}
+#rejectedTaskSection .rejected-task-card .btn{border:2px solid #fff3d6;background:linear-gradient(135deg,#F7E6C4,#D4AF37);color:#1a1206;font-weight:800}
+#rejectedTaskSection > .container > .card,#rejectedTaskContainer > .card{border:3px solid rgba(52,211,153,.55);border-radius:22px;background:linear-gradient(135deg,rgba(52,211,153,.1),#0b1022)}
+#rejectedTaskSection .task-section-subtitle{color:#F3DA9E}
+
+/* ---- 10. Activation: bKash first, Nagad second; Premium benefits ---- */
+.pay-methods .pay-method[data-m="bKash"]{order:-1}
+.benefits-card{border:3px solid var(--secondary,#D4AF37)!important;border-radius:24px;
+  background:radial-gradient(circle at 90% 0%,rgba(243,218,158,.16),transparent 55%),linear-gradient(160deg,#18234f,#0a0f20)!important;box-shadow:0 14px 34px rgba(0,0,0,.45)}
+.benefits-card > h3{background:linear-gradient(90deg,#FFF3C4,#D4AF37,#FFF3C4);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.benefit-item{border:2px solid rgba(52,211,153,.55);border-radius:18px;background:linear-gradient(145deg,rgba(52,211,153,.14),#0d1330);color:#e2e8f0;font-weight:600;box-shadow:0 8px 18px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.12)}
+.benefit-item:hover{border-color:#34d399;transform:translateY(-3px)}
+
+/* ---- 11. Commission example chain: bigger + premium ---- */
+#commission .commission-visual-example{padding:22px 16px;border:3px solid rgba(243,218,158,.6)!important;border-radius:24px;
+  background:radial-gradient(circle at 50% 0%,rgba(243,218,158,.16),transparent 60%),linear-gradient(160deg,#17214a,#0a0f20)!important;box-shadow:0 14px 34px rgba(0,0,0,.45)}
+#commission .commission-visual-title{font-size:33px;font-weight:800;text-align:center;margin-bottom:18px;
+  background:linear-gradient(90deg,#FFF3C4,#D4AF37,#FFF3C4);-webkit-background-clip:text;background-clip:text;color:transparent!important;-webkit-text-fill-color:transparent}
+#commission .commission-chain{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:10px 6px}
+#commission .commission-chain > *{--lc:#D4AF37}
+#commission .commission-chain > :nth-child(1){--lc:#f472b6}
+#commission .commission-chain > :nth-child(3){--lc:#f59e0b}
+#commission .commission-chain > :nth-child(5){--lc:#a78bfa}
+#commission .commission-chain > :nth-child(7){--lc:#38bdf8}
+#commission .commission-chain > :nth-child(9){--lc:#34d399}
+#commission .commission-chain-node{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:108px;padding:16px 8px 14px;
+  border:3px solid var(--lc);border-radius:22px;background:linear-gradient(165deg,rgba(255,255,255,.14),rgba(255,255,255,.02) 45%,rgba(0,0,0,.25));
+  box-shadow:0 10px 24px rgba(0,0,0,.45),0 0 18px var(--lc),inset 0 1px 0 rgba(255,255,255,.25)}
+#commission .commission-chain-avatar{display:flex;align-items:center;justify-content:center;width:68px;height:68px;border-radius:50%;
+  font-size:36px;font-weight:800;color:#0c1020;background:var(--lc);border:4px solid rgba(255,255,255,.55);box-shadow:0 6px 16px rgba(0,0,0,.45)}
+#commission .commission-chain-gain{font-size:30.5px;font-weight:800}
+#commission .commission-chain-level-tag{display:inline-block;padding:2px 14px;font-size:24px;font-weight:800;color:#0c1020!important;border-radius:999px;background:var(--lc)}
+#commission .commission-chain-arrow{display:flex;align-items:center;justify-content:center;width:34px;font-size:36px;font-weight:800;color:#FFF3C4;text-shadow:0 0 14px #D4AF37}
+#commission .commission-chain-node-active{--lc:#D4AF37;border-style:dashed}
+#commission .commission-chain-avatar-active{background:linear-gradient(135deg,#FFF3C4,#D4AF37)}
+#commission .commission-chain-active-tag{display:inline-block;padding:3px 14px;font-size:24px;font-weight:800;color:#a7f3d0;border:2px solid #34d399;border-radius:999px;background:rgba(52,211,153,.14)}
+#commission .commission-visual-note{font-size:28px;line-height:1.7;margin-top:18px}
+
+/* ---- 12. Withdraw method order: bKash first ---- */
+#pmWdMethods .pay-method[data-m="bKash"]{order:-1}
+
+/* ---- 13. Approval time ---- */
+.withdraw-time-card{position:relative;border:3px solid #38bdf8!important;border-left:12px solid #38bdf8!important;border-radius:22px;
+  background:linear-gradient(135deg,rgba(56,189,248,.18),#0b1022 70%)!important;box-shadow:0 14px 32px rgba(0,0,0,.45),0 0 24px rgba(56,189,248,.2)}
+.withdraw-time-card p{color:#e2e8f0!important}
+.withdraw-time-card p:first-child{color:#7dd3fc!important;font-weight:800}
+
+/* ---- 14. Warning ---- */
+.withdraw-warning-card{position:relative;border:3px solid #ef4444!important;border-left:12px solid #ef4444!important;border-radius:22px;
+  background:linear-gradient(135deg,rgba(239,68,68,.22),#0b1022 75%)!important;box-shadow:0 14px 32px rgba(0,0,0,.45),0 0 26px rgba(239,68,68,.28)}
+.withdraw-warning-card p{color:#fecaca!important;font-weight:700}
+
+/* ---- 15. Payment proof ---- */
+.payment-proof-card{border:3px solid #34d399!important;border-left:12px solid #34d399!important;border-radius:24px;
+  background:radial-gradient(circle at 92% 0%,rgba(52,211,153,.18),transparent 55%),linear-gradient(160deg,#17214a,#0a0f20)!important;
+  box-shadow:0 16px 38px rgba(0,0,0,.5),0 0 26px rgba(52,211,153,.2)}
+.payment-proof-card h3{background:linear-gradient(90deg,#FFF3C4,#34d399);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.payment-proof-card p{color:#e2e8f0!important}
+.payment-proof-card .btn{border:3px solid rgba(255,255,255,.4);border-radius:18px;font-weight:800;box-shadow:0 10px 24px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.3)}
+.payment-proof-card a[href*="4pdi08NY1F4wMDU1"]{background:linear-gradient(135deg,#22c55e,#0f7d3a);color:#fff}
+.payment-proof-card a[href*="R_qDGivlyn81NDZl"]{background:linear-gradient(135deg,#2AABEE,#1B6FB5);color:#fff}
+.payment-proof-card a[href*="refer21349"]{background:linear-gradient(135deg,#F7E6C4,#D4AF37);color:#1a1206}
+.payment-proof-card .telegram-note{padding:12px 16px;color:#fde68a!important;border:2px solid rgba(251,191,36,.6);border-radius:14px;background:rgba(251,191,36,.1)}
+
+/* ---- 16. Withdraw History summary ---- */
+#withdrawHistorySection .withdraw-summary-card{position:relative;overflow:hidden;border:3px solid #34d399;border-radius:22px;background:linear-gradient(160deg,#192552,#0a0f22);box-shadow:0 12px 28px rgba(0,0,0,.45)}
+#withdrawHistorySection .withdraw-summary-card:nth-child(2){border-color:#fbbf24}
+#withdrawHistorySection .withdraw-summary-card::before{content:"";position:absolute;left:0;right:0;top:0;height:6px;background:linear-gradient(90deg,#34d399,transparent)}
+#withdrawHistorySection .withdraw-summary-card:nth-child(2)::before{background:linear-gradient(90deg,#fbbf24,transparent)}
+#withdrawHistorySection .withdraw-summary-card span{color:#cbd5e1}
+#withdrawHistorySection .withdraw-summary-card strong{color:#fff;text-shadow:0 0 14px rgba(52,211,153,.5)}
+
+/* ---- 18. Wallet Activity ---- */
+#walletHistory .wallet-group-title{display:inline-block;padding:4px 18px;margin:18px 0 12px;color:#1a1206;background:linear-gradient(135deg,#F7E6C4,#D4AF37);border-radius:999px;font-weight:800;letter-spacing:.5px}
+#walletHistory .card{border:2px solid rgba(212,175,55,.4);border-left:10px solid #D4AF37;border-radius:20px;background:linear-gradient(135deg,#1a2554,#0b1022);box-shadow:0 10px 24px rgba(0,0,0,.4)}
+#walletHistory .card strong{color:#F3DA9E;text-transform:capitalize}
+#walletHistory .card p{color:#e2e8f0}
+
+/* ---- 19. Notice ---- */
+#broadcast .card{position:relative;overflow:hidden;border:3px solid #D4AF37;border-left:12px solid #D4AF37;border-radius:24px;
+  background:radial-gradient(circle at 92% 0%,rgba(243,218,158,.2),transparent 55%),linear-gradient(160deg,#18234f,#0a0f20);box-shadow:0 16px 38px rgba(0,0,0,.5),0 0 24px rgba(212,175,55,.2)}
+#broadcast .card strong{background:linear-gradient(90deg,#FFF3C4,#D4AF37);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+#broadcast .card p{color:#e2e8f0}
+
+/* ---- 20. Notifications ---- */
+#notifications .notif-filter-btn{border:2px solid rgba(212,175,55,.5);border-radius:999px;font-weight:700;background:linear-gradient(145deg,#1a2554,#0d1330);color:#cbd5e1}
+#notifications .notif-filter-active{background:linear-gradient(135deg,#F7E6C4,#D4AF37)!important;color:#1a1206!important;border-color:#fff3d6!important;box-shadow:0 6px 16px rgba(212,175,55,.4)}
+#notificationList .card{border:2px solid rgba(96,165,250,.45);border-left:10px solid #60a5fa;border-radius:20px;background:linear-gradient(135deg,#1a2554,#0b1022);box-shadow:0 10px 24px rgba(0,0,0,.4)}
+#notificationList .card strong{color:#F3DA9E}
+#notificationList .card p{color:#e2e8f0}
+
+/* ---- 21. Help & Support ---- */
+#support .card{border:3px solid rgba(212,175,55,.5);border-radius:24px;
+  background:radial-gradient(circle at 92% 0%,rgba(212,175,55,.14),transparent 55%),linear-gradient(160deg,#17214a,#0b1022);box-shadow:0 14px 34px rgba(0,0,0,.45)}
+#support .card h3{background:linear-gradient(90deg,#FFF3C4,#D4AF37);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+#support .card p{color:#e2e8f0}
+#support .btn{border:3px solid rgba(255,255,255,.4);border-radius:18px;font-weight:800;box-shadow:0 10px 24px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.3)}
+#support .support-team-btn{background:linear-gradient(135deg,#2AABEE,#1B6FB5);color:#fff}
+
+/* ---- 22. সমস্যার ধরন ---- */
+#support .support-category-tag{border:2px solid rgba(212,175,55,.6);border-radius:999px;color:#F3DA9E;font-weight:700;
+  background:linear-gradient(145deg,rgba(243,218,158,.18),rgba(212,175,55,.05));box-shadow:0 6px 14px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.15)}
+#support .support-category-tag:hover{border-color:#fff3d6;color:#fff;transform:translateY(-2px)}
+
+/* ---- 23. FAQ ---- */
+.faq-section{counter-reset:faq}
+.faq-section .card{counter-increment:faq;position:relative;padding-left:96px;border:3px solid rgba(212,175,55,.5);border-radius:24px;
+  background:radial-gradient(circle at 92% 0%,rgba(212,175,55,.12),transparent 55%),linear-gradient(160deg,#17214a,#0b1022);box-shadow:0 12px 30px rgba(0,0,0,.45)}
+.faq-section .card::before{content:counter(faq);position:absolute;left:22px;top:22px;display:flex;align-items:center;justify-content:center;width:54px;height:54px;
+  font-size:30.5px;font-weight:800;color:#1a1206;border-radius:50%;background:linear-gradient(135deg,#F7E6C4,#D4AF37);border:3px solid #fff3d6;box-shadow:0 6px 14px rgba(212,175,55,.45)}
+.faq-section .card h3{background:linear-gradient(90deg,#FFF3C4,#D4AF37);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.faq-section .card p{color:#e2e8f0}
+@media (max-width:560px){.faq-section .card{padding-left:84px}}
