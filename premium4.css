@@ -1,0 +1,743 @@
+/* Premium part 4 */
+.pm-card-note{font-size:22.5px!important;font-weight:600;color:var(--text-muted,#A9B2C9)!important;margin-top:6px!important;line-height:1.4}
+
+/* ---- 7. Account Status ---- */
+#accountStatusSection .status-card{position:relative;overflow:hidden;border:2px solid rgba(212,175,55,.45);background:linear-gradient(160deg,#17214a,#0b1022);box-shadow:0 8px 22px rgba(0,0,0,.4)}
+#accountStatusSection .status-card::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;background:linear-gradient(90deg,#D4AF37,#F3DA9E,#D4AF37)}
+#accountStatusSection .status-card h3{color:#cbd5e1;letter-spacing:.3px}
+#accountStatus{color:#e2e8f0}
+#accountStatus[data-s="active"]{color:#34d399;text-shadow:0 0 16px rgba(52,211,153,.55)}
+#accountStatus[data-s="inactive"]{color:#fb923c;text-shadow:0 0 16px rgba(251,146,60,.45)}
+#accountStatus[data-s="pending"]{color:#facc15;text-shadow:0 0 16px rgba(250,204,21,.45)}
+#accountStatus[data-s="frozen"]{color:#60a5fa;text-shadow:0 0 16px rgba(96,165,250,.5)}
+#joinDate{background:linear-gradient(90deg,#7dd3fc,#c4b5fd);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+#referralCode{background:linear-gradient(90deg,#FFF3C4,#D4AF37,#F3DA9E);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;letter-spacing:1.5px}
+
+/* ---- 8. My Referral ---- */
+#referral .card{border:3px solid rgba(212,175,55,.55);border-radius:24px;
+  background:radial-gradient(circle at 92% 0%,rgba(212,175,55,.16),transparent 55%),linear-gradient(160deg,#17214a,#0b1022);
+  box-shadow:0 14px 34px rgba(0,0,0,.45),0 0 0 4px rgba(212,175,55,.06)}
+#referral .card > label{color:#F3DA9E;font-weight:700;letter-spacing:.3px}
+#referral .card > label::before{content:"🔗 "}
+#referral .referral-box input{border:3px solid var(--secondary,#D4AF37);border-radius:14px;background:rgba(5,8,22,.78);color:#F3DA9E;font-weight:600;box-shadow:inset 0 2px 8px rgba(0,0,0,.4)}
+#copyLinkBtn{border:3px solid #7ee2b0;border-radius:14px;font-weight:800;background:linear-gradient(135deg,#22c55e,#0f7d3a);box-shadow:0 8px 20px rgba(34,197,94,.4),inset 0 1px 0 rgba(255,255,255,.3)}
+#copyLinkBtn:active{transform:scale(.95)}
+#referral .card h3{background:linear-gradient(90deg,#FFF3C4,#D4AF37);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+#referral .progress{height:26px;border:2px solid rgba(255,255,255,.14);background:rgba(255,255,255,.07);box-shadow:inset 0 2px 6px rgba(0,0,0,.4)}
+#referral .progress-bar{background:linear-gradient(90deg,#D4AF37,#FFF3C4 60%,#34d399);box-shadow:0 0 14px rgba(212,175,55,.5)}
+#referral .card p{color:#cbd5e1}
+#progressReferral{display:inline-block;padding:2px 16px;margin-left:6px;border-radius:999px;color:#1a1206;background:linear-gradient(135deg,#F7E6C4,#D4AF37);box-shadow:0 4px 12px rgba(212,175,55,.4)}
+
+/* ---- 9. Referral Commission: shiny, premium ---- */
+.commission-info-card{border:3px solid var(--secondary,#D4AF37)!important;
+  background:radial-gradient(circle at 90% 0%,rgba(243,218,158,.2),transparent 55%),linear-gradient(160deg,#18234f,#0a0f20)!important;
+  box-shadow:0 18px 44px rgba(0,0,0,.5),0 0 0 4px rgba(212,175,55,.08),inset 0 1px 0 rgba(255,255,255,.14)!important}
+.commission-info-card > h3{background:linear-gradient(90deg,#FFF3C4,#D4AF37,#FFF3C4);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;text-shadow:none}
+.commission-info-card .rank-info-subtitle{color:#F3DA9E!important;font-weight:600}
+.commission-level-item{border:2px solid rgba(243,218,158,.55)!important;
+  background:linear-gradient(145deg,rgba(255,255,255,.16),rgba(255,255,255,.03) 42%,rgba(0,0,0,.25))!important;
+  box-shadow:0 8px 20px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.25)}
+.commission-level-amount{background:linear-gradient(180deg,#FFF8DC,#D4AF37);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;font-weight:800}
+.commission-level-name{color:#e2e8f0!important}
+.commission-visual-example{border:2px solid rgba(243,218,158,.4)!important;background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(0,0,0,.2))!important}
+.commission-visual-title{color:#F3DA9E!important;font-weight:800}
+.commission-chain-gain{color:#6ee7b7!important;font-weight:800;text-shadow:0 0 10px rgba(110,231,183,.45)}
+.commission-chain-level-tag{color:#fde68a!important}
+.commission-visual-note{color:#e2e8f0!important}
+.commission-visual-note strong{color:#FFF3C4}
+
+/* flow caption: bigger + bold + colourful */
+#commission .cm-caption{font-size:30.5px!important;font-weight:800!important;line-height:1.5;margin-top:14px!important;
+  background:linear-gradient(90deg,#FFF3C4,#F59E0B 45%,#34d399);-webkit-background-clip:text;background-clip:text;color:transparent!important;-webkit-text-fill-color:transparent}
+/* remove the small Receiver/Level/Amount table */
+#commission .cm-table{display:none!important}
+#commission .cm-h{background:linear-gradient(90deg,#FFF3C4,#D4AF37);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+#commission .cm-level,#commission .cm-recv,#commission .cm-node{box-shadow:0 8px 20px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.22);
+  background-image:linear-gradient(145deg,rgba(255,255,255,.14),rgba(255,255,255,.02) 45%,rgba(0,0,0,.2))}
+#commission .cm-recv b{background:linear-gradient(180deg,#FFF8DC,#D4AF37);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+#commission .cm-how{background:linear-gradient(135deg,rgba(243,218,158,.16),rgba(47,79,214,.1))}
+#commission .cm-how li{color:#e2e8f0}
+#commission .cm-note{color:#fde68a}
+
+/* ---- 10. Withdrawal form ---- */
+.pm-wd-card .withdraw-condition-box{border:3px solid var(--secondary,#D4AF37);border-radius:18px;
+  background:linear-gradient(135deg,rgba(243,218,158,.22),rgba(47,79,214,.14));
+  box-shadow:0 10px 26px rgba(212,175,55,.2),inset 0 1px 0 rgba(255,255,255,.2)}
+.pm-wd-card .withdraw-condition-box strong{background:linear-gradient(180deg,#FFF8DC,#D4AF37);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.pm-wd-card .withdraw-condition-box span{color:#e2e8f0}
+.pm-wd-notice{margin:0 0 18px;border-radius:16px;font-size:26px;line-height:1.6}
+.pm-wd-notice.bad{padding:14px 16px;border:2px solid rgba(248,113,113,.65);background:rgba(248,113,113,.09);color:#fecaca}
+.pm-wd-notice.ok{padding:14px 16px;border:2px solid rgba(52,211,153,.65);background:rgba(52,211,153,.1);color:#a7f3d0}
+.pm-wd-notice ul{margin:8px 0 0 26px;padding:0;list-style:disc}
+.pm-wd-notice li{font-size:26px;margin-bottom:4px}
+#withdrawBtn.pay-submit{font-size:26px;border-color:#fff3d6;color:#1a1206;
+  background:linear-gradient(135deg,#F7E6C4,#E7C27E 45%,#C79A45);box-shadow:0 10px 24px rgba(212,175,55,.45),inset 0 1px 0 rgba(255,255,255,.55)}
+#withdrawBtn.pay-submit:hover:not(:disabled){box-shadow:0 14px 30px rgba(212,175,55,.65)}
+#withdrawBtn.pm-wd-locked{filter:grayscale(.55);opacity:.85}
+
+
+/* =====================================================================
+   PART 5 — premium look for the listed sections (sizes of existing text unchanged,
+   except Task History texts and the Commission example, which were asked to be bigger)
+   ===================================================================== */
+
+/* ---- 2. Dashboard ---- */
+#dashboard .dashboard-grid .card{--ac:#D4AF37;position:relative;overflow:hidden;border:2px solid var(--ac);border-radius:22px;
+  background:linear-gradient(160deg,#192552,#0a0f22);box-shadow:0 12px 28px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.12)}
+#dashboard .dashboard-grid .card::before{content:"";position:absolute;left:0;right:0;top:0;height:6px;background:linear-gradient(90deg,var(--ac),rgba(255,255,255,.0))}
+#dashboard .dashboard-grid .card::after{content:"";position:absolute;right:-44px;top:-44px;width:130px;height:130px;border-radius:50%;background:radial-gradient(circle,var(--ac),transparent 70%);opacity:.2;pointer-events:none}
+#dashboard .dashboard-grid .card:nth-child(1){--ac:#D4AF37}
+#dashboard .dashboard-grid .card:nth-child(2){--ac:#60a5fa}
+#dashboard .dashboard-grid .card:nth-child(3){--ac:#34d399}
+#dashboard .dashboard-grid .card:nth-child(4){--ac:#a78bfa}
+#dashboard .dashboard-grid .card:nth-child(5){--ac:#fbbf24}
+#dashboard .dashboard-grid .card:nth-child(6){--ac:#38bdf8}
+#dashboard .dashboard-grid .card:nth-child(7){--ac:#f472b6}
+#dashboard .dashboard-grid .card:nth-child(8){--ac:#fb7185}
+#dashboard .dashboard-grid .card:nth-child(9){--ac:#22d3ee}
+#dashboard .dashboard-grid .card:nth-child(10){--ac:#f59e0b}
+#dashboard .dashboard-grid .card:nth-child(11){--ac:#94a3b8}
+#dashboard .dashboard-grid .card:nth-child(12){--ac:#facc15}
+#dashboard .dashboard-grid .card h3{color:#cbd5e1}
+#dashboard .dashboard-grid .card h1,#dashboard .dashboard-grid .card h2{color:#fff;text-shadow:0 0 16px var(--ac)}
+#dashboard .dashboard-grid .card h1{color:#F3DA9E}
+.pm-income-card h2{color:#fff}
+
+/* ---- 3. Statistics ---- */
+#statisticsSection .stat-card{--ac:#D4AF37;position:relative;overflow:hidden;border:2px solid var(--ac);border-radius:22px;
+  background:linear-gradient(160deg,#192552,#0a0f22);box-shadow:0 12px 28px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.12)}
+#statisticsSection .stat-card::before{content:"";position:absolute;left:0;right:0;top:0;height:6px;background:linear-gradient(90deg,var(--ac),rgba(255,255,255,0))}
+#statisticsSection .stat-card::after{content:"";position:absolute;right:-44px;bottom:-44px;width:130px;height:130px;border-radius:50%;background:radial-gradient(circle,var(--ac),transparent 70%);opacity:.18;pointer-events:none}
+#statisticsSection .stat-card:nth-child(1){--ac:#60a5fa}
+#statisticsSection .stat-card:nth-child(2){--ac:#34d399}
+#statisticsSection .stat-card:nth-child(3){--ac:#fbbf24}
+#statisticsSection .stat-card:nth-child(4){--ac:#a78bfa}
+#statisticsSection .stat-card:nth-child(5){--ac:#22d3ee}
+#statisticsSection .stat-card:nth-child(6){--ac:#f472b6}
+#statisticsSection .stat-card:nth-child(7){--ac:#D4AF37}
+#statisticsSection .stat-card:nth-child(8){--ac:#38bdf8}
+#statisticsSection .stat-card h3{color:#cbd5e1}
+#statisticsSection .stat-card h2{color:#fff;text-shadow:0 0 16px var(--ac)}
+.pm-stat-rank h2,.pm-stat-next h2{font-size:33px;word-break:break-word}
+.pm-stat-rank h2{color:#F3DA9E!important}
+.pm-stat-next h2{color:#93c5fd!important}
+.pm-mini{height:18px;margin-top:10px}
+.pm-mini .progress-bar{font-size:19.5px}
+
+/* ---- 5. My Referral Team ---- */
+#referralTeam .card{border:3px solid rgba(212,175,55,.5);border-radius:24px;
+  background:radial-gradient(circle at 92% 0%,rgba(212,175,55,.14),transparent 55%),linear-gradient(160deg,#17214a,#0b1022);
+  box-shadow:0 14px 34px rgba(0,0,0,.45)}
+#referralTeam .task-section-subtitle{color:#F3DA9E;font-weight:600}
+#referralTeam .form-group label{color:#F3DA9E;font-weight:700}
+#referralTeam .form-group input,#referralTeam .form-group select{border:3px solid rgba(212,175,55,.5);border-radius:14px;background:rgba(5,8,22,.78);color:#fff}
+#referralTeam .tree-view-toggle .btn{border:2px solid rgba(212,175,55,.55);border-radius:999px;font-weight:700}
+#referralTeam .tree-view-toggle .tree-view-active{background:linear-gradient(135deg,#F7E6C4,#D4AF37)!important;color:#1a1206!important;border-color:#fff3d6!important}
+#loadReferralTreeBtn{background:linear-gradient(135deg,#22c55e,#0f7d3a);border-color:#7ee2b0!important;color:#fff}
+#referralTreeContainer .tree-level-title{color:#F3DA9E;border-bottom:2px solid rgba(212,175,55,.45)}
+#referralTreeContainer .tree-node{border:2px solid rgba(212,175,55,.35);border-left:6px solid #D4AF37;border-radius:14px;background:linear-gradient(135deg,#1a2554,#0d1330);color:#e2e8f0}
+
+/* shared premium table look (Referral History, Withdraw History, Transactions, tree list) */
+#referralHistorySection .table-responsive,#withdrawHistorySection .table-responsive,#transactionSection .table-responsive,#referralTreeContainer .table-responsive{
+  border:3px solid rgba(212,175,55,.5);border-radius:22px;box-shadow:0 14px 34px rgba(0,0,0,.45);background:#0b1022}
+#referralHistorySection .table th,#withdrawHistorySection .table th,#transactionSection .table th,#referralTreeContainer .table th{
+  background:linear-gradient(180deg,#26346e,#18224a);color:#F3DA9E;border-bottom:3px solid #D4AF37}
+#referralHistorySection .table td,#withdrawHistorySection .table td,#transactionSection .table td,#referralTreeContainer .table td{color:#e2e8f0;border-top:1px solid rgba(212,175,55,.2)}
+#referralHistorySection .table tbody tr:nth-child(even) td,#withdrawHistorySection .table tbody tr:nth-child(even) td,
+#transactionSection .table tbody tr:nth-child(even) td,#referralTreeContainer .table tbody tr:nth-child(even) td{background:rgba(255,255,255,.035)}
+#referralHistorySection .table tbody tr:hover td,#withdrawHistorySection .table tbody tr:hover td,
+#transactionSection .table tbody tr:hover td,#referralTreeContainer .table tbody tr:hover td{background:rgba(212,175,55,.12)}
+
+/* ---- 7. RANK & BONUS ---- */
+.rb-section{border:3px solid var(--secondary,#D4AF37)!important;
+  background:radial-gradient(circle at 85% 0%,rgba(243,218,158,.2),transparent 55%),linear-gradient(160deg,#18234f,#0a0f20)!important;
+  box-shadow:0 18px 44px rgba(0,0,0,.5),0 0 0 4px rgba(212,175,55,.08)!important}
+.rb-section > h3{background:linear-gradient(90deg,#FFF3C4,#D4AF37,#FFF3C4);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.rb-grid{grid-template-columns:repeat(auto-fill,minmax(190px,1fr))!important;gap:16px}
+.rb-card{overflow:hidden;border-width:3px;background:linear-gradient(170deg,rgba(255,255,255,.1),rgba(255,255,255,.02) 40%,#0b1022 85%)!important;box-shadow:0 12px 26px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.2)}
+.rb-card::before{content:"";position:absolute;left:0;right:0;top:0;height:6px;background:linear-gradient(90deg,var(--c2),var(--c1),var(--c2))}
+.rb-bonus{background:linear-gradient(135deg,rgba(243,218,158,.25),rgba(212,175,55,.08))!important;border:2px solid rgba(243,218,158,.7)!important}
+.rb-bonus b{background:linear-gradient(180deg,#FFF8DC,#D4AF37);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.rb-req{color:#e2e8f0!important;font-weight:600}
+
+/* ---- 8. Task History (Approved): bigger text ---- */
+#taskHistorySection .task-section-subtitle{font-size:30.5px;color:#F3DA9E;font-weight:600}
+#taskHistorySection .task-history-toggle{border:3px solid rgba(212,175,55,.55);border-radius:22px;padding:22px 24px;
+  background:linear-gradient(135deg,#1c2960,#0b1022);box-shadow:0 12px 28px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.12)}
+#taskHistorySection .task-history-toggle span:first-child{font-size:30.5px;font-weight:700;color:#fff}
+#taskHistorySection .task-history-toggle b{color:#34d399;font-size:33px}
+#taskHistorySection .toggle-arrow{font-size:33px;color:#D4AF37}
+#taskHistorySection .task-history-item{font-size:28px;padding:18px 20px;border:2px solid rgba(52,211,153,.45);border-left:8px solid #34d399;border-radius:16px;
+  background:linear-gradient(135deg,rgba(52,211,153,.12),#0d1330);color:#e2e8f0;line-height:1.6}
+#taskHistorySection .task-history-item strong{font-size:30.5px;color:#F3DA9E}
+
+/* ---- 9. Rejected Tasks ---- */
+#rejectedTaskSection .rejected-task-card{position:relative;overflow:hidden;border:3px solid rgba(248,113,113,.7);border-left:10px solid #ef4444;border-radius:22px;
+  background:linear-gradient(135deg,rgba(239,68,68,.16),#0b1022 70%);box-shadow:0 12px 28px rgba(0,0,0,.45),0 0 22px rgba(239,68,68,.18)}
+#rejectedTaskSection .rejected-task-card h4{color:#fecaca}
+#rejectedTaskSection .rejected-task-card p{color:#e2e8f0}
+#rejectedTaskSection .rejected-task-card strong{color:#fca5a5}
+#rejectedTaskSection .rejected-task-card .btn{border:2px solid #fff3d6;background:linear-gradient(135deg,#F7E6C4,#D4AF37);color:#1a1206;font-weight:800}
+#rejectedTaskSection > .container > .card,#rejectedTaskContainer > .card{border:3px solid rgba(52,211,153,.55);border-radius:22px;background:linear-gradient(135deg,rgba(52,211,153,.1),#0b1022)}
+#rejectedTaskSection .task-section-subtitle{color:#F3DA9E}
+
+/* ---- 10. Activation: bKash first, Nagad second; Premium benefits ---- */
+.pay-methods .pay-method[data-m="bKash"]{order:-1}
+.benefits-card{border:3px solid var(--secondary,#D4AF37)!important;border-radius:24px;
+  background:radial-gradient(circle at 90% 0%,rgba(243,218,158,.16),transparent 55%),linear-gradient(160deg,#18234f,#0a0f20)!important;box-shadow:0 14px 34px rgba(0,0,0,.45)}
+.benefits-card > h3{background:linear-gradient(90deg,#FFF3C4,#D4AF37,#FFF3C4);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.benefit-item{border:2px solid rgba(52,211,153,.55);border-radius:18px;background:linear-gradient(145deg,rgba(52,211,153,.14),#0d1330);color:#e2e8f0;font-weight:600;box-shadow:0 8px 18px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.12)}
+.benefit-item:hover{border-color:#34d399;transform:translateY(-3px)}
+
+/* ---- 11. Commission example chain: bigger + premium ---- */
+#commission .commission-visual-example{padding:22px 16px;border:3px solid rgba(243,218,158,.6)!important;border-radius:24px;
+  background:radial-gradient(circle at 50% 0%,rgba(243,218,158,.16),transparent 60%),linear-gradient(160deg,#17214a,#0a0f20)!important;box-shadow:0 14px 34px rgba(0,0,0,.45)}
+#commission .commission-visual-title{font-size:33px;font-weight:800;text-align:center;margin-bottom:18px;
+  background:linear-gradient(90deg,#FFF3C4,#D4AF37,#FFF3C4);-webkit-background-clip:text;background-clip:text;color:transparent!important;-webkit-text-fill-color:transparent}
+#commission .commission-chain{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:10px 6px}
+#commission .commission-chain > *{--lc:#D4AF37}
+#commission .commission-chain > :nth-child(1){--lc:#f472b6}
+#commission .commission-chain > :nth-child(3){--lc:#f59e0b}
+#commission .commission-chain > :nth-child(5){--lc:#a78bfa}
+#commission .commission-chain > :nth-child(7){--lc:#38bdf8}
+#commission .commission-chain > :nth-child(9){--lc:#34d399}
+#commission .commission-chain-node{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:108px;padding:16px 8px 14px;
+  border:3px solid var(--lc);border-radius:22px;background:linear-gradient(165deg,rgba(255,255,255,.14),rgba(255,255,255,.02) 45%,rgba(0,0,0,.25));
+  box-shadow:0 10px 24px rgba(0,0,0,.45),0 0 18px var(--lc),inset 0 1px 0 rgba(255,255,255,.25)}
+#commission .commission-chain-avatar{display:flex;align-items:center;justify-content:center;width:68px;height:68px;border-radius:50%;
+  font-size:36px;font-weight:800;color:#0c1020;background:var(--lc);border:4px solid rgba(255,255,255,.55);box-shadow:0 6px 16px rgba(0,0,0,.45)}
+#commission .commission-chain-gain{font-size:30.5px;font-weight:800}
+#commission .commission-chain-level-tag{display:inline-block;padding:2px 14px;font-size:24px;font-weight:800;color:#0c1020!important;border-radius:999px;background:var(--lc)}
+#commission .commission-chain-arrow{display:flex;align-items:center;justify-content:center;width:34px;font-size:36px;font-weight:800;color:#FFF3C4;text-shadow:0 0 14px #D4AF37}
+#commission .commission-chain-node-active{--lc:#D4AF37;border-style:dashed}
+#commission .commission-chain-avatar-active{background:linear-gradient(135deg,#FFF3C4,#D4AF37)}
+#commission .commission-chain-active-tag{display:inline-block;padding:3px 14px;font-size:24px;font-weight:800;color:#a7f3d0;border:2px solid #34d399;border-radius:999px;background:rgba(52,211,153,.14)}
+#commission .commission-visual-note{font-size:28px;line-height:1.7;margin-top:18px}
+
+/* ---- 12. Withdraw method order: bKash first ---- */
+#pmWdMethods .pay-method[data-m="bKash"]{order:-1}
+
+/* ---- 13. Approval time ---- */
+.withdraw-time-card{position:relative;border:3px solid #38bdf8!important;border-left:12px solid #38bdf8!important;border-radius:22px;
+  background:linear-gradient(135deg,rgba(56,189,248,.18),#0b1022 70%)!important;box-shadow:0 14px 32px rgba(0,0,0,.45),0 0 24px rgba(56,189,248,.2)}
+.withdraw-time-card p{color:#e2e8f0!important}
+.withdraw-time-card p:first-child{color:#7dd3fc!important;font-weight:800}
+
+/* ---- 14. Warning ---- */
+.withdraw-warning-card{position:relative;border:3px solid #ef4444!important;border-left:12px solid #ef4444!important;border-radius:22px;
+  background:linear-gradient(135deg,rgba(239,68,68,.22),#0b1022 75%)!important;box-shadow:0 14px 32px rgba(0,0,0,.45),0 0 26px rgba(239,68,68,.28)}
+.withdraw-warning-card p{color:#fecaca!important;font-weight:700}
+
+/* ---- 15. Payment proof ---- */
+.payment-proof-card{border:3px solid #34d399!important;border-left:12px solid #34d399!important;border-radius:24px;
+  background:radial-gradient(circle at 92% 0%,rgba(52,211,153,.18),transparent 55%),linear-gradient(160deg,#17214a,#0a0f20)!important;
+  box-shadow:0 16px 38px rgba(0,0,0,.5),0 0 26px rgba(52,211,153,.2)}
+.payment-proof-card h3{background:linear-gradient(90deg,#FFF3C4,#34d399);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.payment-proof-card p{color:#e2e8f0!important}
+.payment-proof-card .btn{border:3px solid rgba(255,255,255,.4);border-radius:18px;font-weight:800;box-shadow:0 10px 24px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.3)}
+.payment-proof-card a[href*="4pdi08NY1F4wMDU1"]{background:linear-gradient(135deg,#22c55e,#0f7d3a);color:#fff}
+.payment-proof-card a[href*="R_qDGivlyn81NDZl"]{background:linear-gradient(135deg,#2AABEE,#1B6FB5);color:#fff}
+.payment-proof-card a[href*="refer21349"]{background:linear-gradient(135deg,#F7E6C4,#D4AF37);color:#1a1206}
+.payment-proof-card .telegram-note{padding:12px 16px;color:#fde68a!important;border:2px solid rgba(251,191,36,.6);border-radius:14px;background:rgba(251,191,36,.1)}
+
+/* ---- 16. Withdraw History summary ---- */
+#withdrawHistorySection .withdraw-summary-card{position:relative;overflow:hidden;border:3px solid #34d399;border-radius:22px;background:linear-gradient(160deg,#192552,#0a0f22);box-shadow:0 12px 28px rgba(0,0,0,.45)}
+#withdrawHistorySection .withdraw-summary-card:nth-child(2){border-color:#fbbf24}
+#withdrawHistorySection .withdraw-summary-card::before{content:"";position:absolute;left:0;right:0;top:0;height:6px;background:linear-gradient(90deg,#34d399,transparent)}
+#withdrawHistorySection .withdraw-summary-card:nth-child(2)::before{background:linear-gradient(90deg,#fbbf24,transparent)}
+#withdrawHistorySection .withdraw-summary-card span{color:#cbd5e1}
+#withdrawHistorySection .withdraw-summary-card strong{color:#fff;text-shadow:0 0 14px rgba(52,211,153,.5)}
+
+/* ---- 18. Wallet Activity ---- */
+#walletHistory .wallet-group-title{display:inline-block;padding:4px 18px;margin:18px 0 12px;color:#1a1206;background:linear-gradient(135deg,#F7E6C4,#D4AF37);border-radius:999px;font-weight:800;letter-spacing:.5px}
+#walletHistory .card{border:2px solid rgba(212,175,55,.4);border-left:10px solid #D4AF37;border-radius:20px;background:linear-gradient(135deg,#1a2554,#0b1022);box-shadow:0 10px 24px rgba(0,0,0,.4)}
+#walletHistory .card strong{color:#F3DA9E;text-transform:capitalize}
+#walletHistory .card p{color:#e2e8f0}
+
+/* ---- 19. Notice ---- */
+#broadcast .card{position:relative;overflow:hidden;border:3px solid #D4AF37;border-left:12px solid #D4AF37;border-radius:24px;
+  background:radial-gradient(circle at 92% 0%,rgba(243,218,158,.2),transparent 55%),linear-gradient(160deg,#18234f,#0a0f20);box-shadow:0 16px 38px rgba(0,0,0,.5),0 0 24px rgba(212,175,55,.2)}
+#broadcast .card strong{background:linear-gradient(90deg,#FFF3C4,#D4AF37);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+#broadcast .card p{color:#e2e8f0}
+
+/* ---- 20. Notifications ---- */
+#notifications .notif-filter-btn{border:2px solid rgba(212,175,55,.5);border-radius:999px;font-weight:700;background:linear-gradient(145deg,#1a2554,#0d1330);color:#cbd5e1}
+#notifications .notif-filter-active{background:linear-gradient(135deg,#F7E6C4,#D4AF37)!important;color:#1a1206!important;border-color:#fff3d6!important;box-shadow:0 6px 16px rgba(212,175,55,.4)}
+#notificationList .card{border:2px solid rgba(96,165,250,.45);border-left:10px solid #60a5fa;border-radius:20px;background:linear-gradient(135deg,#1a2554,#0b1022);box-shadow:0 10px 24px rgba(0,0,0,.4)}
+#notificationList .card strong{color:#F3DA9E}
+#notificationList .card p{color:#e2e8f0}
+
+/* ---- 21. Help & Support ---- */
+#support .card{border:3px solid rgba(212,175,55,.5);border-radius:24px;
+  background:radial-gradient(circle at 92% 0%,rgba(212,175,55,.14),transparent 55%),linear-gradient(160deg,#17214a,#0b1022);box-shadow:0 14px 34px rgba(0,0,0,.45)}
+#support .card h3{background:linear-gradient(90deg,#FFF3C4,#D4AF37);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+#support .card p{color:#e2e8f0}
+#support .btn{border:3px solid rgba(255,255,255,.4);border-radius:18px;font-weight:800;box-shadow:0 10px 24px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.3)}
+#support .support-team-btn{background:linear-gradient(135deg,#2AABEE,#1B6FB5);color:#fff}
+
+/* ---- 22. সমস্যার ধরন ---- */
+#support .support-category-tag{border:2px solid rgba(212,175,55,.6);border-radius:999px;color:#F3DA9E;font-weight:700;
+  background:linear-gradient(145deg,rgba(243,218,158,.18),rgba(212,175,55,.05));box-shadow:0 6px 14px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.15)}
+#support .support-category-tag:hover{border-color:#fff3d6;color:#fff;transform:translateY(-2px)}
+
+/* ---- 23. FAQ ---- */
+.faq-section{counter-reset:faq}
+.faq-section .card{counter-increment:faq;position:relative;padding-left:96px;border:3px solid rgba(212,175,55,.5);border-radius:24px;
+  background:radial-gradient(circle at 92% 0%,rgba(212,175,55,.12),transparent 55%),linear-gradient(160deg,#17214a,#0b1022);box-shadow:0 12px 30px rgba(0,0,0,.45)}
+.faq-section .card::before{content:counter(faq);position:absolute;left:22px;top:22px;display:flex;align-items:center;justify-content:center;width:54px;height:54px;
+  font-size:30.5px;font-weight:800;color:#1a1206;border-radius:50%;background:linear-gradient(135deg,#F7E6C4,#D4AF37);border:3px solid #fff3d6;box-shadow:0 6px 14px rgba(212,175,55,.45)}
+.faq-section .card h3{background:linear-gradient(90deg,#FFF3C4,#D4AF37);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.faq-section .card p{color:#e2e8f0}
+@media (max-width:560px){.faq-section .card{padding-left:84px}}
+
+/* =====================================================================
+   PART 6
+   ===================================================================== */
+
+/* ---- 21. Section titles: bold premium bordered banners ---- */
+.section-title{display:block;position:relative;padding:14px 24px 14px 26px;border:4px solid #D4AF37;border-left-width:14px;border-radius:20px;
+  background:linear-gradient(135deg,rgba(212,175,55,.24),rgba(47,79,214,.14) 60%,rgba(7,10,20,.4));
+  box-shadow:0 10px 26px rgba(0,0,0,.45),0 0 0 4px rgba(212,175,55,.08),inset 0 1px 0 rgba(255,255,255,.18);
+  text-shadow:0 2px 8px rgba(0,0,0,.5)}
+
+/* ---- 3. Lamp caption ---- */
+.lamp-caption-line{width:120px!important;height:4px!important;border-radius:4px;background:linear-gradient(90deg,transparent,#F3DA9E,transparent)!important;box-shadow:0 0 14px rgba(243,218,158,.7)}
+.lamp-caption p{background:linear-gradient(180deg,#FFF8DC,#F1D7A0 50%,#C9A24B);-webkit-background-clip:text;background-clip:text;color:transparent!important;-webkit-text-fill-color:transparent;
+  letter-spacing:.8px;filter:drop-shadow(0 3px 10px rgba(212,175,55,.45))}
+.lamp-caption::after{content:"";display:block;width:160px;height:3px;margin:12px auto 0;border-radius:3px;background:linear-gradient(90deg,transparent,#D4AF37,transparent)}
+
+/* ---- 4. Welcome panel ---- */
+.lamp-welcome-panel .hero-badge{border-width:2px;font-weight:700;box-shadow:0 6px 16px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.2)}
+.lamp-welcome-panel .hero-badge-accent{background:linear-gradient(135deg,rgba(243,218,158,.28),rgba(212,175,55,.08));border-color:#D4AF37;color:#FFF3C4}
+.lamp-welcome-panel .hero-badge-live{background:linear-gradient(135deg,rgba(52,211,153,.28),rgba(52,211,153,.06));border-color:#34d399;color:#a7f3d0}
+.lamp-welcome-panel h1{color:#fff;text-shadow:0 4px 18px rgba(0,0,0,.6)}
+.lamp-welcome-panel h1 span{background:linear-gradient(90deg,#FFF3C4,#D4AF37,#FFF3C4);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.lamp-welcome-panel p{color:#e2e8f0!important;font-weight:500}
+.welcome-trust-badge{border:2px solid rgba(243,218,158,.55)!important;background:linear-gradient(135deg,rgba(243,218,158,.16),rgba(255,255,255,.03))!important;color:#FFF3C4!important;font-weight:600;box-shadow:0 4px 12px rgba(0,0,0,.35)}
+
+/* ---- 4b. Daily Bonus ---- */
+#dailySpin .daily-bonus-card{border:4px solid #D4AF37!important;border-radius:26px;
+  background:radial-gradient(circle at 92% 0%,rgba(243,218,158,.22),transparent 55%),linear-gradient(135deg,#1c2960,#0a0f20)!important;
+  box-shadow:0 16px 38px rgba(0,0,0,.5),0 0 0 4px rgba(212,175,55,.08),inset 0 1px 0 rgba(255,255,255,.18)}
+#dailySpin .daily-bonus-card h3{color:#FFF3C4}
+#dailySpin .daily-bonus-card p{color:#e2e8f0}
+
+/* ---- 5. Lucky Spin: bigger, Ferris-wheel (🎡) design ---- */
+#dailySpin .spin-card{--wheel:310px;border:4px solid #D4AF37!important;border-radius:28px;
+  background:radial-gradient(circle at 50% 12%,rgba(99,102,241,.2),transparent 55%),linear-gradient(160deg,#17214a,#080c1a)!important;
+  box-shadow:0 18px 42px rgba(0,0,0,.55),0 0 0 4px rgba(212,175,55,.08)}
+#dailySpin .spin-card h3{background:linear-gradient(90deg,#FFF3C4,#D4AF37,#FFF3C4);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+#dailySpin .spin-wheel-wrapper{position:relative;isolation:isolate;width:var(--wheel)!important;height:var(--wheel)!important;margin:26px auto 96px!important}
+#dailySpin .spin-wheel-wrapper::before{content:"";position:absolute;left:50%;transform:translateX(-50%);bottom:-86px;width:80%;height:16px;border-radius:9px;z-index:-1;
+  background:linear-gradient(90deg,#8a6a28,#F3DA9E,#8a6a28);box-shadow:0 10px 20px rgba(0,0,0,.55)}
+#dailySpin .spin-wheel-wrapper::after{content:"";position:absolute;left:50%;top:50%;transform:translateX(-50%);width:66%;height:calc(50% + 72px);z-index:-1;
+  clip-path:polygon(50% 0%,100% 100%,87% 100%,50% 17%,13% 100%,0% 100%);background:linear-gradient(180deg,#F3DA9E,#C9A24B 60%,#8a6a28)}
+#dailySpin .spin-wheel{position:relative;width:var(--wheel)!important;height:var(--wheel)!important;border-radius:50%;border:10px solid #D4AF37!important;
+  background:
+   repeating-conic-gradient(from 25.7143deg,rgba(255,243,196,.9) 0 1.4deg,transparent 1.4deg 51.4286deg),
+   radial-gradient(circle,#18255a 0%,#0c1230 62%,#070b1b 100%)!important;
+  box-shadow:0 0 0 5px #0b1020,0 0 38px rgba(212,175,55,.55),inset 0 0 30px rgba(0,0,0,.6)!important}
+#dailySpin .spin-wheel::before{content:"";position:absolute;inset:12px;border-radius:50%;border:5px dotted #FFF3C4;opacity:.95;pointer-events:none}
+#dailySpin .spin-wheel::after{content:"";position:absolute;inset:27%;border-radius:50%;border:3px solid rgba(243,218,158,.6);pointer-events:none}
+#dailySpin .spin-segment{position:absolute;top:50%;left:50%;display:flex;align-items:center;justify-content:center;min-width:60px;padding:6px 10px;
+  border-radius:14px 14px 20px 20px;border:3px solid #fff3d6;color:#fff;font-weight:800;text-shadow:0 2px 4px rgba(0,0,0,.65);
+  box-shadow:0 7px 14px rgba(0,0,0,.55),inset 0 2px 0 rgba(255,255,255,.4);background:#2563eb}
+#dailySpin .spin-segment-1{background:linear-gradient(160deg,#60a5fa,#1d4ed8);transform:translate(-50%,-50%) rotate(25.7143deg) translateY(calc(var(--wheel) * -.325))!important}
+#dailySpin .spin-segment-2{background:linear-gradient(160deg,#4ade80,#15803d);transform:translate(-50%,-50%) rotate(77.1429deg) translateY(calc(var(--wheel) * -.325))!important}
+#dailySpin .spin-segment-3{background:linear-gradient(160deg,#fb923c,#c2410c);transform:translate(-50%,-50%) rotate(128.5714deg) translateY(calc(var(--wheel) * -.325))!important}
+#dailySpin .spin-segment-4{background:linear-gradient(160deg,#f472b6,#be185d);transform:translate(-50%,-50%) rotate(180deg) translateY(calc(var(--wheel) * -.325))!important}
+#dailySpin .spin-segment-5{background:linear-gradient(160deg,#a78bfa,#6d28d9);transform:translate(-50%,-50%) rotate(231.4286deg) translateY(calc(var(--wheel) * -.325))!important}
+#dailySpin .spin-segment-6{background:linear-gradient(160deg,#22d3ee,#0e7490);transform:translate(-50%,-50%) rotate(282.8571deg) translateY(calc(var(--wheel) * -.325))!important}
+#dailySpin .spin-segment-7{background:linear-gradient(160deg,#FFE27A,#B8860B);transform:translate(-50%,-50%) rotate(334.2857deg) translateY(calc(var(--wheel) * -.325))!important}
+#dailySpin .spin-wheel-hub{position:absolute!important;top:50%!important;left:50%!important;transform:translate(-50%,-50%)!important;display:flex;align-items:center;justify-content:center;
+  width:78px;height:78px;border-radius:50%;font-weight:800;color:#1a1206;background:linear-gradient(145deg,#FFF3C4,#D4AF37 60%,#8a6a28);border:4px solid #fff3d6;
+  box-shadow:0 0 0 5px #0b1020,0 6px 16px rgba(0,0,0,.6),0 0 22px rgba(243,218,158,.6);z-index:3}
+#dailySpin .spin-pointer{top:-24px!important;font-size:50px;color:#FFF3C4!important;text-shadow:0 0 16px #D4AF37,0 4px 8px rgba(0,0,0,.7);z-index:4}
+
+/* ---- 6. My Profile ---- */
+#profile .profile-card{border:4px solid #D4AF37!important;border-radius:28px;
+  background:radial-gradient(circle at 92% 0%,rgba(243,218,158,.2),transparent 55%),linear-gradient(135deg,#1c2960,#0a0f20)!important;
+  box-shadow:0 18px 42px rgba(0,0,0,.5),0 0 0 4px rgba(212,175,55,.08),inset 0 1px 0 rgba(255,255,255,.18)}
+#profile .profile-avatar img{border:4px solid #D4AF37!important;box-shadow:0 0 0 5px rgba(212,175,55,.22),0 10px 24px rgba(0,0,0,.55)}
+#profile .profile-details h3{color:#fff;text-shadow:0 2px 10px rgba(212,175,55,.35)}
+#profile .profile-email{color:#F3DA9E!important}
+#profile .profile-membership-tag{border:2px solid #fff3d6;box-shadow:0 6px 14px rgba(212,175,55,.4)}
+#profile .profile-info-item{position:relative;overflow:hidden;border:2px solid rgba(243,218,158,.5)!important;border-radius:18px;
+  background:linear-gradient(160deg,rgba(255,255,255,.1),rgba(255,255,255,.02) 40%,#0b1022)!important;box-shadow:0 8px 20px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.2)}
+#profile .profile-info-item::before{content:"";position:absolute;left:0;right:0;top:0;height:5px;background:linear-gradient(90deg,#D4AF37,#60a5fa)}
+#profile .profile-info-label{color:#cbd5e1!important}
+#profile .profile-info-value{color:#fff!important}
+#profile .profile-referral-code{background:linear-gradient(90deg,#FFF3C4,#D4AF37);-webkit-background-clip:text;background-clip:text;color:transparent!important;-webkit-text-fill-color:transparent}
+#profile .profile-btn-row .btn{border:3px solid rgba(255,255,255,.4);border-radius:16px;font-weight:800}
+.pm-pinfo{border-width:3px!important;border-radius:20px!important;background:linear-gradient(160deg,rgba(255,255,255,.1),rgba(255,255,255,.02) 40%,#0b1022)!important;box-shadow:0 10px 24px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.2)!important}
+.pm-pinfo-ico{background:linear-gradient(145deg,rgba(243,218,158,.35),rgba(212,175,55,.1))!important;border:2px solid #D4AF37!important}
+
+/* ---- 7/8. Referral Contest ---- */
+#referralContest .card{border:4px solid rgba(212,175,55,.65);border-radius:26px;
+  background:radial-gradient(circle at 92% 0%,rgba(243,218,158,.16),transparent 55%),linear-gradient(160deg,#1a2554,#0a0f20);
+  box-shadow:0 16px 38px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.14)}
+#referralContest .contest-card{border-left-width:14px;border-left-color:#f59e0b}
+#referralContest .contest-prize-item{border:2px solid #D4AF37;border-radius:14px;color:#FFF3C4;background:linear-gradient(135deg,rgba(243,218,158,.22),rgba(212,175,55,.06));font-weight:700}
+#referralContest .contest-my-rank-box{border:2px solid rgba(243,218,158,.55);border-radius:16px;background:linear-gradient(135deg,rgba(243,218,158,.18),rgba(255,255,255,.03))}
+#referralContest .contest-my-rank-box strong{color:#FFF3C4}
+#referralContest .contest-history-item{border:2px solid rgba(212,175,55,.4);border-left:8px solid #D4AF37;border-radius:16px;background:linear-gradient(135deg,#1a2554,#0b1022)}
+#referralContest .card h3,#referralContest .leaderboard-card-title{background:linear-gradient(90deg,#FFF3C4,#D4AF37);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;font-weight:800}
+
+/* ---- 9/10. Leaderboards ---- */
+#leaderboard .card,#referralContest .leaderboard-card{border-width:4px}
+.lb-top{border-width:4px!important;border-radius:26px!important;box-shadow:0 16px 34px rgba(0,0,0,.55),0 0 30px var(--tg),inset 0 1px 0 rgba(255,255,255,.25)!important}
+.lb-p1{box-shadow:0 18px 40px rgba(0,0,0,.6),0 0 44px rgba(255,213,74,.5),inset 0 1px 0 rgba(255,255,255,.3)!important}
+.lb-top .lb-avatar{border-width:4px}
+.lb-top .lb-name{color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.6)}
+.lb-score b{text-shadow:0 0 18px var(--tc)}
+.lb-row{border-width:3px!important;border-radius:20px!important;background:linear-gradient(135deg,#1c2960,#0b1022)!important;box-shadow:0 8px 20px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.12)}
+.lb-pos{color:#FFF3C4}
+.lb-live-bar{padding:8px 14px;border:2px solid rgba(52,211,153,.5);border-radius:999px;background:rgba(52,211,153,.08);color:#a7f3d0}
+#pmGenLb .table-responsive{border-width:4px;border-radius:24px}
+#pmGenLb .table th{background:linear-gradient(180deg,#26346e,#18224a);color:#F3DA9E;border-bottom:3px solid #D4AF37}
+#pmGenLb .table td{color:#e2e8f0;border-top:1px solid rgba(212,175,55,.2)}
+.lb-user .lb-name{color:#fff}
+
+/* ---- 11. Rank Progress ---- */
+.rp-card{border-width:4px!important;border-radius:28px!important;box-shadow:0 18px 42px rgba(0,0,0,.55),0 0 34px var(--c2),inset 0 1px 0 rgba(255,255,255,.2)!important}
+.rp-head-text h2{text-shadow:0 0 22px var(--c1)}
+.rp-percent{text-shadow:0 0 22px var(--c1)}
+.rp-bar{height:34px!important;border-width:3px!important}
+.rp-next{border-width:3px!important;border-radius:22px!important;background:linear-gradient(135deg,rgba(255,255,255,.08),rgba(255,255,255,.02))!important}
+.rp-next-info span{color:#e2e8f0!important}
+
+/* ---- 12. RANK & BONUS: brighter, clearer icons ---- */
+.rb-section .rank-info-subtitle{padding:14px 18px;color:#FFF3C4!important;font-weight:600;border:2px solid rgba(243,218,158,.55);border-radius:18px;
+  background:linear-gradient(135deg,rgba(243,218,158,.18),rgba(47,79,214,.1));box-shadow:inset 0 1px 0 rgba(255,255,255,.18)}
+.rb-card{border-radius:26px!important;padding-top:34px!important}
+.rb-card .rk-badge{border:5px solid #fff!important;font-size:50px;width:100px;height:100px;filter:saturate(1.45) brightness(1.18);
+  background:radial-gradient(circle at 32% 28%,#fff 0%,var(--c1) 38%,var(--c2) 100%)!important;
+  box-shadow:0 8px 20px rgba(0,0,0,.55),0 0 0 4px var(--c2),0 0 30px var(--c1),inset 0 -6px 12px rgba(0,0,0,.25),inset 0 4px 8px rgba(255,255,255,.6)!important;
+  text-shadow:0 0 14px rgba(255,255,255,.95),0 3px 6px rgba(0,0,0,.35)}
+.rb-card h4{font-size:33px!important;text-shadow:0 0 16px var(--c1);color:#fff!important}
+.rb-req{display:inline-block;padding:3px 14px;border:2px solid var(--c1);border-radius:999px;background:rgba(255,255,255,.08)}
+.rb-current{box-shadow:0 0 0 5px rgba(243,218,158,.35),0 0 44px var(--c1),0 14px 30px rgba(0,0,0,.55)!important}
+.rb-locked{opacity:.88!important;filter:none!important}
+.rb-locked .rk-badge{filter:saturate(1.2) brightness(1.05)}
+
+/* ---- 13. Recent Activity ---- */
+#activityList .card{position:relative;border:3px solid rgba(96,165,250,.55);border-left:12px solid #60a5fa;border-radius:22px;
+  background:linear-gradient(135deg,#1c2960,#0a0f20);box-shadow:0 12px 28px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.12)}
+#activityList .card strong{color:#FFF3C4}
+#activityList .card p{color:#a7f3d0}
+
+/* ---- 14. Task Hub ---- */
+#taskHub .task-section-subtitle{padding:14px 18px;color:#FFF3C4;font-weight:600;border:2px solid rgba(243,218,158,.5);border-radius:18px;
+  background:linear-gradient(135deg,rgba(243,218,158,.16),rgba(47,79,214,.1))}
+.task-category-card[data-pro]{border-width:4px!important;border-radius:26px!important;padding:20px 8px 18px!important;
+  background:linear-gradient(165deg,rgba(255,255,255,.14),rgba(255,255,255,.02) 40%,#0b1022 90%)!important;
+  box-shadow:0 12px 26px rgba(0,0,0,.5),0 0 20px var(--brand),inset 0 1px 0 rgba(255,255,255,.25)}
+.task-category-card[data-pro] .task-category-label{text-shadow:0 2px 6px rgba(0,0,0,.6);font-weight:800}
+.tl-count{background:linear-gradient(135deg,rgba(243,218,158,.3),rgba(255,255,255,.06))!important;border:2px solid rgba(243,218,158,.7)!important}
+#taskListArea .task-list-area-header{padding:14px 20px;border:3px solid rgba(212,175,55,.6);border-radius:20px;background:linear-gradient(135deg,#1c2960,#0b1022)}
+#taskListArea .task-counter-badge{border:2px solid #fff3d6;box-shadow:0 4px 12px rgba(0,0,0,.4)}
+.task-filter-bar input,.task-filter-bar select{border:3px solid rgba(212,175,55,.5)!important;border-radius:14px!important;background:rgba(5,8,22,.78)!important;color:#fff!important}
+.task-card{border:3px solid rgba(212,175,55,.5)!important;border-left:12px solid #D4AF37!important;border-radius:24px!important;
+  background:radial-gradient(circle at 92% 0%,rgba(243,218,158,.12),transparent 55%),linear-gradient(135deg,#1a2554,#0a0f20)!important;
+  box-shadow:0 14px 32px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.14)}
+.task-card-top h4{color:#fff}
+.task-card-top p{color:#e2e8f0}
+.task-reward{padding:3px 14px;color:#052e1b!important;border-radius:999px;background:linear-gradient(135deg,#6ee7b7,#22c55e);font-weight:800}
+
+/* ---- 15. Commission: "How it works" colours, hide L1-L5 grid ---- */
+#commission .commission-level-grid{display:none!important}
+#commission .cm-how{border:4px solid #D4AF37!important;border-radius:26px;background:radial-gradient(circle at 92% 0%,rgba(243,218,158,.2),transparent 55%),linear-gradient(160deg,#1c2960,#0a0f20)!important;box-shadow:0 14px 34px rgba(0,0,0,.45)}
+#commission .cm-how h4{background:linear-gradient(90deg,#FFF3C4,#34d399,#60a5fa);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;font-weight:800}
+#commission .cm-how ol{list-style:none;margin:0 0 14px;padding:0;counter-reset:cs}
+#commission .cm-how li{counter-increment:cs;position:relative;margin-bottom:12px;padding:12px 14px 12px 70px;color:#fff;font-weight:600;border-radius:16px;
+  border:2px solid var(--lc);background:linear-gradient(135deg,rgba(255,255,255,.1),rgba(255,255,255,.02))}
+#commission .cm-how li::before{content:counter(cs);position:absolute;left:14px;top:50%;transform:translateY(-50%);display:flex;align-items:center;justify-content:center;width:42px;height:42px;
+  font-weight:800;color:#0c1020;border-radius:50%;background:var(--lc);box-shadow:0 4px 10px rgba(0,0,0,.45)}
+#commission .cm-how li:nth-child(1){--lc:#34d399}
+#commission .cm-how li:nth-child(2){--lc:#60a5fa}
+#commission .cm-how li:nth-child(3){--lc:#f59e0b}
+#commission .cm-how li:nth-child(4){--lc:#a78bfa}
+#commission .cm-how li:nth-child(5){--lc:#f472b6}
+#commission .cm-note{color:#fde68a!important;font-weight:700;border:3px solid rgba(251,191,36,.7)!important;border-radius:16px;background:linear-gradient(135deg,rgba(251,191,36,.2),rgba(251,191,36,.04))!important}
+.benefit-item{padding:16px 14px!important;border-width:3px!important;border-radius:20px!important;font-weight:700!important;color:#fff!important}
+.benefit-item:nth-child(4n+1){border-color:#34d399!important}
+.benefit-item:nth-child(4n+2){border-color:#60a5fa!important}
+.benefit-item:nth-child(4n+3){border-color:#f59e0b!important}
+.benefit-item:nth-child(4n+4){border-color:#a78bfa!important}
+
+/* ---- 16. Withdrawal Eligibility ---- */
+#withdraw .withdraw-overview-card{border:4px solid #D4AF37!important;border-radius:26px;background:radial-gradient(circle at 92% 0%,rgba(243,218,158,.18),transparent 55%),linear-gradient(135deg,#1c2960,#0a0f20)!important;box-shadow:0 16px 38px rgba(0,0,0,.5)}
+#withdraw .withdraw-overview-item span{color:#cbd5e1}
+#withdraw .withdraw-overview-item strong{background:linear-gradient(180deg,#FFF8DC,#D4AF37);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+#withdraw .withdraw-eligibility-card{border:4px solid rgba(96,165,250,.7)!important;border-radius:26px;background:radial-gradient(circle at 92% 0%,rgba(96,165,250,.18),transparent 55%),linear-gradient(160deg,#1a2554,#0a0f20)!important;box-shadow:0 16px 38px rgba(0,0,0,.5)}
+#withdraw .withdraw-eligibility-card > h3{background:linear-gradient(90deg,#FFF3C4,#60a5fa);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+#withdraw .eligibility-item{padding:14px 16px;border:2px solid rgba(255,255,255,.14);border-radius:18px;background:rgba(255,255,255,.04)}
+#withdraw .eligibility-label{color:#fff}
+#withdraw .eligibility-progress{height:22px;border:2px solid rgba(255,255,255,.14);box-shadow:inset 0 2px 6px rgba(0,0,0,.4)}
+#withdraw .eligibility-progress .progress-bar{background:linear-gradient(90deg,#D4AF37,#FFF3C4 60%,#34d399)}
+#withdraw .eligibility-final-status{border-width:3px;border-radius:18px}
+.pm-wd-card{border-width:4px!important}
+.pm-wd-card .form-group input{background:linear-gradient(180deg,rgba(5,8,22,.9),rgba(12,18,44,.9))!important;box-shadow:inset 0 3px 10px rgba(0,0,0,.5)}
+.pm-wd-card .form-group label{color:#F3DA9E!important;font-weight:800}
+.pay-method-on[data-m="bKash"]{box-shadow:0 0 28px rgba(226,19,110,.55)!important}
+
+/* ---- 17. Payment Proof: wider / bigger cards ---- */
+.payment-proof-card{padding:30px 26px!important}
+.payment-proof-card .btn{min-height:80px;padding:14px 22px;font-size:28px;border-radius:22px}
+
+/* ---- 18. Support Team ---- */
+#support .support-team-grid{display:grid;grid-template-columns:1fr;gap:14px}
+#support .support-team-btn{display:flex;align-items:center;justify-content:center;min-height:76px;padding:12px 20px;font-size:26px;text-align:center;line-height:1.35}
+#support .pm-team-official{background:linear-gradient(135deg,#F7E6C4,#D4AF37);color:#1a1206}
+#support .pm-team-helping{background:linear-gradient(135deg,#22c55e,#0f7d3a);color:#fff}
+
+/* ---- 19. Contact ---- */
+#contact .card{border:4px solid #D4AF37;border-radius:26px;background:radial-gradient(circle at 92% 0%,rgba(243,218,158,.18),transparent 55%),linear-gradient(135deg,#1c2960,#0a0f20);box-shadow:0 16px 38px rgba(0,0,0,.5)}
+#contact .card p{color:#e2e8f0}
+#contact .card strong{background:linear-gradient(90deg,#FFF3C4,#D4AF37);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+
+/* ---- 20. Footer ---- */
+.footer{margin-top:70px;border-top:5px solid #D4AF37;background:radial-gradient(circle at 50% 0%,rgba(243,218,158,.12),transparent 60%),linear-gradient(180deg,#0e1533,#070a14)}
+.footer-column h2{background:linear-gradient(90deg,#FFF3C4,#D4AF37);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.footer-column h3{color:#F3DA9E;padding-bottom:8px;border-bottom:3px solid rgba(212,175,55,.6);display:inline-block}
+.footer-column p,.footer-column ul li a{color:#cbd5e1}
+.footer-column ul li a:hover,.footer-column > a:hover{color:#FFF3C4}
+.footer-column > a{color:#F3DA9E;font-weight:700}
+.footer-logo{border:3px solid #D4AF37;border-radius:14px;box-shadow:0 6px 16px rgba(212,175,55,.35)}
+.footer-divider{height:3px;background:linear-gradient(90deg,transparent,#D4AF37,transparent)}
+.footer-bottom{color:#F3DA9E}
+
+/* ---- 22. Menu (☰) panel ---- */
+.quick-nav-panel{background:radial-gradient(circle at 80% 0%,rgba(243,218,158,.14),transparent 55%),linear-gradient(180deg,#141d45,#070a14)!important;border-right:4px solid #D4AF37!important;box-shadow:12px 0 40px rgba(0,0,0,.6)}
+.quick-nav-title{background:linear-gradient(90deg,#FFF3C4,#D4AF37);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;font-weight:800}
+.quick-nav-referral-box{border:3px solid rgba(212,175,55,.6)!important;border-radius:18px;background:linear-gradient(135deg,rgba(243,218,158,.14),rgba(255,255,255,.02))!important}
+.quick-nav-referral-box > span{color:#F3DA9E!important;font-weight:700}
+.quick-nav-link{border:2px solid rgba(212,175,55,.3);border-radius:14px;color:#e2e8f0!important;font-weight:700;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.01))}
+.quick-nav-link:first-child{background:linear-gradient(135deg,rgba(243,218,158,.3),rgba(212,175,55,.08))!important;color:#FFF3C4!important;border-color:#D4AF37}
+.quick-nav-link:hover,.quick-nav-link:active{color:#fff!important;border-color:#D4AF37;background:linear-gradient(135deg,rgba(243,218,158,.22),rgba(255,255,255,.05))!important}
+
+
+/* =====================================================================
+   PART 6
+   ===================================================================== */
+
+/* ---- 21. Section titles + bigger borders ---- */
+main .section-title{position:relative;padding:4px 0 14px 18px;border-left:8px solid #D4AF37;
+  background:linear-gradient(90deg,#FFF3C4,#D4AF37 55%,#F3DA9E);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+main .section-title::after{content:"";position:absolute;left:18px;bottom:0;width:150px;height:5px;border-radius:3px;background:linear-gradient(90deg,#D4AF37,rgba(212,175,55,0))}
+main .card,main .stat-card,main .status-card,main .profile-card,main .table-responsive,main .withdraw-summary-card,
+main .task-history-toggle,main .rejected-task-card{border-width:3px}
+#dashboard .dashboard-grid .card,#statisticsSection .stat-card{border-width:4px}
+#commission{scroll-margin-top:40px}
+
+/* ---- 22. Menu panel ---- */
+.quick-nav-panel{background:linear-gradient(170deg,#141d44,#080c1c)!important;border-right:4px solid #D4AF37!important;box-shadow:12px 0 40px rgba(0,0,0,.6)}
+.quick-nav-title{background:linear-gradient(90deg,#FFF3C4,#D4AF37);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.quick-nav-referral-box{border:3px solid rgba(212,175,55,.6)!important;border-radius:18px!important;background:linear-gradient(145deg,rgba(243,218,158,.14),rgba(0,0,0,.3))!important}
+.quick-nav-referral-box > span{color:#F3DA9E!important;font-weight:700}
+.quick-nav-referral-row input{border:2px solid rgba(212,175,55,.5)!important;color:#F3DA9E!important;background:rgba(5,8,22,.8)!important}
+.quick-nav-link{border:2px solid rgba(212,175,55,.22);border-left:6px solid #D4AF37;border-radius:14px;color:#e2e8f0!important;font-weight:700;
+  background:linear-gradient(135deg,rgba(255,255,255,.07),rgba(255,255,255,.01))!important}
+.quick-nav-link:first-child{color:#FFF3C4!important;border-color:#D4AF37;background:linear-gradient(135deg,rgba(243,218,158,.25),rgba(212,175,55,.06))!important}
+.quick-nav-link:hover,.quick-nav-link:active{color:#fff!important;border-color:#fff3d6;background:linear-gradient(135deg,rgba(243,218,158,.3),rgba(212,175,55,.1))!important}
+
+/* ---- 3. Lamp caption ---- */
+.lamp-caption{width:max-content;max-width:none;margin-left:auto;margin-right:auto;padding:14px 22px;border:3px solid rgba(212,175,55,.6);border-radius:20px;
+  background:linear-gradient(145deg,rgba(243,218,158,.16),rgba(0,0,0,.45));box-shadow:0 10px 26px rgba(0,0,0,.55),0 0 22px rgba(212,175,55,.18),inset 0 1px 0 rgba(255,255,255,.18)}
+.lamp-caption-line{width:90px!important;height:4px!important;border-radius:3px;background:linear-gradient(90deg,transparent,#D4AF37,transparent)!important}
+.lamp-caption p{background:linear-gradient(90deg,#FFF3C4,#D4AF37 55%,#FFF3C4);-webkit-background-clip:text;background-clip:text;color:transparent!important;-webkit-text-fill-color:transparent;text-shadow:none}
+
+/* ---- 4. Welcome panel ---- */
+.lamp-welcome-panel .hero-badge{border:2px solid rgba(212,175,55,.6);border-radius:999px;font-weight:700;
+  background:linear-gradient(145deg,rgba(243,218,158,.2),rgba(0,0,0,.35));box-shadow:0 6px 16px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.2)}
+.lamp-welcome-panel .hero-badge-live{border-color:rgba(52,211,153,.7);background:linear-gradient(145deg,rgba(52,211,153,.22),rgba(0,0,0,.35))}
+.lamp-welcome-panel h1{color:#fff;text-shadow:0 4px 18px rgba(0,0,0,.6)}
+.lamp-welcome-panel h1 span{background:linear-gradient(90deg,#FFF3C4,#D4AF37 55%,#F3DA9E);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.lamp-welcome-panel p{color:#dbe3f5}
+.welcome-trust-badge{border:2px solid rgba(212,175,55,.5)!important;border-radius:999px!important;color:#F3DA9E!important;font-weight:600;
+  background:linear-gradient(145deg,rgba(243,218,158,.16),rgba(0,0,0,.35))!important;box-shadow:0 5px 12px rgba(0,0,0,.4)}
+
+/* ---- 4/5. Daily Bonus & Lucky Spin ---- */
+.daily-bonus-card{border:4px solid #D4AF37!important;border-radius:26px!important;
+  background:radial-gradient(circle at 92% 0%,rgba(243,218,158,.25),transparent 55%),linear-gradient(135deg,#1c2960,#0a0f22)!important;
+  box-shadow:0 16px 38px rgba(0,0,0,.5),0 0 26px rgba(212,175,55,.22),inset 0 1px 0 rgba(255,255,255,.18)!important}
+.daily-bonus-card h3{color:#fff!important}
+.daily-bonus-card p{color:#e2e8f0!important}
+.daily-bonus-tag{color:#1a1206!important;font-weight:800;background:linear-gradient(135deg,#F7E6C4,#D4AF37)!important;border-radius:999px;padding:2px 14px}
+.btn-claim{border:3px solid #fff3d6!important;box-shadow:0 10px 24px rgba(212,175,55,.5),inset 0 1px 0 rgba(255,255,255,.5)!important}
+.spin-card{border:4px solid #D4AF37!important;border-radius:28px!important;
+  background:radial-gradient(circle at 50% 14%,rgba(243,218,158,.22),transparent 55%),linear-gradient(160deg,#1c2960,#080c1c)!important;
+  box-shadow:0 18px 44px rgba(0,0,0,.55),0 0 30px rgba(212,175,55,.2),inset 0 1px 0 rgba(255,255,255,.18)!important}
+.spin-card h3{background:linear-gradient(90deg,#FFF3C4,#D4AF37,#FFF3C4);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.spin-card-tag{color:#1a1206!important;font-weight:800;background:linear-gradient(135deg,#F7E6C4,#D4AF37)!important;border-radius:999px;padding:3px 16px}
+.spin-card > p{color:#e2e8f0!important}
+.btn-spin-now{border:3px solid #fff3d6!important;box-shadow:0 12px 28px rgba(212,175,55,.55),inset 0 1px 0 rgba(255,255,255,.5)!important}
+
+/* Lucky Spin: bigger, Ferris-wheel (🎡) style */
+.spin-card .spin-wheel-wrapper{zoom:1.3;position:relative;isolation:isolate;margin-bottom:56px}
+.spin-card .spin-wheel{position:relative;
+  background:radial-gradient(circle,#1d2a63 0 30%,#0e1533 31% 100%)!important;
+  border:7px solid #D4AF37!important;
+  box-shadow:0 0 0 4px #0b1020,0 0 30px rgba(212,175,55,.5),inset 0 0 24px rgba(0,0,0,.6)!important}
+.spin-card .spin-wheel::before{content:"";position:absolute;inset:0;border-radius:50%;pointer-events:none;
+  background:repeating-conic-gradient(from 0deg,rgba(243,218,158,.9) 0 1.4deg,transparent 1.4deg 25.714deg)}
+.spin-card .spin-wheel::after{content:"";position:absolute;inset:27%;border:3px solid rgba(243,218,158,.85);border-radius:50%;pointer-events:none}
+.spin-card .spin-segment{padding:3px 9px;border-radius:10px 10px 15px 15px;border:2px solid #fff;color:#fff;font-weight:800;
+  box-shadow:0 3px 8px rgba(0,0,0,.55);text-shadow:0 1px 2px rgba(0,0,0,.6)}
+.spin-card .spin-segment-1{background:#2F4FD6}
+.spin-card .spin-segment-2{background:#C9961A}
+.spin-card .spin-segment-3{background:#16A34A}
+.spin-card .spin-segment-4{background:#DC2626}
+.spin-card .spin-segment-5{background:#7C3AED}
+.spin-card .spin-segment-6{background:#0891B2}
+.spin-card .spin-segment-7{background:#DB2777}
+.spin-card .spin-wheel-wrapper::after{content:"";position:absolute;left:50%;top:100%;width:150px;height:64px;margin-top:-16px;transform:translateX(-50%);z-index:-1;
+  background:linear-gradient(180deg,#F3DA9E,#8a6a28);clip-path:polygon(46% 0,54% 0,100% 100%,86% 100%,50% 22%,14% 100%,0 100%)}
+
+/* ---- 6. My Profile ---- */
+#profile .profile-card{border:4px solid #D4AF37!important;border-radius:28px!important;
+  background:radial-gradient(circle at 90% 0%,rgba(243,218,158,.22),transparent 55%),linear-gradient(135deg,#1c2960,#0a0f22)!important;
+  box-shadow:0 18px 44px rgba(0,0,0,.5),0 0 26px rgba(212,175,55,.2)!important}
+#profile .profile-details h3{background:linear-gradient(90deg,#FFF3C4,#D4AF37);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+#profile .profile-email{color:#cbd5e1!important}
+#profile .profile-membership-tag{color:#1a1206!important;font-weight:800}
+#profile .profile-info-item{border:3px solid rgba(212,175,55,.5)!important;border-radius:18px!important;
+  background:linear-gradient(145deg,rgba(255,255,255,.1),rgba(0,0,0,.3))!important;box-shadow:0 8px 18px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.15)}
+#profile .profile-info-label{color:#F3DA9E!important;font-weight:700}
+#profile .profile-info-value{color:#fff!important;font-weight:700}
+.pm-pinfo{border:3px solid rgba(212,175,55,.55)!important;border-radius:20px!important;
+  background:linear-gradient(145deg,rgba(255,255,255,.1),rgba(0,0,0,.32))!important;box-shadow:0 10px 22px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.15)!important}
+.pm-pinfo-ico{background:linear-gradient(145deg,#F7E6C4,#D4AF37)!important;border:2px solid #fff3d6!important}
+.pm-pinfo small{color:#F3DA9E!important}
+.pm-pinfo-gold b{background:linear-gradient(180deg,#FFF8DC,#D4AF37);-webkit-background-clip:text;background-clip:text;color:transparent!important;-webkit-text-fill-color:transparent}
+
+/* ---- 7/8. Referral Contest ---- */
+#referralContest .card{border:4px solid rgba(212,175,55,.6)!important;border-radius:26px!important;
+  background:radial-gradient(circle at 92% 0%,rgba(243,218,158,.16),transparent 55%),linear-gradient(160deg,#1a2554,#0a0f22)!important;
+  box-shadow:0 16px 38px rgba(0,0,0,.5)!important}
+#referralContest .contest-card{border-color:#fbbf24!important;box-shadow:0 16px 38px rgba(0,0,0,.5),0 0 28px rgba(251,191,36,.25)!important}
+#referralContest #contestNoneCard{color:#F3DA9E;font-weight:600;border-left:12px solid #D4AF37!important}
+#referralContest .contest-prize-item{border:2px solid rgba(251,191,36,.6);background:linear-gradient(135deg,rgba(251,191,36,.18),rgba(0,0,0,.3));color:#fde68a}
+#referralContest .contest-my-rank-box{border:2px solid rgba(251,191,36,.55);background:linear-gradient(135deg,rgba(251,191,36,.16),rgba(0,0,0,.3))}
+#referralContest h3,#referralContest .leaderboard-card-title{background:linear-gradient(90deg,#FFF3C4,#D4AF37);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+#referralContest .contest-history-item{border:2px solid rgba(212,175,55,.4);border-left:8px solid #D4AF37;background:linear-gradient(135deg,#1a2554,#0b1022)}
+#referralContest .text-muted{color:#cbd5e1}
+
+/* ---- 9/10. Leaderboards ---- */
+.lb-top{border-width:4px!important;box-shadow:0 14px 30px rgba(0,0,0,.5),0 0 28px var(--tg),inset 0 1px 0 rgba(255,255,255,.22)!important;
+  background:linear-gradient(170deg,var(--tg),rgba(255,255,255,.04) 30%,#0a0f22 80%)!important}
+.lb-p1{box-shadow:0 18px 38px rgba(0,0,0,.55),0 0 40px rgba(255,213,74,.45),inset 0 1px 0 rgba(255,255,255,.3)!important}
+.lb-name{color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.5)}
+.lb-id{color:#cbd5e1}
+.lb-row{border:3px solid rgba(212,175,55,.45)!important;border-left:8px solid #D4AF37!important;border-radius:18px!important;
+  background:linear-gradient(135deg,#1c2960,#0b1022)!important;box-shadow:0 8px 18px rgba(0,0,0,.4)}
+.lb-table .lb-name{font-size:inherit}
+#pmGenLb .table-responsive,#pmLiveLb .table-responsive{border:4px solid rgba(212,175,55,.55);border-radius:24px;box-shadow:0 14px 34px rgba(0,0,0,.45)}
+#pmGenLb .table th{background:linear-gradient(180deg,#26346e,#18224a);color:#F3DA9E;border-bottom:3px solid #D4AF37}
+.lb-live-bar{padding:10px 16px;border:2px solid rgba(52,211,153,.5);border-radius:999px;background:rgba(52,211,153,.08);color:#a7f3d0}
+#leaderboard .leaderboard-card,#referralContest .leaderboard-card{border-width:4px}
+
+/* ---- 11. Rank Progress ---- */
+.rp-card{border-width:4px!important;background:radial-gradient(circle at 15% 0%,rgba(255,255,255,.12),transparent 50%),linear-gradient(160deg,#1c2960,#080c1c)!important;
+  box-shadow:0 18px 44px rgba(0,0,0,.55),0 0 34px var(--c2),inset 0 1px 0 rgba(255,255,255,.2)!important}
+.rp-bar{height:34px;border:3px solid rgba(255,255,255,.2)}
+.rp-next{border:3px dashed var(--n2)!important;background:linear-gradient(135deg,rgba(255,255,255,.08),rgba(0,0,0,.25))!important}
+.rp-percent{text-shadow:0 0 20px var(--c1)}
+.rp-note{color:#cbd5e1!important}
+
+/* ---- 12. RANK & BONUS: bright big icons, richer cards ---- */
+.rb-section .rank-info-subtitle{padding:14px 18px;border:3px solid rgba(212,175,55,.6);border-radius:18px;
+  background:linear-gradient(135deg,rgba(243,218,158,.18),rgba(0,0,0,.25));color:#fde68a!important;font-weight:600;box-shadow:inset 0 1px 0 rgba(255,255,255,.15)}
+.rb-card{background:linear-gradient(170deg,var(--c2) 0%,#121a3d 62%,#080c1c 100%)!important;border-width:4px!important;padding-top:34px}
+.rb-card h4{color:#fff!important;text-shadow:0 2px 8px rgba(0,0,0,.6),0 0 14px var(--c1)}
+.rk-badge{border:5px solid #fff!important;background:radial-gradient(circle at 35% 28%,#fff 0%,var(--c1) 38%,var(--c2) 100%)!important;
+  box-shadow:0 0 0 4px var(--c2),0 0 30px var(--c1),0 10px 20px rgba(0,0,0,.55)!important}
+.rk-badge{text-shadow:0 2px 6px rgba(0,0,0,.45);filter:saturate(1.35) brightness(1.08)}
+.rb-card .rk-lg{width:96px;height:96px;font-size:52px}
+.rb-tag{box-shadow:0 4px 10px rgba(0,0,0,.4)}
+.rb-current{box-shadow:0 0 0 5px rgba(212,175,55,.35),0 0 40px var(--c1),0 14px 30px rgba(0,0,0,.55)!important}
+
+/* ---- 13. Recent Activity ---- */
+#activityList .card{border:3px solid rgba(52,211,153,.5)!important;border-left:12px solid #34d399!important;border-radius:20px!important;
+  background:linear-gradient(135deg,rgba(52,211,153,.12),#0b1022 70%)!important;box-shadow:0 10px 24px rgba(0,0,0,.4)!important}
+#activityList .card strong{color:#F3DA9E}
+#activityList .card p{color:#e2e8f0}
+
+/* ---- 14. Task Hub ---- */
+#taskHub .task-section-subtitle{padding:16px 20px;border:3px solid rgba(212,175,55,.6);border-radius:20px;color:#fde68a;font-weight:600;
+  background:linear-gradient(135deg,rgba(243,218,158,.18),rgba(0,0,0,.3));box-shadow:0 8px 20px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.15)}
+.task-category-card[data-pro]{border-width:4px!important;border-radius:24px!important;
+  background:linear-gradient(165deg,rgba(255,255,255,.12),rgba(255,255,255,.02) 40%,#0a0f22 90%)!important;box-shadow:0 12px 26px rgba(0,0,0,.5),0 0 16px var(--brand),inset 0 1px 0 rgba(255,255,255,.2)}
+.task-category-card[data-pro].category-active{box-shadow:0 0 0 5px rgba(212,175,55,.4),0 0 34px rgba(212,175,55,.55)!important}
+.tl-count{border:2px solid var(--brand,#D4AF37)!important;background:rgba(0,0,0,.35)!important;color:#fff}
+#taskHub .task-list-area-header{padding:12px 18px;border:3px solid rgba(212,175,55,.5);border-radius:18px;background:linear-gradient(135deg,#1c2960,#0b1022)}
+#taskHub .task-counter-badge{border:2px solid #fff3d6;box-shadow:0 0 14px rgba(220,38,38,.6)}
+#taskHub .task-filter-bar input,#taskHub .task-filter-bar select{border:3px solid rgba(212,175,55,.5)!important;border-radius:14px!important;background:rgba(5,8,22,.8)!important;color:#fff!important}
+#taskHub .task-card{border:3px solid rgba(212,175,55,.55)!important;border-radius:24px!important;
+  background:radial-gradient(circle at 94% 0%,rgba(243,218,158,.12),transparent 55%),linear-gradient(160deg,#1a2554,#0a0f22)!important;box-shadow:0 14px 30px rgba(0,0,0,.45)!important}
+#taskHub .task-card-top h4{background:linear-gradient(90deg,#FFF3C4,#D4AF37);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+#taskHub .task-card-top p{color:#e2e8f0!important}
+#taskHub .task-reward{padding:3px 14px;color:#a7f3d0;border:2px solid #34d399;border-radius:999px;background:rgba(52,211,153,.14);text-shadow:0 0 10px rgba(52,211,153,.5)}
+#taskHub .task-card .btn-primary{border:2px solid #fff3d6;background:linear-gradient(135deg,#F7E6C4,#D4AF37);color:#1a1206;font-weight:800}
+
+/* ---- 15. Commission: How it works colours + remove old L1..L5 grid ---- */
+#commission .commission-level-grid{display:none!important}
+#commission .cm-how{border:4px solid rgba(243,218,158,.65)!important;background:linear-gradient(135deg,rgba(243,218,158,.2),rgba(47,79,214,.14))!important}
+#commission .cm-how h4{background:linear-gradient(90deg,#fde68a,#f9a8d4,#93c5fd);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+#commission .cm-how li{font-weight:700}
+#commission .cm-how li:nth-child(1){color:#fde68a}
+#commission .cm-how li:nth-child(2){color:#6ee7b7}
+#commission .cm-how li:nth-child(3){color:#93c5fd}
+#commission .cm-how li:nth-child(4){color:#f9a8d4}
+#commission .cm-how li:nth-child(5){color:#fdba74}
+#commission .cm-how li::marker{color:#FFF3C4;font-weight:800}
+#commission .cm-note{border:3px solid #fbbf24;background:rgba(251,191,36,.12);color:#fde68a;font-weight:700}
+.benefit-item{border-width:3px!important;font-weight:700;color:#fff!important;
+  background:linear-gradient(145deg,rgba(52,211,153,.22),rgba(255,255,255,.04) 45%,#0b1022)!important}
+.benefit-item:nth-child(3n+2){border-color:#60a5fa!important;background:linear-gradient(145deg,rgba(96,165,250,.22),rgba(255,255,255,.04) 45%,#0b1022)!important}
+.benefit-item:nth-child(3n){border-color:#f9a8d4!important;background:linear-gradient(145deg,rgba(249,168,212,.2),rgba(255,255,255,.04) 45%,#0b1022)!important}
+
+/* ---- 16. Withdrawal Eligibility ---- */
+#withdraw .withdraw-overview-card{border:4px solid #D4AF37!important;border-radius:26px!important;
+  background:radial-gradient(circle at 92% 0%,rgba(243,218,158,.2),transparent 55%),linear-gradient(135deg,#1c2960,#0a0f22)!important;box-shadow:0 16px 38px rgba(0,0,0,.5),0 0 24px rgba(212,175,55,.2)!important}
+#withdraw .withdraw-overview-item span{color:#cbd5e1!important}
+#withdraw .withdraw-overview-item strong{background:linear-gradient(180deg,#FFF8DC,#D4AF37);-webkit-background-clip:text;background-clip:text;color:transparent!important;-webkit-text-fill-color:transparent}
+#withdraw .withdraw-eligibility-card{border:4px solid rgba(96,165,250,.6)!important;border-radius:26px!important;
+  background:radial-gradient(circle at 92% 0%,rgba(96,165,250,.16),transparent 55%),linear-gradient(160deg,#1a2554,#0a0f22)!important;box-shadow:0 16px 38px rgba(0,0,0,.5)!important}
+#withdraw .withdraw-eligibility-card h3{background:linear-gradient(90deg,#bfdbfe,#93c5fd);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+#withdraw .eligibility-label{color:#e2e8f0!important;font-weight:600}
+#withdraw .eligibility-progress{height:22px;border:2px solid rgba(255,255,255,.18);background:rgba(255,255,255,.07)}
+#withdraw .eligibility-progress .progress-bar{background:linear-gradient(90deg,#3b82f6,#34d399);box-shadow:0 0 14px rgba(59,130,246,.5)}
+#withdraw .eligibility-final-status{border-width:3px!important;border-radius:18px!important}
+#withdraw .withdraw-timeline-card{border:4px solid rgba(212,175,55,.55)!important;border-radius:24px!important}
+#withdraw .pm-wd-card{border-width:4px!important}
+#withdraw .pm-wd-card .form-group input{background:rgba(5,8,22,.82)}
+#withdraw .pm-wd-card .form-group label{color:#F3DA9E}
+
+/* ---- 17. Payment proof: wider, bigger cards ---- */
+.payment-proof-card{padding:30px 26px!important}
+.payment-proof-card .btn{min-height:84px;padding:18px 20px;border-radius:22px!important;white-space:normal;text-align:center}
+
+/* ---- 18. Support Team ---- */
+#support .support-team-grid{display:grid;grid-template-columns:1fr;gap:16px}
+#support .support-team-btn{min-height:80px;justify-content:center;text-align:center;white-space:normal;border-radius:22px!important}
+#support .pm-team-official{background:linear-gradient(135deg,#7C3AED,#4C1D95)!important;color:#fff}
+#support .pm-team-helping{background:linear-gradient(135deg,#F7E6C4,#D4AF37)!important;color:#1a1206}
+
+/* ---- 19. Contact ---- */
+#contact .card{border:4px solid #D4AF37!important;border-left:14px solid #D4AF37!important;border-radius:26px!important;
+  background:radial-gradient(circle at 92% 0%,rgba(243,218,158,.2),transparent 55%),linear-gradient(160deg,#1c2960,#0a0f22)!important;box-shadow:0 16px 38px rgba(0,0,0,.5),0 0 24px rgba(212,175,55,.18)!important}
+#contact .card p{color:#e2e8f0}
+#contact .card strong{background:linear-gradient(90deg,#FFF3C4,#D4AF37);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+
+/* ---- 20. Footer ---- */
+.footer{border-top:5px solid #D4AF37!important;background:linear-gradient(180deg,#0b1129,#05070f)!important;box-shadow:0 -10px 30px rgba(0,0,0,.5)}
+.footer-logo{border:2px solid rgba(212,175,55,.7);box-shadow:0 0 0 3px rgba(212,175,55,.14)}
+.footer-column h2{background:linear-gradient(90deg,#FFF3C4,#D4AF37);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+.footer-column h3{color:#F3DA9E!important;padding-bottom:8px;border-bottom:3px solid rgba(212,175,55,.5);display:inline-block}
+.footer-column p{color:#cbd5e1!important}
+.footer-column ul li a,.footer-column > a{color:#e2e8f0!important;font-weight:600}
+.footer-column > a{color:#FFD76A!important}
+.footer-column ul li a:hover,.footer-column > a:hover{color:#fff!important;text-shadow:0 0 12px #D4AF37}
+.footer-divider{height:3px!important;background:linear-gradient(90deg,transparent,#D4AF37,transparent)!important}
+.footer-bottom{color:#F3DA9E!important;font-weight:600}
