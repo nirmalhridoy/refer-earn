@@ -1,0 +1,285 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn() &&
+        request.auth.token.email in [
+          "antorahmed0185@gmail.com"
+        ];
+    }
+
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    // Date as YYYY-MM-DD taken from the SERVER clock.
+    function ymd(t) {
+      return string(t.year()) + "-"
+        + (t.month() < 10 ? "0" : "") + string(t.month()) + "-"
+        + (t.day() < 10 ? "0" : "") + string(t.day());
+    }
+
+    // Accepts today's date in UTC or in Bangladesh time (UTC+6).
+    function dateOk(d) {
+      return d == ymd(request.time) || d == ymd(request.time + duration.value(6, "h"));
+    }
+
+    function isValidRegistrationBonusUpdate() {
+      return request.resource.data.diff(resource.data).affectedKeys()
+        .hasOnly(["walletBalance", "totalIncome", "registrationBonusGiven", "lastActive"])
+        && request.resource.data.walletBalance == resource.data.walletBalance + 5
+        && request.resource.data.totalIncome == resource.data.totalIncome + 5
+        && resource.data.registrationBonusGiven == false
+        && request.resource.data.registrationBonusGiven == true;
+    }
+
+    // Daily bonus: server date, exactly +5, only once per date.
+    function isValidDailyBonusUpdate() {
+      return request.resource.data.diff(resource.data).affectedKeys()
+        .hasOnly(["walletBalance", "totalIncome", "lastLoginBonusDate", "lastActive"])
+        && request.resource.data.walletBalance == resource.data.walletBalance + 5
+        && request.resource.data.totalIncome == resource.data.totalIncome + 5
+        && dateOk(request.resource.data.lastLoginBonusDate)
+        && request.resource.data.lastLoginBonusDate != resource.data.get("lastLoginBonusDate", null);
+    }
+
+    // Lucky spin: any non-frozen account, reward 0-5, ONE SPIN EVERY 3 HOURS.
+    // lastSpinAt must be the server time of this very write, and at least
+    // 3 hours must have passed since the previous spin.
+    function isValidSpinUpdate() {
+      return request.resource.data.diff(resource.data).affectedKeys()
+        .hasOnly(["walletBalance", "totalIncome", "lastSpinAt", "lastActive"])
+        && resource.data.get("isFrozen", false) == false
+        && request.resource.data.lastSpinAt == request.time
+        && (resource.data.get("lastSpinAt", null) == null
+            || resource.data.get("lastSpinAt", null) + duration.value(3, "h") <= request.time)
+        && (request.resource.data.walletBalance - resource.data.walletBalance) in [0, 1, 2, 3, 4, 5]
+        && (request.resource.data.walletBalance - resource.data.walletBalance)
+          == (request.resource.data.totalIncome - resource.data.totalIncome);
+    }
+
+    function isValidWithdrawSubmission() {
+      return request.resource.data.diff(resource.data).affectedKeys()
+        .hasOnly(["walletBalance", "withdrawableReferralCount", "cycleTaskCount"])
+        && request.resource.data.walletBalance == resource.data.walletBalance - 350
+        && request.resource.data.walletBalance >= 0
+        && request.resource.data.withdrawableReferralCount == resource.data.get("withdrawableReferralCount", 0) - 3
+        && request.resource.data.withdrawableReferralCount >= 0
+        && request.resource.data.cycleTaskCount == resource.data.get("cycleTaskCount", 0) - 10
+        && request.resource.data.cycleTaskCount >= 0
+        && resource.data.get("withdrawableReferralCount", 0) >= 3
+        && resource.data.get("cycleTaskCount", 0) >= 10
+        && resource.data.walletBalance >= 350;
+    }
+
+    match /users/{uid} {
+
+      allow read: if isSignedIn();
+
+      allow create: if isOwner(uid)
+        && request.resource.data.uid == uid
+        && request.resource.data.isActive == false
+        && request.resource.data.isFrozen == false
+        && request.resource.data.walletBalance == 0
+        && request.resource.data.totalIncome == 0
+        && request.resource.data.referralEarnings == 0;
+
+      allow update: if isAdmin()
+        || (
+          isOwner(uid) &&
+          (
+            request.resource.data.diff(resource.data).affectedKeys()
+              .hasOnly(["name", "phone", "district", "photoURL", "lastActive"])
+            || isValidRegistrationBonusUpdate()
+            || isValidDailyBonusUpdate()
+            || isValidSpinUpdate()
+            || isValidWithdrawSubmission()
+          )
+        );
+
+      allow delete: if isAdmin();
+    }
+
+    // One document per user per day (id = uid_YYYY-MM-DD). Create-only,
+    // so a second claim on the same day is rejected by the database itself.
+    match /dailyClaims/{claimId} {
+      allow read: if isSignedIn() && (isAdmin() || claimId.matches(request.auth.uid + "_.*"));
+      allow create: if isSignedIn()
+        && request.resource.data.uid == request.auth.uid
+        && claimId == request.auth.uid + "_" + request.resource.data.date
+        && dateOk(request.resource.data.date)
+        && request.resource.data.amount == 5;
+      allow update: if false;
+      allow delete: if isAdmin();
+    }
+
+    // (not used any more by the app: spin is limited by lastSpinAt on the user document)
+    match /spinResults/{spinId} {
+      allow read: if isSignedIn() && (isAdmin() || spinId.matches(request.auth.uid + "_.*"));
+      allow create: if isSignedIn()
+        && request.resource.data.uid == request.auth.uid
+        && spinId == request.auth.uid + "_" + request.resource.data.date
+        && dateOk(request.resource.data.date)
+        && request.resource.data.reward in [0, 1, 2, 3, 4, 5];
+      allow update: if false;
+      allow delete: if isAdmin();
+    }
+
+    match /withdrawRequests/{requestId} {
+
+      allow create: if isSignedIn()
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.status == "pending";
+
+      allow read: if isAdmin() || (isSignedIn() && resource.data.uid == request.auth.uid);
+
+      allow update: if isAdmin();
+
+      allow delete: if isAdmin();
+    }
+
+    match /activationRequests/{requestId} {
+
+      // A request is only accepted together with its unique Transaction-ID lock
+      // (see activationTrx below), so one TrxID can't be used twice.
+      allow create: if isSignedIn()
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.status == "pending"
+        && existsAfter(/databases/$(database)/documents/activationTrx/$(request.resource.data.transactionId.upper()))
+        && getAfter(/databases/$(database)/documents/activationTrx/$(request.resource.data.transactionId.upper())).data.requestId == requestId;
+
+      allow read: if isAdmin() || (isSignedIn() && resource.data.uid == request.auth.uid);
+
+      // Only a still-pending request can be processed -> blocks double approval
+      // (and therefore duplicate commission) of the same activation.
+      allow update: if isAdmin() && resource.data.status == "pending";
+
+      allow delete: if isAdmin();
+    }
+
+    // One lock document per Transaction ID (id = TRXID in UPPERCASE).
+    match /activationTrx/{trxId} {
+      allow get: if isSignedIn();
+      allow list: if isAdmin();
+
+      allow create: if isSignedIn()
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.trxId == trxId
+        && trxId == trxId.upper()
+        && trxId.matches("[A-Z0-9]{6,20}");
+
+      // Re-use allowed only by the same user, and only if the earlier request was rejected.
+      allow update: if isSignedIn()
+        && resource.data.uid == request.auth.uid
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.trxId == trxId
+        && get(/databases/$(database)/documents/activationRequests/$(resource.data.requestId)).data.status == "rejected";
+
+      allow delete: if isAdmin();
+    }
+
+    match /transactions/{transactionId} {
+
+      allow create: if isAdmin()
+        || (
+          isSignedIn() &&
+          request.resource.data.uid == request.auth.uid &&
+          (
+            (request.resource.data.type == "withdraw" && request.resource.data.amount <= 0)
+            || request.resource.data.type == "daily_login_bonus"
+            || request.resource.data.type == "lucky_spin"
+            || request.resource.data.type == "registration_bonus"
+          )
+        );
+
+      allow read: if isAdmin() || (isSignedIn() && resource.data.uid == request.auth.uid);
+
+      allow update: if false;
+
+      allow delete: if isAdmin();
+    }
+
+    match /notifications/{notificationId} {
+
+      allow read: if isAdmin()
+        || (
+          isSignedIn() &&
+          (resource.data.uid == request.auth.uid || resource.data.uid == "all")
+        );
+
+      allow create: if isAdmin()
+        || (
+          isSignedIn() &&
+          request.resource.data.uid == request.auth.uid &&
+          (request.resource.data.type == "success" || request.resource.data.type == "info")
+        );
+
+      allow update: if isAdmin();
+
+      allow delete: if isAdmin();
+    }
+
+    match /broadcast/{broadcastId} {
+
+      allow read: if isSignedIn();
+
+      allow create: if isAdmin();
+
+      allow update: if isAdmin();
+
+      allow delete: if isAdmin();
+    }
+
+    match /tasks/{taskId} {
+
+      allow read: if isSignedIn();
+
+      allow create: if isAdmin();
+
+      allow update: if isAdmin();
+
+      allow delete: if isAdmin();
+    }
+
+    match /taskSubmissions/{submissionId} {
+
+      allow create: if isSignedIn()
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.status == "pending";
+
+      allow read: if isAdmin() || (isSignedIn() && resource.data.uid == request.auth.uid);
+
+      allow update: if isAdmin()
+        || (
+          isSignedIn() &&
+          resource.data.uid == request.auth.uid &&
+          resource.data.status == "rejected" &&
+          request.resource.data.status == "pending" &&
+          request.resource.data.uid == request.auth.uid
+        );
+
+      allow delete: if isAdmin();
+    }
+
+    match /contests/{contestId} {
+
+      allow read: if isSignedIn();
+
+      allow create: if isAdmin();
+
+      allow update: if isAdmin();
+
+      allow delete: if isAdmin();
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
